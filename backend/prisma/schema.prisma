@@ -11,61 +11,66 @@ datasource db {
 }
 
 model User {
-  first_name String
-  last_name String
-  email String @unique 
-  id    Int      @id @default(autoincrement())
-  phone_number String
-  birthday DateTime
-  role Role @default(USER)
-  EmployeeProfile EmployeeProfile? 
-  PatientProfile PatientProfile?
-  Dependents Guardians[] @relation("User to Guardian Link")
+  first_name      String
+  last_name       String
+  email           String           @unique
+  id              Int              @id @default(autoincrement())
+  phone_number    String
+  birthday        DateTime
+  EmployeeProfile EmployeeProfile?
+  PatientProfile  PatientProfile?
+  Dependents      PatientProfile[] @relation("guardians")
+  Report          Report[]
 }
-enum Role{
+
+enum Role {
   Admin
   Technician
   BCBA
 }
-model EmployeeProfile{
-  role Role @default(Technician)
-  id Int @id @default(autoincrement())
-  User User @relation(fields: [id], references: [id])
-   
+
+model EmployeeProfile {
+  role   Role     @default(Technician)
+  id     Int      @id @default(autoincrement())
+  User   User     @relation(fields: [id], references: [id])
+  Report Report[]
 }
 
-model PatientProfile{
- Guardians User[] @relation("User to Guardian Link")//guardian relation many to many link to User table instead
-  id Int @id @default(autoincrement())
-  User User @relation(fields: [id], references: [id])
- 
+model PatientProfile {
+  Guardians User[]    @relation("guardians") //guardian relation many to many link to User table instead
+  id        Int       @id @default(autoincrement())
+  User      User      @relation(fields: [id], references: [id])
+  Report    Report[]
+  Program   Program[]
 }
-
 
 model Behavior {
-  name String
-  description String
-  datatype Datatype @default(COUNT)
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String
+  datatype       Datatype @default(COUNT)
   trialsPerEntry Int
-  entries String[]
-  tags String[] 
-  programs Program[] @relation("ProgramBehaviors")
+  entries        String[]
+  tags           String[]
 }
 
 model Report {
+  id          Int             @id @default(autoincrement())
   sessionTime DateTime
-  data Json
-  patientId Int
-  employeeId Int
-  patient User @relation(fields: [patientId], references: [id])
-  employee User @relation(fields: [employeeId], references: [id])
+  data        Json
+  patientId   Int
+  employeeId  Int
+  patient     PatientProfile  @relation(fields: [patientId], references: [id])
+  employee    EmployeeProfile @relation(fields: [employeeId], references: [id])
+  User        User?           @relation(fields: [userId], references: [id])
+  userId      Int?
 }
 
 model Program {
-  programId Int
-  patient User @relation(fields: [programId], references: [id])
-  // many to many relation program will have multiple behaviors
-  Behaviors Behavior[] @relation("ProgramBehaviors")
+  id        Int            @id @default(autoincrement())
+  patientId Int
+  patient   PatientProfile @relation(fields: [patientId], references: [id])
+  behaviors Json           @default("[]")
 }
 
 enum Datatype {

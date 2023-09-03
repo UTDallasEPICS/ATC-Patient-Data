@@ -1,0 +1,15 @@
+services:
+  atc-db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DATABASE=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5003:5432'
+    volumes:
+      - atc-db:/var/lib/postgresql/data
+volumes:
+  atc-db:
+    driver: local
