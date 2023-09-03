@@ -33,10 +33,6 @@ Make sure to COPY the `.env.example` file to `.env` and uncomment the `DATABASE_
 
 In the backend folder, run `docker-compose up` to start the database, then run `npx prisma migrate dev` in _another terminal_ to setup the database schema. You can then run `npm run start` in the backend and `npm run dev` in the frontend.
 
-The server connection logic can be found under [index.ts](https://github.com/UTDallasEPICS/ATC-Patient-Management-Backend/blob/main/index.ts)
-
-- If the '127.0.0.1' uri fails to connect for you, consider creating your own [.env](https://github.com/UTDallasEPICS/ATC-Patient-Management-Backend/blob/main/.env.example) file _(Example provided with the link)_
-
 # Usage
 
 We used either [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/) to test requests, the tool you decide to use is up to you
@@ -51,7 +47,3 @@ Requests use the JSON format, here is an example Get request under **localhost:8
     "password": "123"
 }
 ```
-
-[MongoDB Compass](https://www.mongodb.com/products/compass) can be used to view the information stored within the MongoDB database that this project uses
-
-- You will need the connection string used by **mongoose.connect()** under [index.ts](https://github.com/UTDallasEPICS/ATC-Patient-Management-Backend/blob/main/index.ts) to use this
