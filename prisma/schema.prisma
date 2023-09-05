@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  first_name      String
+  last_name       String
+  email           String           @unique
+  id              Int              @id @default(autoincrement())
+  phone_number    String
+  birthday        DateTime
+  EmployeeProfile EmployeeProfile?
+  PatientProfile  PatientProfile?
+  Dependents      PatientProfile[] @relation("dependents")
+  Sessions        Session[]
+}
+
+enum Role {
+  Admin
+  Technician
+  BCBA
+}
+
+model EmployeeProfile {
+  role     Role             @default(Technician)
+  id       Int              @id @default(autoincrement())
+  User     User             @relation(fields: [id], references: [id])
+  Patients PatientProfile[]
+  Sessions Session[]
+}
+
+model PatientProfile {
+  Guardians         User[]           @relation("dependents") //guardian relation many to many link to User table instead
+  id                Int              @id @default(autoincrement())
+  User              User             @relation(fields: [id], references: [id])
+  Sessions          Session[]
+  Program           Program[]
+  EmployeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])
+  employeeProfileId Int?
+}
+
+model Behavior {
+  id             Int      @id @default(autoincrement())
+  name           String
+  description    String
+  datatype       Datatype @default(COUNT)
+  trialsPerEntry Int
+  entries        String[]
+  tags           String[]
+}
+
+model Session {
+  id          Int             @id @default(autoincrement())
+  sessionTime DateTime
+  data        Json
+  patientId   Int
+  employeeId  Int
+  patient     PatientProfile  @relation(fields: [patientId], references: [id])
+  employee    EmployeeProfile @relation(fields: [employeeId], references: [id])
+  User        User?           @relation(fields: [userId], references: [id])
+  userId      Int?
+}
+
+model Program {
+  id        Int            @id @default(autoincrement())
+  patientId Int
+  patient   PatientProfile @relation(fields: [patientId], references: [id])
+  behaviors Json           @default("[]")
+}
+
+enum Datatype {
+  BOOLEAN
+  COUNT
+  BOOLEAN_ARRAY
+  COUNT_ARRAY
+}
