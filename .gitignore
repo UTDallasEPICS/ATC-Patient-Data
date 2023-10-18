@@ -4,3 +4,11 @@ dist
 .next
 *.DS_Store
 .env
+
+
+
+1 0 0
+0 1 0
+0 0 1
+
+2x = 2

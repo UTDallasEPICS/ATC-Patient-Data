@@ -4,14 +4,14 @@ import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
-import { Employee } from "../../interfaces/Employee";
+import { Employee } from "../../components/Interfaces/Entities";
 import { useRouter } from "next/router";
-import CheckUser  from '../../auth0CheckUser';
+import CheckUser from "../../auth0CheckUser";
 
 const newEmployee = () => {
   // Verifies if user has the correct permissions
-  const {allowed, role} = CheckUser(["Admin"])
-  if(!allowed) return(<div>Redirecting...</div>);
+  const { allowed, role } = CheckUser(["Admin"]);
+  if (!allowed) return <div>Redirecting...</div>;
 
   const router = useRouter();
   const firstNameInput: Input = {
@@ -56,9 +56,9 @@ const newEmployee = () => {
   const convertStringToDate = (date: string) => {
     const data = date.split("-");
     return new Date(
-        parseInt(data[0]),
-        parseInt(data[1]) - 1,
-        parseInt(data[2])
+      parseInt(data[0]),
+      parseInt(data[1]) - 1,
+      parseInt(data[2])
     );
   };
 
@@ -82,7 +82,7 @@ const newEmployee = () => {
     );
     */
     const [firstName, lastName, birthday, phoneNumber, email, otherInfo] =
-            fields.map((field) => field.value || "");
+      fields.map((field) => field.value || "");
 
     const newUser: Employee = {
       firstName,
@@ -93,36 +93,34 @@ const newEmployee = () => {
       otherInfo,
     };
     await fetch("http://localhost:8080/employee/", {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newUser),
-        });
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
 
-        router.push("/employee/search");
+    router.push("/employee/search");
   };
-  
-
 
   return (
     <div>
       <Head>
         <title>New Employee</title>
-        <link rel="icon" href="/atc-logo.png" />
+        <link rel='icon' href='/atc-logo.png' />
       </Head>
 
-      <Navbar pageTitle="New Employee" role={role}>   
-          <Link href="/employee/search">
-                <Button className="primaryButton">Go Back</Button>
-          </Link>         
-                <div>
-                    <NewEntity
-                        textFields={[...textInputs]}
-                        submitFunction={handleSubmit}
-                    />
-                </div>
-            </Navbar>
+      <Navbar pageTitle='New Employee' role={role}>
+        <Link href='/employee/search'>
+          <Button className='primaryButton'>Go Back</Button>
+        </Link>
+        <div>
+          <NewEntity
+            textFields={[...textInputs]}
+            submitFunction={handleSubmit}
+          />
+        </div>
+      </Navbar>
     </div>
   );
 };
