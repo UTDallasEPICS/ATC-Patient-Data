@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/test/index.tsx"
-, "auth0CheckUser.tsx", "pages/add-user-test.js", "pages/employee/test.jsx"  ],
+, "auth0CheckUser.tsx", "pages/add-user-test.js", "pages/employee/test.jsx", "prisma/seed.js"  ], // RIGRE-TODO: is that last bit needed
   "exclude": [
     "node_modules"
   ]

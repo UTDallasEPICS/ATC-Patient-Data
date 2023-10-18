@@ -1,0 +1,40 @@
+{
+    "behaviors": [
+        {
+            "id": 0,
+            "name": "Violent Outbursts",
+            "description": "Patient has a violent outburst during the session",
+            "datatype": "BOOLEAN",
+            "trialsPerEntry": 1,
+            "entries": [],
+            "tags": []
+        },
+        {
+            "id": 1,
+            "name": "Violent Outbursts",
+            "description": "Patient has a violent outburst during the session",
+            "datatype": "COUNT",
+            "trialsPerEntry": 1,
+            "entries": [],
+            "tags": []
+        },
+        {
+            "id": 2,
+            "name": "Violent Outbursts",
+            "description": "Patient has a violent outburst during the session",
+            "datatype": "BOOLEAN_ARRAY",
+            "trialsPerEntry": 1,
+            "entries": [],
+            "tags": []
+        },
+        {
+            "id": 3,
+            "name": "Violent Outbursts",
+            "description": "Patient has a violent outburst during the session",
+            "datatype": "COUNT_ARRAY",
+            "trialsPerEntry": 1,
+            "entries": [],
+            "tags": []
+        }
+    ]
+}
