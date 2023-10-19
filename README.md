@@ -2,6 +2,7 @@
 
 ## Getting Started
 Before anything, read last semester's final report in Edusouced, read everything in the [documentation](https://github.com/UTDallasEPICS/ATC-Patient-Management-Backend/tree/main/Documentation), and everything in the [wiki](https://github.com/UTDallasEPICS/ATC-Patient-Management-Frontend/wiki).
+When creating code, please use comments as you write; it helps during and after writing. 
 
 ## Building and the Running Front-end
 1. `cd` to ATC-Patient-Management-frontend
