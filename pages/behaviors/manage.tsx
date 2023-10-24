@@ -9,7 +9,8 @@ import { Button, makeStyles, Paper,
         DialogContent, DialogContentText,
         DialogTitle,
 } from "@material-ui/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useSWR from 'swr'
 import CheckUser from "../../auth0CheckUser";
 
 const useStyles = makeStyles({
@@ -33,28 +34,56 @@ interface BehaviorAsProps {
     _id: string;
 }
 
-export default function manageBehaviorsPage({ behaviors }) {
+export default function manageBehaviorsPage() {
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin", "BCBA"])
     if(!allowed) return(<div>Redirecting...</div>);
 
-    const [behaviorList, setBehaviorList] = useState<BehaviorAsProps[]>(
-        behaviors.map((behavior: Behavior, idx: number) => ({
-            behaviorName: behavior.name,
-            description: behavior.description,
-            datatype: behavior.datatype,
-            id: idx + 1,
-            _id: behavior._id,
-        }))
-    );
+    // fetch thebehavior data on the client side
+    // from here to...
+    const [behaviors, setBehaviors] = useState(null)
+    const [behaviorList, setBehaviorList] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/api/behavior`, { method: 'GET' });
+                if (response.ok) {
+                    const data = await response.json();
+                    setBehaviors(data);
+                } else {
+                    console.error('Failed to fetch data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        if (behaviors) {
+            const behaviorList = behaviors.map((behavior, idx) => ({
+                behaviorName: behavior.name,
+                description: behavior.description,
+                datatype: behavior.datatype,
+                id: idx + 1,
+                _id: behavior.id,
+            }));
+            console.log(behaviorList)
+            setBehaviorList(behaviorList);
+        }
+    }, [behaviors]);
+    // to here
+
     const [dialogOpen, setDialogOpen] = useState(false);
     const [focusElement, setFocusElement] = useState(-1);
 
     const removeBehavior = async () => {
         await fetch(
-            `http://localhost:8080/behaviour/${behaviorList[focusElement]._id}`,
+            `/api/behavior?id=${behaviorList[focusElement]._id}`,
             {
-                method: "delete",
+                method: "DELETE",
             }
         );
         setBehaviorList((prev) => {
@@ -195,12 +224,13 @@ export default function manageBehaviorsPage({ behaviors }) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const data = await fetch(`${process.env.BASE_URL}/api/search/behavior`, {method: "POST",});
-    const behaviors = await data.json();
-    return {
-        props: {
-            behaviors,
-        },
-    };
-};
+// export const getServerSideProps: GetServerSideProps = async () => {
+//     const data = await fetch(`${process.env.BASE_URL}/api/behavior`, {method: "GET",});
+//     const behaviors = await data.json();
+//         console.log(behaviors)
+//     return {
+//         props: {
+//             behaviors,
+//         },
+//     };
+// };
