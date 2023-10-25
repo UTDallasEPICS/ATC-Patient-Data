@@ -63,7 +63,7 @@ export const getServerSideProps = async () => {
   // // const res = await fetch(`https://randomuser.me/api/`)
   // const employees = await res.json()
   // TODO: search by whether has employee profile
-  let temp = await fetch(`${process.env.BASE_URL}/api/search/user`, {
+  let temp = await fetch(process.env.AUTH0_BASE_URL + '/api/search/user', {
         method: "POST",
     });
 
