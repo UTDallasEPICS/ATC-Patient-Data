@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useSWR from 'swr'
 
 const editProgram = ({ patient, employee, behaviors }) => {
   console.log(patient);
@@ -15,7 +16,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
 
   const handleClick = async () => {
     
-    const response = await fetch('http://localhost:8080/report/', {
+    const response = await fetch('${process.env.BASE_URL}/report/', {
       method: "post",
       mode: "cors",
       headers: {
@@ -36,7 +37,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
 
   const updateUser = async () => {
     console.log(patient._id)
-    const response = await fetch(`http://localhost:8080/patient/${patient._id}`, {
+    const response = await fetch(`${process.env.BASE_URL}/patient/${patient._id}`, {
       method: "PATCH",
       mode: "cors",
       headers: {
@@ -52,7 +53,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
   }
 
   const getReport = async () => {
-    const response = await fetch('http://localhost:8080/report/' + reportId)
+    const response = await fetch('${process.env.BASE_URL}/report/' + reportId)
     const {data} = await response.json();
     report = data;
     console.log(data)
@@ -61,7 +62,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
   const getStudentReports = async () => {
     let studentReports = []
     for(const reportID of patient['reports']) {
-      const response = await fetch(`http://localhost:8080/report/${reportID}`)
+      const response = await fetch(`${process.env.BASE_URL}/report/${reportID}`)
       const {data} = await response.json();
       studentReports.push(data)
     }
@@ -74,7 +75,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
       if (reportID !== ID) updatedReports.push(reportID)
     })
     console.log(updatedReports)
-    const response = await fetch(`http://localhost:8080/patient/${patient._id}`, {
+    const response = await fetch(`${process.env.BASE_URL}/patient/${patient._id}`, {
       method: "PATCH",
       mode: "cors",
       headers: {
@@ -96,7 +97,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
 
       <button onClick={async() => {
         const employeeRes = await fetch(
-          `http://localhost:8080/employee`
+          `${process.env.BASE_URL}/employee`
         );
         
         const employeeData = await employeeRes.json();
@@ -130,29 +131,66 @@ const editProgram = ({ patient, employee, behaviors }) => {
   );
 };
 
-export const getServerSideProps = async ({ query }) => {
+// DO NOT TOUCH FILE UNTIL LAB THEN ASK TAZ
+
+export const getServerSideProps = async ({ query }) => { // ask Taz
   const patientRes = await fetch(
-    `http://localhost:8080/patient/${query.studentID}`
+    `${process.env.BASE_URL}/patient/${query.studentID}`
   );
   const patientData = await patientRes.json(); 
 
   const employeeRes = await fetch(
-    `http://localhost:8080/employee/64518555b5b62f1086e74d80`
+    `${process.env.BASE_URL}/employee/64518555b5b62f1086e74d80`
   );
   const employeeData = await employeeRes.json();
 
   const programRes = await fetch(
-    `http://localhost:8080/patient/program/${query.studentID}`
+    `${process.env.BASE_URL}/patient/program/${query.studentID}`
   );
   const programData = await programRes.json();
 
   return {
-    props: {
-      patient: patientData['data'],
+    props: { // props passes data into the component that was mounted
+      patient: patientData['data'], // all of these lines of code happen in one line
       employee: employeeData['data'],
       behaviors: programData['data'][0]["behaviours"],
     },
   };
 };
 
-export default editProgram;
+
+ 
+const fetcher = (...args) => fetch(...args).then((res) => res.json())
+ 
+function Profile() {
+  const { data, error } = useSWR('/api/profile-data', fetcher) // fetcher is created 
+ 
+  if (error) return <div>Failed to load</div> // if you don't load
+  if (!data) return <div>Loading...</div> // if data hasn't been completely loaded yet
+ 
+  const patientRes = await fetch(
+    `${process.env.BASE_URL}/patient/${query.studentID}`
+  );
+  const patientData = await patientRes.json(); 
+
+  const employeeRes = await fetch(
+    `${process.env.BASE_URL}/employee/64518555b5b62f1086e74d80`
+  );
+  const employeeData = await employeeRes.json();
+
+  const programRes = await fetch(
+    `${process.env.BASE_URL}/patient/program/${query.studentID}`
+  );
+  const programData = await programRes.json();
+
+
+
+  return ( // ignore the html tags
+    <div> 
+      
+    </div>
+  )
+}
+
+
+export default editProgram; // DO NOT DELETE THIS SAMUEL

@@ -34,8 +34,8 @@ function BehaviorPage({ behaviorData: { data } }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const data = await fetch(
-        `http://localhost:8080/behaviour/${context.params.behaviorId}`,
-        {
+        `${process.env.BASE_URL}/behaviour/${context.params.behaviorId}`,
+        { // GET IS NOT CASE SENSITIVE
             method: "get",
         }
     );

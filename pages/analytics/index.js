@@ -8,6 +8,7 @@ import Tab from "@material-ui/core/Tab";
 import Graphs from "../../components/Analytics/Graphs/Graphs";
 import Reports from "../../components/Analytics/Reports/Reports";
 import CheckUser from "../../auth0CheckUser";
+import ReactDOM from "react-dom/client";
 
 const analytics = ({ patient, reports }) => {
   // Verifies if user has the correct permissions
@@ -54,17 +55,17 @@ const analytics = ({ patient, reports }) => {
   );
 };
 
-export const getServerSideProps = async ({ query }) => {
+/* export const getServerSideProps = async ({ query }) => { // CONVERT TO CLIENT SIDE
   const studentID = query.studentID;
 
   const patientRes = await fetch(
-    `http://localhost:8080/patient/${query.studentID}`
+    `${process.env.BASE_URL}/patient/${query.studentID}`
   );
   const patientData = await patientRes.json(); 
 
   let reports = []
   for(const reportID of patientData['data']['reports']) {
-    const response = await fetch(`http://localhost:8080/report/${reportID}`)
+    const response = await fetch(`${process.env.BASE_URL}/report/${reportID}`)
     const {data} = await response.json();
     reports.push(data)
   }
@@ -76,6 +77,43 @@ export const getServerSideProps = async ({ query }) => {
       reports: reports,
     },
   };
-};
+}; */
+
+// WRITE NEW CODE HERE
+/* export default function getStudentProfileClientSide({ patient, reports }) { // Ask Taz about this
+  // State to store patient and reports data
+  const [patientData, setPatientData] = useState(patient);
+  const [reportsData, setReportsData] = useState(reports);
+
+  // Effect to fetch data when the component is mounted
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const patientRes = await fetch(
+          `${process.env.BASE_URL}/patient/${query.studentID}`
+        ); // grab URL
+        const patientData = await patientRes.json();
+        let newReports = [];
+        for (const reportID of patientData['data']['reports']) { 
+          const response = await fetch(`${process.env.BASE_URL}/report/${reportID}`);
+          const { data } = await response.json();
+          newReports.push(data);
+        }
+
+        setPatientData(patientData['data']);
+        setReportsData(newReports);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+  return { // Do I need props here?
+    patient: patientData['data'], 
+      reports: reports,
+  }
+}  */
+
 
 export default analytics;

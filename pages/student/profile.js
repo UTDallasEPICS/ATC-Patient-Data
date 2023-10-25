@@ -15,10 +15,47 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
 import CheckUser  from '../../auth0CheckUser';
 
-const studentProfile = ({ student }) => {
+
+// empty arrow func; DO NOT TAKE IN PROPS
+const studentProfile = () => { // studentProfile creates a Student Profile Component
     // Verifies if user has the correct permissions
-    const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"])
-    if(!allowed) return(<div>Redirecting...</div>);
+    const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"]) // check
+    if(!allowed)  { return(<div>Redirecting...</div>); }
+
+    
+    // State has class level variables (?)
+    // Every time a state changes, the component is rerendered
+
+    // useState returns an array of two items; first is a reference to the component; second is a func
+    const [ student, setStudent ] = useState(); // From the perspective of the human, we make a variable for this component
+    // to reference the variable in question, we call student
+    // to mutate the variable in question, setStudent should be called
+
+    // useEffect is a React Hook (basically a backend method)
+    // constructor called WHEN object is created
+
+
+    useEffect(() => { 
+        // SAMUEL TODO FIX THE HARDCODE
+        const temp = await fetch(`${process.env.BASE_URL}/patient/1`, { method: "get", } ); // THE 1 IS HARDCODED, CHANGE IT LATER
+    const { data } = await temp.json();
+
+    const s = { // Student is a data object/component
+        id: query.id, // this came from server side props
+        firstName: data.firstName,
+        lastName: data.lastName,
+        img: "",
+        dob: data.birthday,
+        parentPhone: data.parentPhone,
+        email: data.email,
+        parentEmail: data.parentEmail,
+    };
+
+    setStudent(s);
+
+    }, []) 
+    // Dependency Array 
+    // useEffect called whenever it changes; should not be used for now until "later"
 
     var editStudent = false;
     if (role == "Admin") editStudent = true;
@@ -36,7 +73,7 @@ const studentProfile = ({ student }) => {
     };
 
     const handleArchive = async () => {
-        const temp = await fetch(`http://localhost:8080/patient/${student.id}`, {
+        const temp = await fetch(`${process.env.BASE_URL}/patient/${student.id}`, {
             method: "DELETE",
         });
         const { data } = await temp.json();
@@ -60,7 +97,9 @@ const studentProfile = ({ student }) => {
         //return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
     };
 
-    return (
+    return ( // This should be jsx
+    // Any time you want to include code, you use {}
+    
         <div className={styles.container}>
             <Head>
                 <title>Student Profile</title>
@@ -242,13 +281,20 @@ const studentProfile = ({ student }) => {
 
 export default studentProfile;
 
+// Need UseEffect()
+// Props is short for property
+// Props is an input for a component
+// The student prop is called in the above function when returning
+
+// DEPRECATED, DESTROY
 export const getServerSideProps = async ({ query }) => {
-    const temp = await fetch(`http://localhost:8080/patient/${query.id}`, {
+    // SAMUEL TODO: KILL IT
+    const temp = await fetch(`${process.env.BASE_URL}/patient/${query.id}`, {
         method: "get",
     });
     const { data } = await temp.json();
 
-    const student = {
+    const student = { // Student is a data object/component
         id: query.id,
         firstName: data.firstName,
         lastName: data.lastName,

@@ -4,11 +4,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../lib/prisma';
 import { Behavior } from '@prisma/client';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) { // does stuff with behaviors
 
   switch(req.method) {
 
     case 'GET':
+      return await getBehavior(req, res);
+
+    case 'GETMANY':
       return await getBehaviors(req, res);
 
     case 'POST':

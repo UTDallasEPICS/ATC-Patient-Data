@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Head from "next/head";
 import Current from "../components/editProgram/Current";
 import CheckUser  from '../auth0CheckUser';
+import useSWR from 'swr'
 
 const editProgram = ({ studentID, program }) => {
   const {allowed, role} = CheckUser(["Admin", "BCBA"])
@@ -21,10 +22,10 @@ const editProgram = ({ studentID, program }) => {
   );
 };
 
-export const getServerSideProps = async ({ query }) => {
+export const getServerSideProps = async ({ query }) => { // What data is this fetching?
   const temp = await fetch(
-    `http://localhost:8080/patient/program/${query.studentID}`
-  );
+    `${process.env.BASE_URL}/patient/program/${query.studentID}`
+    );
   const { data } = await temp.json();
   return {
     props: {

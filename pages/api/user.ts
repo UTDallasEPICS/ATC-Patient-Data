@@ -20,9 +20,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
+const getUser = async (req: NextApiRequest, res: NextApiResponse) => { 
+  // User sends get request
+  // Request tries to get data from database
+  // Database either accepts the request and responds with a user or responds with a rejection
   try {
-    const user = await prisma.user.find({
+    const user = await prisma.user.find({ // fetches data from Prisma based on user ID
       where: {
         id: req.query.id
       },
@@ -44,3 +47,27 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(500).json({error});
   }
 }
+
+const createUser = async(req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const userData: User = req.body;
+    const user = await prisma.behavior.create({
+      data: userData
+    });
+    return res.status(201).json(behavior);
+  } catch (error) {
+    return res.status(500).json({error});
+  }
+}
+
+/* const createBehavior = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const behaviorData: Behavior = req.body;
+    const behavior = await prisma.behavior.create({
+      data: behaviorData
+    });
+    return res.status(201).json(behavior);
+  } catch (error) {
+    return res.status(500).json({ error }); 
+  }
+} */

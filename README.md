@@ -12,7 +12,7 @@ When creating code, please use comments as you write; it helps during and after 
     * > NOTE: Read up on `--force` [here:](https://stackoverflow.com/questions/66020820/npm-when-to-use-force-and-legacy-peer-deps)
 3. run `npm run dev` to start frontend
     * > NOTE: Back-end must be running, else fetch error when login in
-4. go to http://localhost:3000 in browser to see the app
+4. go to ${process.env.BASE_URL} in browser to see the app
 
 ## Learn More
 

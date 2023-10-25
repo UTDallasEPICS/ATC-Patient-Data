@@ -9,7 +9,8 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import CheckUser  from '../../auth0CheckUser';
-
+import useSWR from 'swr'
+import { useState, useEffect } from "react";
 // import theme from '../src/theme';
 
 import { green } from "@material-ui/core/colors";
@@ -27,6 +28,8 @@ const theme = createTheme({
         primary: green,
     },
 });
+
+
 
 export default function studentSearch({ students }) {
     // Verifies if user has the correct permissions
@@ -73,9 +76,71 @@ export default function studentSearch({ students }) {
             </Navbar>
         </div>
     );
-}
+} 
+/* This code probably doesn't work
+export default function studentSearch() { // searches from client side 
+    // THIS CODE IS UNTESTED!!!!!
+    const { allowed, role } = CheckUser(["Admin", "BCBA", "Technician"]);
+    if (!allowed) return <div>Redirecting...</div>;
+  
+    const [students, setStudents] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+  
+    useEffect(() => {
+      async function fetchData() {
+        let temp = await fetch(`${process.env.BASE_URL}/api/search/user`, {
+          method: "POST",
+        });
+  
+        const data = await temp.json();
 
-export const getServerSideProps = async () => {
+        let fetchedStudents = data.map((student) => {
+            student.id = student._id; 
+            delete student._id; // remember to free up the memory, we don't need it anymore
+            return {
+              ...student,
+              img: "",
+            };
+          });
+    
+          fetchedStudents.sort(function (a, b) {
+            const aName = a.firstName + a.lastName;
+            const bName = b.firstName + b.lastName;
+            if (aName < bName) {
+              return -1;
+            }
+            if (aName > bName) {
+                return 1;
+              }
+              return 0;
+            });
+      
+            setStudents(fetchedStudents);
+          }
+      
+          fetchData();
+        }, []); // Empty dependency array means this useEffect will run once when the component is mounted
+      
+      }
+
+      // this block of code is for having a loading state so users can see if the data is still coming or not
+      const [isLoading, setIsLoading] = useState(true);
+
+      useEffect(() => {
+        async function fetchData() {
+          setIsLoading(true);
+          // ... data fetching logic ...
+      
+          setStudents(fetchedStudents);
+          setIsLoading(false);
+        }
+      
+        fetchData();
+      }, []); */
+
+
+
+export const getServerSideProps = async () => { // If you see a getServerSide function, turn it into a Client Side func
     // const res = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=6`)
     // // const res = await fetch(`https://randomuser.me/api/`)
     // const students = await res.json()
@@ -83,7 +148,7 @@ export const getServerSideProps = async () => {
     let temp = await fetch(`${process.env.BASE_URL}/api/search/user`, {
         method: "POST",
     });
-
+    
     const  data  = await temp.json();
 
     let students = data.map((student) => {
@@ -112,4 +177,4 @@ export const getServerSideProps = async () => {
             students,
         },
     };
-};
+}; 

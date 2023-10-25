@@ -161,7 +161,7 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
   }
 
   const submitSession = async () => {
-    const reportPostResponse = await fetch('http://localhost:8080/report/', {
+    const reportPostResponse = await fetch('${process.env.BASE_URL}/report/', {
       method: "post",
       mode: "cors",
       headers: {
@@ -179,12 +179,12 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
     const reportId = reportPostData['data'];
     console.log(reportId)
 
-    const reportResponse = await fetch('http://localhost:8080/report/' + reportId)
+    const reportResponse = await fetch('${process.env.BASE_URL}/report/' + reportId)
     const reportData = await reportResponse.json();
     const report = reportData['data'];
     console.log(report)
 
-    const patientResponse = await fetch(`http://localhost:8080/patient/${patient._id}`, {
+    const patientResponse = await fetch(`${process.env.BASE_URL}/patient/${patient._id}`, {
       method: "PATCH",
       mode: "cors",
       headers: {
@@ -229,17 +229,17 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const patientRes = await fetch(
-    `http://localhost:8080/patient/${query.studentID}`
+    `${process.env.BASE_URL}/patient/${query.studentID}`
   );
   const patientData = await patientRes.json(); 
 
   const employeeRes = await fetch(
-    `http://localhost:8080/employee/64518555b5b62f1086e74d80`
+    `${process.env.BASE_URL}/employee/64518555b5b62f1086e74d80`
   );
   const employeeData = await employeeRes.json();
 
   const programRes = await fetch(
-    `http://localhost:8080/patient/program/${query.studentID}`
+    `${process.env.BASE_URL}/patient/program/${query.studentID}`
   );
   const programData = await programRes.json();
 
