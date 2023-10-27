@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
-import { GetServerSideProps } from "next";
 import { Button, makeStyles, Paper,
         Table, TableBody, TableCell,
         TableContainer, TableHead,
@@ -10,7 +9,6 @@ import { Button, makeStyles, Paper,
         DialogTitle,
 } from "@material-ui/core";
 import { useState, useEffect } from "react";
-import useSWR from 'swr'
 import CheckUser from "../../auth0CheckUser";
 
 const useStyles = makeStyles({
@@ -39,15 +37,14 @@ export default function manageBehaviorsPage() {
     const {allowed, role} = CheckUser(["Admin", "BCBA"])
     if(!allowed) return(<div>Redirecting...</div>);
 
-    // fetch thebehavior data on the client side
-    // from here to...
+    // fetch the behavior data on the client side
     const [behaviors, setBehaviors] = useState(null)
     const [behaviorList, setBehaviorList] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/behavior`, { method: 'GET' });
+                const response = await fetch(`/api/search/behavior`, { method: 'GET' });
                 if (response.ok) {
                     const data = await response.json();
                     setBehaviors(data);
@@ -70,11 +67,9 @@ export default function manageBehaviorsPage() {
                 id: idx + 1,
                 _id: behavior.id,
             }));
-            console.log(behaviorList)
             setBehaviorList(behaviorList);
         }
     }, [behaviors]);
-    // to here
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [focusElement, setFocusElement] = useState(-1);
@@ -223,14 +218,3 @@ export default function manageBehaviorsPage() {
         </div>
     );
 }
-
-// export const getServerSideProps: GetServerSideProps = async () => {
-//     const data = await fetch(`${process.env.BASE_URL}/api/behavior`, {method: "GET",});
-//     const behaviors = await data.json();
-//         console.log(behaviors)
-//     return {
-//         props: {
-//             behaviors,
-//         },
-//     };
-// };
