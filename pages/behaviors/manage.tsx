@@ -25,7 +25,7 @@ export default function manageBehaviorsPage() {
 
     // fetch the behavior data on the client side
     const [behaviors, setBehaviors] = useState<Behavior[] | null >(null)
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,8 +45,8 @@ export default function manageBehaviorsPage() {
         fetchData();
     }, [behaviors]);
 
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const [focusElement, setFocusElement] = useState(-1);
+    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+    const [focusElement, setFocusElement] = useState<number>(-1);
 
     const removeBehavior = async () => {
         await fetch(
