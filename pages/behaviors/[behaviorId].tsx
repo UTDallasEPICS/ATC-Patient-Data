@@ -1,11 +1,11 @@
 import Head from "next/head";
-import { GetServerSideProps } from "next";
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
 import { Button } from "@material-ui/core";
 import CheckUser from "../../auth0CheckUser";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
+import { Behavior } from '@prisma/client';
 
 function BehaviorPage() {
     // Verifies if user has the correct permissions
@@ -15,14 +15,14 @@ function BehaviorPage() {
     const router = useRouter();
     const { behaviorId } = router.query;
 
-    const [behaviorData, setBehaviorData] = useState([])
+    const [behaviorData, setBehaviorData] = useState<Behavior | []>([])
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(`/api/search/behavior?id=${behaviorId}`, { method: 'GET' });
                 if (response.ok) {
-                    const data = await response.json();
+                    const data: Behavior = await response.json();
                     setBehaviorData(data);
                 } else {
                     console.error('Failed to fetch data:', response.status, response.statusText);

@@ -8,6 +8,7 @@ import { Button, makeStyles, Paper,
         DialogContent, DialogContentText,
         DialogTitle,
 } from "@material-ui/core";
+import { Behavior } from '@prisma/client';
 import { useState, useEffect } from "react";
 import CheckUser from "../../auth0CheckUser";
 
@@ -17,37 +18,23 @@ const useStyles = makeStyles({
     },
 });
 
-interface Behavior {
-    name: string;
-    description: string;
-    datatype: string;
-    _id: string;
-}
-
-interface BehaviorAsProps {
-    behaviorName: string;
-    description: string;
-    id: number;
-    datatype: string;
-    _id: string;
-}
-
 export default function manageBehaviorsPage() {
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin", "BCBA"])
     if(!allowed) return(<div>Redirecting...</div>);
 
     // fetch the behavior data on the client side
-    const [behaviors, setBehaviors] = useState(null)
-    const [behaviorList, setBehaviorList] = useState([]);
+    const [behaviors, setBehaviors] = useState<Behavior[] | null >(null)
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch(`/api/search/behavior`, { method: 'GET' });
                 if (response.ok) {
-                    const data = await response.json();
+                    const data : Behavior[] = await response.json();
                     setBehaviors(data);
+                    setLoading(false);
                 } else {
                     console.error('Failed to fetch data:', response.status, response.statusText);
                 }
@@ -56,19 +43,6 @@ export default function manageBehaviorsPage() {
             }
         };
         fetchData();
-    }, []);
-
-    useEffect(() => {
-        if (behaviors) {
-            const behaviorList = behaviors.map((behavior, idx) => ({
-                behaviorName: behavior.name,
-                description: behavior.description,
-                datatype: behavior.datatype,
-                id: idx + 1,
-                _id: behavior.id,
-            }));
-            setBehaviorList(behaviorList);
-        }
     }, [behaviors]);
 
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -76,12 +50,12 @@ export default function manageBehaviorsPage() {
 
     const removeBehavior = async () => {
         await fetch(
-            `/api/behavior?id=${behaviorList[focusElement]._id}`,
+            `/api/behavior?id=${focusElement}`,
             {
                 method: "DELETE",
             }
         );
-        setBehaviorList((prev) => {
+        setBehaviors((prev) => {
             prev.splice(focusElement, 1);
             return prev;
         });
@@ -120,58 +94,62 @@ export default function manageBehaviorsPage() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {behaviorList.map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            {row.id}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {row.behaviorName}
-                                        </TableCell>
-                                        <TableCell>{row.description}</TableCell>
-                                        <TableCell>{row.datatype}</TableCell>
-                                        <TableCell align="center">
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    justifyContent:
-                                                        "space-around",
-                                                }}
-                                            >
-                                                <Link
-                                                    href={`/behaviors/${row._id}`}
+                                {loading ? (
+                                    <p>Loading data...</p>
+                                ) : (
+                                    behaviors.map((row) => (
+                                        <TableRow
+                                            key={row.id}
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <TableCell component="th" scope="row">
+                                                {row.id}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {row.name}
+                                            </TableCell>
+                                            <TableCell>{row.description}</TableCell>
+                                            <TableCell>{row.datatype}</TableCell>
+                                            <TableCell align="center">
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent:
+                                                            "space-around",
+                                                    }}
                                                 >
+                                                    <Link
+                                                        href={`/behaviors/${row.id}`}
+                                                    >
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            style={{width: "100px", marginRight:"1em",}}
+                                                        >
+                                                            View Details
+                                                        </Button>
+                                                    </Link>
                                                     <Button
                                                         variant="contained"
-                                                        color="primary"
-                                                        style={{width: "100px", marginRight:"1em",}}
+                                                        style={{
+                                                            backgroundColor: "#ff604f",
+                                                            width: "100px",
+                                                            color: "white",
+                                                        }}
+                                                        onClick={() => {
+                                                            setFocusElement(
+                                                                row.id
+                                                            );
+                                                            setDialogOpen(true);
+                                                        }}
                                                     >
-                                                        View Details
+                                                        Remove Behavior
                                                     </Button>
-                                                </Link>
-                                                <Button
-                                                    variant="contained"
-                                                    style={{
-                                                        backgroundColor: "#ff604f",
-                                                        width: "100px",
-                                                        color: "white",
-                                                    }}
-                                                    onClick={() => {
-                                                        setFocusElement(
-                                                            row.id - 1
-                                                        );
-                                                        setDialogOpen(true);
-                                                    }}
-                                                >
-                                                    Remove Behavior
-                                                </Button>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
                             </TableBody>
                         </Table>
                     </TableContainer>

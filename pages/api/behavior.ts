@@ -31,6 +31,9 @@ const createBehavior = async (req: NextApiRequest, res: NextApiResponse) => {
         name: behaviorData.name,
         description: behaviorData.description,
         datatype: behaviorData.datatype,
+        trialsPerEntry: null, 
+        entries: [], 
+        tags: []
       },
     });
     return res.status(201).json(behavior);
@@ -45,8 +48,7 @@ const deleteBehavior = async (req: NextApiRequest, res: NextApiResponse) => {
     await prisma.behavior.delete({
       where: { id: Number(id) }
     });
-    // Setting the status of a response itself does not send the response in NextJS, so here msg has been attached for the response to be properly sent
-    return res.status(200).json({ message: `Behavior with ID ${id} deleted successfully` });
+    return res.status(200).json({ message: `Behavior deleted successfully` });;
   } catch (error) {
     return res.status(500).json({ error });
   }
