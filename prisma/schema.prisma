@@ -10,18 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  first_name      String
-  last_name       String
-  email           String           @unique
-  id              Int              @id @default(autoincrement())
-  phone_number    String
-  birthday        DateTime
-  EmployeeProfile EmployeeProfile?
-  PatientProfile  PatientProfile?
-  Dependents      PatientProfile[] @relation("dependents")
-  Sessions        Session[]
-}
 
 enum Role {
   Admin
@@ -29,15 +17,47 @@ enum Role {
   BCBA
 }
 
+// siwitched to the below to match up with the behavior types listed in 
+// behavior/add.tsx line 124-127
+enum Datatype {
+  TRIAL
+  PROBE
+  DURATION
+  FREQUENCY
+}
+
+// previously used 
+// enum Datatype {
+//   BOOLEAN
+//   COUNT
+//   BOOLEAN_ARRAY
+//   COUNT_ARRAY
+// }
+
+// any lines containing the word "patient" have been replaced with "student"
+model User {
+  id              Int              @id @default(autoincrement())
+  first_name      String
+  last_name       String
+  email           String?          @unique
+  phone_number    String?
+  birthday        DateTime
+  EmployeeProfile EmployeeProfile?
+  StudentProfile  StudentProfile?
+  Dependents      StudentProfile[] @relation("dependents")
+  Sessions        Session[] 
+  image           Image?
+}
+
 model EmployeeProfile {
   role     Role             @default(Technician)
   id       Int              @id @default(autoincrement())
   User     User             @relation(fields: [id], references: [id])
-  Patients PatientProfile[]
+  Students StudentProfile[]
   Sessions Session[]
 }
 
-model PatientProfile {
+model StudentProfile {
   Guardians         User[]           @relation("dependents") //guardian relation many to many link to User table instead
   id                Int              @id @default(autoincrement())
   User              User             @relation(fields: [id], references: [id])
@@ -51,8 +71,8 @@ model Behavior {
   id             Int      @id @default(autoincrement())
   name           String
   description    String
-  datatype       Datatype @default(COUNT)
-  trialsPerEntry Int
+  datatype       Datatype @default(TRIAL)
+  trialsPerEntry Int?
   entries        String[]
   tags           String[]
 }
@@ -61,9 +81,9 @@ model Session {
   id          Int             @id @default(autoincrement())
   sessionTime DateTime
   data        Json
-  patientId   Int
+  studentId   Int
   employeeId  Int
-  patient     PatientProfile  @relation(fields: [patientId], references: [id])
+  student     StudentProfile  @relation(fields: [studentId], references: [id])
   employee    EmployeeProfile @relation(fields: [employeeId], references: [id])
   User        User?           @relation(fields: [userId], references: [id])
   userId      Int?
@@ -71,14 +91,16 @@ model Session {
 
 model Program {
   id        Int            @id @default(autoincrement())
-  patientId Int
-  patient   PatientProfile @relation(fields: [patientId], references: [id])
+  studentId Int
+  student   StudentProfile @relation(fields: [studentId], references: [id])
   behaviors Json           @default("[]")
 }
 
-enum Datatype {
-  BOOLEAN
-  COUNT
-  BOOLEAN_ARRAY
-  COUNT_ARRAY
+
+// image model to hold user profile pictures
+model Image{
+  id        Int          @id @default(autoincrement())
+  Image     String 
+  userId    Int          @unique
+  user      User         @relation(fields: [userId], references: [id]) 
 }
