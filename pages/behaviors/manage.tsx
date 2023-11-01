@@ -195,4 +195,5 @@ export default function manageBehaviorsPage() {
             </Navbar>
         </div>
     );
+
 }
