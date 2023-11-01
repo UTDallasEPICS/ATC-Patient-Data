@@ -32,8 +32,8 @@ export default function addBehavior() {
         ) {
             return;
         }
-        await fetch("http://localhost:8080/behaviour/", {
-            method: "post",
+        await fetch("/api/behavior/", {
+            method: "POST",
             mode: "cors",
             headers: {
                 "Content-Type": "application/json",
@@ -41,14 +41,16 @@ export default function addBehavior() {
             body: JSON.stringify({
                 name: behaviorData.behaviorName,
                 description: behaviorData.description,
-                datatype: behaviorData.datatype,
+                datatype: behaviorData.datatype.toUpperCase(),
             }),
         });
+
         setBehaviorData({
             behaviorName: "",
             description: "",
             datatype: "",
         });
+
         router.push("/behaviors/manage");
     };
 
