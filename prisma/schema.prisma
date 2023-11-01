@@ -26,14 +26,6 @@ enum Datatype {
   FREQUENCY
 }
 
-// previously used 
-// enum Datatype {
-//   BOOLEAN
-//   COUNT
-//   BOOLEAN_ARRAY
-//   COUNT_ARRAY
-// }
-
 // any lines containing the word "patient" have been replaced with "student"
 model User {
   id              Int              @id @default(autoincrement())
