@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import CheckUser  from '../../auth0CheckUser';
+import {StudentSearchProps, Student} from '../../types';
 
 // import theme from '../src/theme';
 
@@ -28,7 +29,7 @@ const theme = createTheme({
     },
 });
 
-export default function studentSearch({ students }) {
+export default function studentSearch({ students }: StudentSearchProps) {
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician"])
     if(!allowed) return(<div>Redirecting...</div>);
@@ -80,13 +81,13 @@ export const getServerSideProps = async () => {
     // // const res = await fetch(`https://randomuser.me/api/`)
     // const students = await res.json()
   // TODO: search by whether has patient profile
-    let temp = await fetch(`${process.env.BASE_URL}/api/search/user`, {
+    let temp = await fetch(process.env.AUTH0_BASE_URL + '/api/search/user', {
         method: "POST",
     });
 
     const  data  = await temp.json();
 
-    let students = data.map((student) => {
+    let students: Student[] = data.map((student: any) => {
         student.id = student._id;
         delete student._id;
         return {

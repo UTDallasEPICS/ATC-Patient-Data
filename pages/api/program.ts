@@ -1,14 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '../../lib/prisma';
+import prisma from '../../lib/prisma';
+import { Program } from '@prisma/client';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-
-  switch(req.method) {
+export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
+  switch( req.method ) {
     case 'GET':
-      return await getPrograms(req, res);
+      return await getProgram(req, res);
     
     case 'POST':
       return await createProgram(req, res);
@@ -19,27 +16,17 @@ export default async function handler(
     default:
       return res.status(405).end();
   }
-
 }
 
-const getPrograms = async (req: NextApiRequest, res: NextApiResponse) => {
+const getProgram = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { id } = req.query; 
   try {
-    const programs = await prisma.program.findMany();
-    return res.status(200).json(programs);
-  } catch (error) {
-    return res.status(500).json({error});
-  }
-}
-
-const getProgramById = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
-  try {
-    const program = await prisma.program.findUnique({
-      where: { id: Number(id) }
+    const program  = await prisma.program.findFirst({
+      where: { id: Number(id) },
     });
     return res.status(200).json(program);
   } catch (error) {
-    return res.status(500).json({error}); 
+    return res.status(500).json({error});
   }
 }
 

@@ -1,31 +1,30 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
+import {  } from '@prisma/client';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  switch (req.method) {
+export default async function handler( req: NextApiRequest, res: NextApiResponse ) { 
+  switch ( req.method ) {
     case "GET":
-      return getReports(req, res);
+      return getReport(req, res);
+
     case "POST":
       return createReport(req, res);
+
     case "DELETE":
       return deleteReport(req, res);
+    
+    default:
+      return res.status(405).end();
   }
 }
 
-const getReports = async (req: NextApiRequest, res: NextApiResponse) => {
+const getReport = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { id } = req.query;
   try {
-    if (req.query.id) {
-      const report = await prisma.report.findUnique({
-        where: { id: req.query.id as string },
+    const session = await prisma.session.findFirst({
+        where: { id: Number(id) },
       });
-      return res.status(200).json(report);
-    } else {
-      const reports = await prisma.report.findMany();
-      return res.status(200).json(reports);
-    }
+      return res.status(200).json(session);
   } catch (error) {
     return res.status(500).json({ error });
   }
@@ -33,7 +32,7 @@ const getReports = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const createReport = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const savedReport = await prisma.report.create({
+    const savedReport = await prisma.session.create({
       data: req.body,
     });
     return res
@@ -46,7 +45,7 @@ const createReport = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const deleteReport = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    await prisma.report.delete({
+    await prisma.session.delete({
       where: { id: req.query.id as string },
     });
     return res.status(200);

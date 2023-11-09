@@ -90,7 +90,7 @@ const editStudent = (props: { student: PatientWithIdAndImg }) => {
             fields.map((field) => field.value || "");
 
         try {
-            await fetch(`http://localhost:8080/patient/${student.id}`, {
+            await fetch(`${process.env.AUTH0_BASE_URL}/patient/${student.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -138,7 +138,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
     const temp = await fetch(
-        `http://localhost:8080/patient/${query.studentID}`,
+        `${process.env.AUTH0_BASE_URL}/patient/${query.studentID}`,
         {
             method: "GET",
         }

@@ -14,6 +14,10 @@ export interface Student {
     img?: ImageBitmap,
   }
 
+export interface StudentProfileProps {
+    student: Student;
+}
+
 export interface Employee {
   firstName: string,
   lastName: string,

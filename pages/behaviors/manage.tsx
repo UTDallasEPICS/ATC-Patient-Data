@@ -33,6 +33,7 @@ export default function manageBehaviorsPage() {
                 const response = await fetch(`/api/search/behavior`, { method: 'GET' });
                 if (response.ok) {
                     const data : Behavior[] = await response.json();
+                    
                     setBehaviors(data);
                     setLoading(false);
                 } else {
@@ -195,4 +196,5 @@ export default function manageBehaviorsPage() {
             </Navbar>
         </div>
     );
+
 }

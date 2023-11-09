@@ -43,7 +43,7 @@ const Behavior = ({ list, studentId, updateBehaviorList }) => {
     }
     try {
       await fetch(
-        `http://localhost:8080/patient/program/${studentId}/delete/${behaviorId}`,
+        `${process.env.AUTH0_BASE_URL}/patient/program/${studentId}/delete/${behaviorId}`,
         {
           method: "delete",
           mode: "cors",

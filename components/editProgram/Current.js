@@ -32,7 +32,7 @@ const Current = ({ studentID, addedBehavior }) => {
 
   React.useEffect(() => {
     async function getBehaviors() {
-      const temp = await fetch("http://localhost:8080/behaviour", {
+      const temp = await fetch(`${process.env.AUTH0_BASE_URL}/behaviour`, {
         method: "get",
       });
       const { data } = await temp.json();
@@ -59,7 +59,7 @@ const Current = ({ studentID, addedBehavior }) => {
     };
 
     try {
-      const temp = await fetch("http://localhost:8080/program", {
+      const temp = await fetch(`${process.env.AUTH0_BASE_URL}/program`, {
         method: "post",
         body: JSON.stringify(payload),
         headers: {

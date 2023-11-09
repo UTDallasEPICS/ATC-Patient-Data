@@ -14,48 +14,49 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
 import CheckUser  from '../../auth0CheckUser';
+import {StudentProfileProps, Student} from '../../types';
 
-const studentProfile = ({ student }) => {
+const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
     // Verifies if user has the correct permissions
-    const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"])
-    if(!allowed) return(<div>Redirecting...</div>);
+    const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"]);
+    if(!allowed) return <div>Redirecting...</div>;
 
-    var editStudent = false;
+    var editStudent: boolean = false;
     if (role == "Admin") editStudent = true;
-    var studentAnalytics = false;
+    var studentAnalytics: boolean = false;
     if (role == "Admin" || role == "BCBA" || role == "Technician") studentAnalytics = true;
 
     //State handles the notifications for when the archive is clicked
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
     console.log(role)
-    const handleClickOpen = () => {
+    const handleClickOpen = (): void => {
         setOpen(true);
     };
-    const handleClose = () => {
+    const handleClose = (): void => {
         setOpen(false);
     };
 
-    const handleArchive = async () => {
-        const temp = await fetch(`http://localhost:8080/patient/${student.id}`, {
+    const handleArchive = async (): Promise<void> => {
+        const temp = await fetch(`${process.env.AUTH0_BASE_URL}/patient/${student.id}`, {
             method: "DELETE",
         });
         const { data } = await temp.json();
-        console.log(data)
-        handleClose()
+        console.log(data);
+        handleClose();
     }
 
     //State for handling when other info is being pressed
-    const [otherInfoOpen, setOtherInfo] = React.useState(false);
+    const [otherInfoOpen, setOtherInfo] = React.useState<boolean>(false);
     //Opens other info
-    const openOtherInfo = () => {
+    const openOtherInfo = (): void => {
         setOtherInfo(true);
     };
     //Close Other Info
-    const closeOtherInfo = () => {
+    const closeOtherInfo = (): void => {
         setOtherInfo(false);
     };
 
-    const formatDate = (d) => {
+    const formatDate = (d: Date): string => {
         return d.toLocaleDateString('en-us', { year:"numeric", month:"short", day: 'numeric'})
         //return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
     };
@@ -242,8 +243,8 @@ const studentProfile = ({ student }) => {
 
 export default studentProfile;
 
-export const getServerSideProps = async ({ query }) => {
-    const temp = await fetch(`http://localhost:8080/patient/${query.id}`, {
+export const getServerSideProps = async ({ query }): Promise<{ props: { student: Student } }> => {
+    const temp = await fetch(`${process.env.AUTH0_BASE_URL}/patient/${query.id}`, {
         method: "get",
     });
     const { data } = await temp.json();
@@ -257,6 +258,7 @@ export const getServerSideProps = async ({ query }) => {
         parentPhone: data.parentPhone,
         email: data.email,
         parentEmail: data.parentEmail,
+        otherInfo: data.otherInfo,
     };
     return {
         props: {

@@ -2,7 +2,6 @@ import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
-import { Patient } from "../../interfaces/Patient";
 import CheckUser  from '../../auth0CheckUser';
 import { useRouter } from 'next/router';
 import Link from "next/link";
@@ -84,7 +83,7 @@ const newStudent = () => {
             parentEmail,
         };
 
-        await fetch("http://localhost:8080/patient/", {
+        await fetch(`${process.env.AUTH0_BASE_URL}/patient/`, {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
