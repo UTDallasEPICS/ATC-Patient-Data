@@ -1,8 +1,9 @@
-# Docker - MongoDB Server
-* Will use a docker MongoDB image and run that image as a container to start our MongoDB server for ATC-Backend
-    * backend will then connect to this MongoDB server instance via localhost:port
+# Docker - PostgreSQL Server
+* IMPORTANT NOTE: You need the database to be running in Docker constantly while you are developing (coding) the software. You may also need to change your DATABASE_URL .env variable to this URL: `postgresql://postgres:postgres@localhost:5003/postgres`
+  
 
 * **SCRIPTS**
+  *FOR ALL SCRIPTING, USE GIT BASH INSTEAD OF POWERSHELL*
     * `npm run createDB`
         * build docker image using a dockerfile and create + run container to start a MongoDB server instance
         * > **NOTE: Can only be ran once to start server if container not yet created**
@@ -10,13 +11,6 @@
         * Start/restart exited/running container
     * `npm run stopDB`
         * Stop running container
-        * > This means that the backend cannot connect to the Mongoose database server!
-
-    * 👎 ALTERNATIVE 👎
-        * pull MongoDB image
-            * `docker pull mongo`
-        * Start a MongoDB server Instance
-            * `docker run --name MONGODB_SERVER_NAME -d mongo:latest`
 
 * **OTHER**
     * view images
@@ -27,13 +21,15 @@
         * `docker image rm IMAGE_NAME`
     * delete containers
         * `docker container rm CONTAINER_NAME`
+    * [https://www.ictshore.com/data-center/how-to-use-docker/#:~:text=How%20to%20use%20Docker%201%20Installing%20Docker%20Of,5%20Storage%20persistence%20...%206%20The%20Dockerfile%20](url)
+    * `docker ps`
+        * verifies that the database is running
+    * `psql -h localhost -p 5003 -U postgres -d postgres`
 <br/><br/>
 
 * **REFERENCES**
     * https://www.tutorialspoint.com/docker/docker_file.htm
-    * https://www.mongodb.com/compatibility/docker
-    * https://hub.docker.com/_/mongo
-        * [run Reference](https://docs.docker.com/engine/reference/commandline/run/)
+    * [https://hub.docker.com/_/postgres/](url)
     * [How to automatically delete a Docker container after running it](https://www.powercms.in/article/how-automatically-delete-docker-container-after-running-it)
 <br/><br/>
 
