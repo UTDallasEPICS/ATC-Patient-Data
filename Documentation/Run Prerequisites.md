@@ -6,20 +6,11 @@
 1. Install WSL (Windows Subsystem for Linux)
     * Only for Windows devices
     * Run `wsl --set-default-version 2` in command prompt
-    * Download [Distrod](https://github.com/nullpo-head/wsl-distrod)
-        * run distrod_wsl_launcher.exe and follow wizard
-            * enter `2`
-            * enter `6` (archlinux, can choose other distro)
-            * enter `1` (or some distro version)
-            * enter a `username` and `password` for distro (Note, password will not be shown in terminal when typing)
-            * done
 
-* > NOTE: I am using Archliux in WSL terminal so the pacman package manager is used, may use other E.g, apt for Ubuntu
+* > NOTE: I am using Archlinux in WSL terminal so the pacman package manager is used, may use other E.g, apt for Ubuntu
 
 2. install [git](https://git-scm.com/), [npm](https://www.npmjs.com/), and [docker](https://www.docker.com/)
-    * run `sudo pacman -S git`
-    * run `sudo pacman -S npm`
-    * run `sudo pacman -S docker`
+   * > NOTE: DO NOT MAKE A DOCKER ACCOUNT, YOU DON'T NEED ONE.
 
 3. Clone frontend and backend repository
     * > NOTE: `cd` and do these commands in the folder you want the repositories to be placed in
