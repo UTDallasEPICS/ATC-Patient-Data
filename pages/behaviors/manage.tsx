@@ -47,7 +47,7 @@ export default function manageBehaviorsPage() {
             }
         };
         fetchData();
-    }, [behaviors]);
+    }, []);
 
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [focusElement, setFocusElement] = useState<number>(-1);
