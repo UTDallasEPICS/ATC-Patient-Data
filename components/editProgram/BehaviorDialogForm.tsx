@@ -1,3 +1,4 @@
+import React, { FC, ChangeEvent } from 'react';
 import {
   Button,
   FormControl,
@@ -9,8 +10,9 @@ import {
 } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import styles from "../../styles/EditProgram.module.css";
+import { BehaviorDialogFormProps } from '../../types';
 
-export default function BehaviorDialogForm({ behavior, setBehavior }) {
+const BehaviorDialogForm: FC<BehaviorDialogFormProps> = ({ behavior, setBehavior }) => {
   return (
     <Paper className={styles.domainPaper}>
       <FormControl fullWidth>
@@ -19,7 +21,7 @@ export default function BehaviorDialogForm({ behavior, setBehavior }) {
           id="my-input"
           aria-describedby="my-helper-text"
           value={behavior.name}
-          onChange={(e) =>
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setBehavior({
               ...behavior,
               name: e.target.value,
@@ -39,7 +41,7 @@ export default function BehaviorDialogForm({ behavior, setBehavior }) {
           id="my-input"
           aria-describedby="my-helper-text"
           value={behavior.description}
-          onChange={(e) =>
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setBehavior({
               ...behavior,
               description: e.target.value,
@@ -56,10 +58,10 @@ export default function BehaviorDialogForm({ behavior, setBehavior }) {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={behavior.datatype}
-          onChange={(e) => {
+          onChange={(e: ChangeEvent <{ value: unknown}>) => {
             setBehavior((prev) => ({
               ...prev,
-              datatype: e.target.value,
+              datatype: e.target.value as string,
             }));
           }}
         >
@@ -78,3 +80,5 @@ export default function BehaviorDialogForm({ behavior, setBehavior }) {
     </Paper>
   );
 }
+
+export default BehaviorDialogForm;

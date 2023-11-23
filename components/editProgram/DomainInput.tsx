@@ -1,12 +1,13 @@
-import React from "react";
+import React, { FC, useState } from "react";
 import Chip from "@material-ui/core/Chip";
 import styles from "../../styles/EditProgram.module.css";
 import Paper from "@material-ui/core/Paper";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from '@material-ui/core/Fab';
+import { ChipData } from "../../types";
 
-const DomainInput = () => {
-  const [chipData, setChipData] = React.useState([
+const DomainInput: FC = () => {
+  const [chipData, setChipData] = React.useState<ChipData[]>([
     { key: 0, label: "Tag 1" },
     { key: 1, label: "Tag 2" },
     { key: 2, label: "Tag 3" },
@@ -14,7 +15,7 @@ const DomainInput = () => {
     { key: 4, label: "Tag 5" },
   ]);
 
-  const handleDelete = (chipToDelete) => () => {
+  const handleDelete = (chipToDelete: ChipData) => () => {
     setChipData((chips) =>
       chips.filter((chip) => chip.key !== chipToDelete.key)
     );

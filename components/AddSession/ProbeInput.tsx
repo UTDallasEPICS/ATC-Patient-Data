@@ -2,11 +2,12 @@ import styles from "../../styles/AddSession.module.css";
 import Card from "@material-ui/core/Card";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import React from "react";
+import { ProbeInputProps } from "../../types";
 
-const ProbeInput = ({ title, trialsPerEntry, entryNumber, setResponses}) => {
-  const [checkedData, setCheckedData] = useState([]);
+const ProbeInput: FC<ProbeInputProps> = ({ title, trialsPerEntry, entryNumber, setResponses}) => {
+  const [checkedData, setCheckedData] = useState<string[]>([]);
   useEffect(() => initializeArray(trialsPerEntry), [trialsPerEntry]);
   const initializeArray = (trialsPerEntry) => {
     for (var i = 0; i < trialsPerEntry; i++) {
@@ -20,7 +21,7 @@ const ProbeInput = ({ title, trialsPerEntry, entryNumber, setResponses}) => {
     }
   }, [checkedData])
 
-  const switchValue = (value, i) => {
+  const switchValue = (value: string, i: number) => {
     setCheckedData((checkedData) => {
       let items = [...checkedData];
       let item = items[i];

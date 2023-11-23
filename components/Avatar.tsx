@@ -1,7 +1,10 @@
-export default function Avatar({ img, diameter }) {
-  const addDefaultSrc = (e) => {
+import React, { FC, SyntheticEvent  } from 'react';
+import { AvatarProps } from '../types';
+
+const Avatar: FC<AvatarProps> = ({ img, diameter }) => {
+  const addDefaultSrc = (e: SyntheticEvent<HTMLImageElement>) => {
     console.log("addDefaultSrc called");
-    e.target.src = defaultImg;
+    e.currentTarget.src = defaultImg;
   };
   {
     if (img == "") img = defaultImg;
@@ -27,3 +30,5 @@ const avatar = {
   verticalAlign: "middle",
   borderRadius: "50%",
 };
+
+export default Avatar;

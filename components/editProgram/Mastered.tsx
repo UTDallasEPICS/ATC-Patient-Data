@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Behavior from "./Behavior";
+import { BehaviorItem, MasteredProps } from '../../types';
 
 
 
-const Mastered = ( { studentID }) => {
+const Mastered: FC<MasteredProps> = ( { studentID }) => {
     
-    const [behavior, setBehavior] = React.useState([]);
+    const [behavior, setBehavior] = useState<BehaviorItem[]>([]);
   
-    React.useEffect(() => {
+    useEffect(() => {
       setBehavior([
         {
           id: 0,
@@ -41,7 +42,9 @@ const Mastered = ( { studentID }) => {
     }, []);
     return (
         <div>
-            <Behavior list={behavior} />
+            <Behavior list={behavior} studentId={0} updateBehaviorList={function (updatedlist: any): void {
+          throw new Error('Function not implemented.');
+        } } />
         </div>
     )
 }

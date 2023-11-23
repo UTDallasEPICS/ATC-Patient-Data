@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {FC} from 'react'
 import Current from './Current'
 import styles from "../../../styles/AddSession.module.css";
 import Typography from "@material-ui/core/Typography";
+import { ReportsProps } from '../../../types';
 
-const Reports = ({ reports }) => {
+const Reports: FC<ReportsProps> = ({ reports }) => {
 
     return (
         <div>

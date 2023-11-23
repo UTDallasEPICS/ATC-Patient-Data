@@ -2,11 +2,12 @@ import Stopwatch from "./Stopwatch/Stopwatch";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import styles from "../../styles/AddSession.module.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { DurationInputProps} from '../../types';
 
-const DurationInput = ({title, entryNumber, setResponses}) => {
-  let time = 0;
-  const getTime = (time) =>
+const DurationInput: React.FC<DurationInputProps> = ({title, entryNumber, setResponses}) => {
+  let time: number = 0;
+  const getTime = (time: number) =>
   {
       time = time;
       if(typeof(setResponses) == "function") {

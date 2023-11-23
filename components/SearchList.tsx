@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useState, FC} from "react";
 import PropTypes from "prop-types";
 import StudentListItem from "./searchListItem";
 import styles from "../styles/SearchList.module.css";
+import { Student, SearchListProps } from "../types";
 
-const SearchList = ({ students, searchTerm, destinationPath }) => {
+const SearchList: FC<SearchListProps> = ({ students, searchTerm, destinationPath }) => {
     return (
         <div
             className={styles.studentList}

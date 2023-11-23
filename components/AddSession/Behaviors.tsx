@@ -1,13 +1,14 @@
+import React, { FC } from "react";
 import Behavior from "./Behavior";
-
+import { BehaviorsProps } from "../../types";
  
-export default function Behaviors({ behaviors, returnResponses}) {
-  let responseArray = []
-  for(var i = 0; i < behaviors.length; i++)
+const Behaviors: FC<BehaviorsProps> = ({ behaviors, returnResponses}) => {
+  let responseArray: any[] = [];
+  for (var i = 0; i < behaviors.length; i++)
   {
       responseArray[i] = [];
   }
-  const fillData = (behaviorCount, response) =>
+  const fillData = (behaviorCount: number, response: any) =>
   {
       responseArray[behaviorCount] = response;
       if(typeof(returnResponses) == "function") {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC, useState, ChangeEvent} from "react";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
@@ -7,19 +7,21 @@ import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import styles from "../../styles/GenInfo.module.css";
 import { Container } from "@material-ui/core";
+import { fchmod } from "fs";
+import { GenInfoProps } from "../../types";
 
-const GenInfo = ({
+const GenInfo: FC<GenInfoProps> = ({
   globalBehavior,
   behaviorId,
   setBehaviorId,
   updateBehavior,
 }) => {
-  const handleChange = (event) => {
-    setBehaviorId(event.target.value);
-    updateBehavior(event.target.value);
+  const handleChange = (event: ChangeEvent<{ value: unknown}>) => {
+    setBehaviorId(event.target.value as string);
+    updateBehavior(event.target.value as string);
   };
 
-  const [hide, setHide] = React.useState(false);
+  const [hide, setHide] = useState(false);
 
   const doNotShow = () => {
     setHide(false);
@@ -35,7 +37,7 @@ const GenInfo = ({
             Choose behavior
           </MenuItem>
           {globalBehavior.map((behavior, idx) => (
-            <MenuItem key={idx} value={behavior._id}>
+            <MenuItem key={idx} value={behavior.id}>
               {behavior.name}
             </MenuItem>
           ))}

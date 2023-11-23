@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { FC } from 'react'
 import TextField from '@material-ui/core/TextField';
 import styles from "../../styles/Mastery.module.css";
 
 
-const Mastery = () => {
+const Mastery: FC = () => {
     return (
         <div className={styles.container}>
             <TextField

@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { FC } from 'react'
 import styles from "../styles/OtherInfo.module.css"
+import { OtherInfoProps } from '../types'
 
-const OtherInfo = ({ info }) => {
+const OtherInfo: FC<OtherInfoProps> = ({ info }) => {
     return (
         <div>
             <div className = {styles.container}>

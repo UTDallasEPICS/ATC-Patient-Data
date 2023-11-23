@@ -1,4 +1,4 @@
-import React from "react";
+import React, {FC, useState, useEffect} from "react";
 import Head from "next/head";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -18,17 +18,18 @@ import DomainInput from "./DomainInput";
 import Master from "./Mastery";
 import Behavior from "./Behavior";
 import BehaviorDialogForm from "./BehaviorDialogForm";
+import { CurrentProps } from "../../types";
 
-const Current = ({ studentID, addedBehavior }) => {
-  const [loading, setLoading] = React.useState(true);
-  const [open, setOpen] = React.useState(false);
-  const [activeStep, setActiveStep] = React.useState(0);
-  const steps = getSteps();
+const Current: FC<CurrentProps> = ({ studentID, addedBehavior }) => {
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [activeStep, setActiveStep] = React.useState<number>(0);
+  const steps: string[] = getSteps();
 
-  const [globalBehavior, setGlobalBehavior] = React.useState([]);
-  const [behavior, setBehavior] = React.useState([]);
-  const [behaviorId, setBehaviorId] = React.useState("");
-  const [currentBehavior, setCurrentBehavior] = React.useState(null);
+  const [globalBehavior, setGlobalBehavior] = React.useState<any[]>([]);
+  const [behavior, setBehavior] = React.useState<any[]>([]);
+  const [behaviorId, setBehaviorId] = React.useState<string>("");
+  const [currentBehavior, setCurrentBehavior] = React.useState<any>(null);
 
   React.useEffect(() => {
     async function getBehaviors() {
@@ -44,15 +45,15 @@ const Current = ({ studentID, addedBehavior }) => {
   }, []);
 
   //Handling if we need set trials
-  const handleClickOpen = () => {
+  const handleClickOpen = (): void => {
     setOpen(true);
   };
   //Handling when we do not need to set trial amount
-  const handleClose = () => {
+  const handleClose = (): void => {
     setOpen(false);
   };
 
-  const saveProgram = async () => {
+  const saveProgram = async (): Promise<void> => {
     const payload = {
       ...currentBehavior,
       studentId: studentID,
@@ -76,7 +77,7 @@ const Current = ({ studentID, addedBehavior }) => {
   };
 
   //Function for  the stepper
-  const handleNext = async () => {
+  const handleNext = async (): Promise<void> => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     if (activeStep + 1 === steps.length) {
       setActiveStep(0);
@@ -85,16 +86,16 @@ const Current = ({ studentID, addedBehavior }) => {
     }
   };
   //Allows the stepper to go back
-  const handleBack = () => {
+  const handleBack = (): void => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   //Gets the steps for the stepper
-  function getSteps() {
+  function getSteps(): string[] {
     return ["General Info", "Domain"];
   }
 
   //Returns the components corresponding to the step the user is on.
-  function getStepContent(stepIndex) {
+  function getStepContent(stepIndex: number): JSX.Element | string {
     switch (stepIndex) {
       case 0:
         return (
@@ -102,7 +103,7 @@ const Current = ({ studentID, addedBehavior }) => {
             globalBehavior={globalBehavior}
             behaviorId={behaviorId}
             setBehaviorId={setBehaviorId}
-            updateBehavior={(idx) => {
+            updateBehavior={(idx: string) => {
               setCurrentBehavior(
                 globalBehavior.find((behavior) => behavior._id === idx)
               );
@@ -161,7 +162,7 @@ const Current = ({ studentID, addedBehavior }) => {
             </Stepper>
             <div>
               {activeStep === steps.length ? (
-                {}
+                <></>
               ) : (
                 <div>
                   <Typography>{getStepContent(activeStep)}</Typography>
