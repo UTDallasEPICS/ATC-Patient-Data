@@ -88,7 +88,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
         fields.map((field) => field.value || "");
 
     try {
-        await fetch(`http://localhost:8080/employee/${employee.id}`, {
+        await fetch(`http://localhost:3000/employee/${employee.id}`, {
             method: "patch",
             headers: {
                 "Content-Type": "application/json",
@@ -136,7 +136,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
     const temp = await fetch(
-        `http://localhost:8080/employee/${query.employeeID}`,
+        `/employee/${query.employeeID}`,
         {
             method: "get",
         }

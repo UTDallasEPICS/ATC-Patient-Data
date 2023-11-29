@@ -83,7 +83,7 @@ const newStudent = () => {
             parentEmail,
         };
 
-        await fetch("http://localhost:8080/patient/", {
+        await fetch("http://localhost:3000/patient/", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",

@@ -37,7 +37,7 @@ const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
     };
 
     const handleArchive = async (): Promise<void> => {
-        const temp = await fetch(`http://localhost:8080/patient/${student.id}`, {
+        const temp = await fetch(`http://localhost:3000/patient/${student.id}`, {
             method: "DELETE",
         });
         const { data } = await temp.json();
@@ -244,7 +244,7 @@ const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
 export default studentProfile;
 
 export const getServerSideProps = async ({ query }): Promise<{ props: { student: Student } }> => {
-    const temp = await fetch(`http://localhost:8080/patient/${query.id}`, {
+    const temp = await fetch(`http://localhost:3000/patient/${query.id}`, {
         method: "get",
     });
     const { data } = await temp.json();

@@ -30,7 +30,7 @@ export default function manageBehaviorsPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/search/behavior`, { method: 'GET' });
+                const response = await fetch(`http://localhost:3000/api/search/behavior`, { method: 'GET' });
                 if (response.ok) {
                     const data : Behavior[] = await response.json();
                     setBehaviors(data);
