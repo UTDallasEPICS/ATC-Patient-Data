@@ -45,8 +45,9 @@ export default function manageBehaviorsPage() {
         fetchData();
     }, [behaviors]);
 
+    // These two functions don't do data fetching
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const [focusElement, setFocusElement] = useState<number>(-1);
+    const [focusElement, setFocusElement] = useState<number>(-1); // -1 is initial value
 
     const removeBehavior = async () => {
         await fetch(
