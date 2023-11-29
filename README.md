@@ -3,16 +3,14 @@
 ## Getting Started
 Before anything, read last semester's final report in Edusouced, read everything in the [documentation](https://github.com/UTDallasEPICS/ATC-Patient-Management-Backend/tree/main/Documentation), and everything in the [wiki](https://github.com/UTDallasEPICS/ATC-Patient-Management-Frontend/wiki).
 When creating code, please use comments as you write; it helps during and after writing. 
+Before attempting to run the website, please visit [the prerequisites file](https://github.com/UTDallasEPICS/ATC-Patient-Data/Documentation/Start%20from%20Scratch.md)
 
-## Building and the Running Front-end
-1. `cd` to ATC-Patient-Management-frontend
-2. run `pnpm install`
-    * > NOTE: may have upstream dependency conflict
-    * run `pnpm install --force`
-    * > NOTE: Read up on `--force` [here:](https://stackoverflow.com/questions/66020820/npm-when-to-use-force-and-legacy-peer-deps)
-3. run `npm run dev` to start frontend
+
+## Run Web Application
+1. `cd` to ATC-Patient-Management
+2. run `npm run dev` to start the website
     * > NOTE: Back-end must be running, else fetch error when login in
-4. go to http://localhost:3000 in browser to see the app
+3. go to http://localhost:3000 in browser to see the app
 
 ## Learn More
 

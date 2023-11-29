@@ -9,7 +9,7 @@ classDiagram
         +String email
         +String phoneNumber
         +boolean isTherapist
-        +Patient[] patients
+        +Student[] students
 
         updateSelf(this : DocumentType~Administrator~, data : any) : this.save()
     }
@@ -45,7 +45,7 @@ classDiagram
 
 ```mermaid
 classDiagram
-    class Patient {
+    class Student {
         +String firstName
         +String lastName
         +String email
@@ -58,7 +58,7 @@ classDiagram
         +Therapist therapist
         +Administrator administrator
 
-        updateSelf(this : DocumentType~Patient~, data : any) : this.save()
+        updateSelf(this : DocumentType~Student~, data : any) : this.save()
     }
 ```
 
@@ -67,11 +67,11 @@ classDiagram
 ```mermaid
 classDiagram
     class Program {
-        +Patient patient
+        +Student student
         +WithID~IBehavior~[] behavior
 
         updateSelf(this : DocumentType~Program~, data : any) : this.save()
-        findOrCreate(this : ReturnModelType~typeof Program~, DocumentType~Patient~ dwa) program
+        findOrCreate(this : ReturnModelType~typeof Program~, DocumentType~Student~ dwa) program
         addBehavior(this: DocumentType~Program~, behavior: IBehavior) : this.save()
     }
 ```
@@ -85,7 +85,7 @@ classDiagram
         \n
         Therapist, therapistModel,
         Behavior, behaviorModel,
-        Patient, patientModel,
+        Student, studentModel,
         Administrator, administratorModel,
         Program, programModel,
         Report, reportModel
@@ -99,7 +99,7 @@ classDiagram
     class Report {
         +Date sessionTime
         +object data
-        +Patient patient
+        +Student student
         +Therapist therapist
         +BehaviorInSession[] behaviors
 
@@ -120,7 +120,7 @@ classDiagram
         +String password
         +String phoneNUmber
         +boolean isAdmin
-        +Patient[] patients
+        +Student[] students
 
         updateSelf(this : DocumentType~Therapist~, data : any) : this.save()
     }
