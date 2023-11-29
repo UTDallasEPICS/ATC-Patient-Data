@@ -136,11 +136,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
     const temp = await fetch(
-<<<<<<< HEAD
         `/employee/${query.employeeID}`,
-=======
-        `http://localhost:3000/employee/${query.employeeID}`,
->>>>>>> 17f4b61b94213a6e66a4ad5ced8fe794774fd260
         {
             method: "get",
         }

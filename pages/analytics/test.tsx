@@ -96,11 +96,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
 
       <button onClick={async() => {
         const employeeRes = await fetch(
-<<<<<<< HEAD
           `/employee`
-=======
-          `http://localhost:3000/employee`
->>>>>>> 17f4b61b94213a6e66a4ad5ced8fe794774fd260
         );
         
         const employeeData = await employeeRes.json();
@@ -136,29 +132,17 @@ const editProgram = ({ patient, employee, behaviors }) => {
 
 export const getServerSideProps = async ({ query }) => {
   const patientRes = await fetch(
-<<<<<<< HEAD
     `/patient/${query.studentID}`
-=======
-    `http://localhost:3000/patient/${query.studentID}`
->>>>>>> 17f4b61b94213a6e66a4ad5ced8fe794774fd260
   );
   const patientData = await patientRes.json(); 
 
   const employeeRes = await fetch(
-<<<<<<< HEAD
     `/employee/64518555b5b62f1086e74d80`
-=======
-    `http://localhost:3000/employee/64518555b5b62f1086e74d80`
->>>>>>> 17f4b61b94213a6e66a4ad5ced8fe794774fd260
   );
   const employeeData = await employeeRes.json();
 
   const programRes = await fetch(
-<<<<<<< HEAD
     `/patient/program/${query.studentID}`
-=======
-    `http://localhost:3000/patient/program/${query.studentID}`
->>>>>>> 17f4b61b94213a6e66a4ad5ced8fe794774fd260
   );
   const programData = await programRes.json();
 
