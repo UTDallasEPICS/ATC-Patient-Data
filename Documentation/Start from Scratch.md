@@ -58,7 +58,7 @@ git clone UTDallasEPICS/ATC-Patient-Data
 ```
 ![BashTerminal](https://github.com/UTDallasEPICS/ATC-Patient-Data/assets/126997597/978488c2-458b-432f-b282-bba42fd9d823)
 
-Every time you start working on code, stash your code with `git stash` and then run `git pull [master] [Branch Name]` to keep your items updated.
+Every time you start working on code, stash your code with `git stash` and then run `git pull [remote origin] [Branch Name]` to keep your items updated.
 
 
 

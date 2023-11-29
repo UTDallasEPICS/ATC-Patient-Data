@@ -138,7 +138,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
     const temp = await fetch(
+<<<<<<< HEAD
         `/patient/${query.studentID}`,
+=======
+        `http://localhost:3000/patient/${query.studentID}`,
+>>>>>>> 17f4b61b94213a6e66a4ad5ced8fe794774fd260
         {
             method: "GET",
         }
