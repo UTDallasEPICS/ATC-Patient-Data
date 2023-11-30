@@ -3,7 +3,8 @@
 ## Getting Started
 Before anything, read last semester's final report in Edusouced, read everything in the [documentation](https://github.com/UTDallasEPICS/ATC-Patient-Management-Backend/tree/main/Documentation), and everything in the [wiki](https://github.com/UTDallasEPICS/ATC-Patient-Management-Frontend/wiki).
 When creating code, please use comments as you write; it helps during and after writing. 
-Before attempting to run the website, please visit [the prerequisites file](https://github.com/UTDallasEPICS/ATC-Patient-Data/Documentation/Start%20from%20Scratch.md)
+Before attempting to run the website, please visit [the prerequisites file:]
+* [https://github.com/UTDallasEPICS/ATC-Patient-Data/blob/Docu_Cleaning/Documentation/Start%20from%20Scratch.md](url)
 
 
 ## Run Web Application
