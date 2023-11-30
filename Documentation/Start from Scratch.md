@@ -54,7 +54,7 @@ After Git is downloaded, run these commands:
 
 ```bash
 git checkout -b [Branch Name] # Create a new branch named whatever you want
-git clone UTDallasEPICS/ATC-Patient-Data
+git clone https://github.com/UTDallasEPICS/ATC-Patient-Data.git # This is the current URL that Git will see
 ```
 ![BashTerminal](https://github.com/UTDallasEPICS/ATC-Patient-Data/assets/126997597/978488c2-458b-432f-b282-bba42fd9d823)
 
