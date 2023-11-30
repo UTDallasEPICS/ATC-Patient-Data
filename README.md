@@ -9,7 +9,7 @@ Before attempting to run the website, please visit [the prerequisites file](http
 ## Run Web Application
 1. `cd` to ATC-Patient-Management
 2. run `npm run dev` to start the website
-    * > NOTE: Back-end must be running, else fetch error when login in
+    * > NOTE: Back-end must be running, else fetch error when logging in
 3. go to http://localhost:3000 in browser to see the app
 
 ## Learn More
