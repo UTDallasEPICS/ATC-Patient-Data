@@ -83,6 +83,10 @@ Every time you start working on code, stash your code with `git stash` and then 
 
 * If the database does not show up, refer to this
     *   ATC-Patient-Data/Documentation/Docker and PostgreSQL.md at master · UTDallasEPICS/ATC-Patient-Data (github.com), [Link](https://github.com/UTDallasEPICS/ATC-Patient-Data/tree/master/Documentation)
+    *   If the link doesn't work, run:
+            * `docker-compose up`
+            * `npx prisma migrate reset` 
+              * `npx prisma db migrate` migrates the database to Docker Container
 * While coding/developing, the database should always be running.
 
 
