@@ -196,7 +196,7 @@ export default function manageBehaviorsPage({ behaviors }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const data = await fetch(`${process.env.BASE_URL}/api/search/behavior`, {method: "POST",});
+    const data = await fetch(process.env.AUTH0_BASE_URL + '/api/search/behavior', {method: "POST",}};
     const behaviors = await data.json();
     return {
         props: {
