@@ -2,10 +2,11 @@ import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
-import { Patient } from "../../interfaces/Patient";
 import { GetServerSideProps } from "next";
 import CheckUser  from '../../auth0CheckUser';
 import { useRouter } from 'next/router';
+import { Patient, Student } from "../../types";
+
 
 type PatientWithIdAndImg = Patient & { id: string; img: string };
 
@@ -17,7 +18,7 @@ const editStudent = (props: { student: PatientWithIdAndImg }) => {
     const { student } = props;
     const router = useRouter();
 
-    const formatDate = (d) => {
+    const formatDate = (d: any) => {
         d = new Date(d);
         return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
     };
@@ -130,7 +131,7 @@ const editStudent = (props: { student: PatientWithIdAndImg }) => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps <{ student: PatientWithIdAndImg}> = async (context) => {
     const { query } = context;
     if (!query.studentID) {
         return {

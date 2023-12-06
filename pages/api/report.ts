@@ -18,12 +18,12 @@ export default async function handler(
 const getReports = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.query.id) {
-      const report = await prisma.report.findUnique({
+      const session = await prisma.session.findUnique({
         where: { id: req.query.id as string },
       });
-      return res.status(200).json(report);
+      return res.status(200).json(session);
     } else {
-      const reports = await prisma.report.findMany();
+      const reports = await prisma.session.findMany();
       return res.status(200).json(reports);
     }
   } catch (error) {
@@ -33,7 +33,7 @@ const getReports = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const createReport = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const savedReport = await prisma.report.create({
+    const savedReport = await prisma.session.create({
       data: req.body,
     });
     return res
@@ -46,7 +46,7 @@ const createReport = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const deleteReport = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    await prisma.report.delete({
+    await prisma.session.delete({
       where: { id: req.query.id as string },
     });
     return res.status(200);

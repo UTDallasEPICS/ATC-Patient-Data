@@ -7,13 +7,13 @@ const editProgram = ({ patient, employee, behaviors }) => {
   var reportId = null;
   var report = null;
 
-  const [ID, setID] = React.useState('')
-  const onChange = (event) => {
+  const [ID, setID] = useState<string>('')
+  const onChange = (event: any) => {
     console.log(event.target.value)
     setID(event.target.value)
   }
 
-  const handleClick = async () => {
+  const handleClick = async (): Promise<void> => {
     
     const response = await fetch('http://localhost:8080/report/', {
       method: "post",
@@ -34,7 +34,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
     console.log(data)
   }
 
-  const updateUser = async () => {
+  const updateUser = async (): Promise<void> => {
     console.log(patient._id)
     const response = await fetch(`http://localhost:8080/patient/${patient._id}`, {
       method: "PATCH",
@@ -51,14 +51,14 @@ const editProgram = ({ patient, employee, behaviors }) => {
     console.log(data)
   }
 
-  const getReport = async () => {
+  const getReport = async (): Promise<void> => {
     const response = await fetch('http://localhost:8080/report/' + reportId)
     const {data} = await response.json();
     report = data;
     console.log(data)
   }
 
-  const getStudentReports = async () => {
+  const getStudentReports = async (): Promise<void> => {
     let studentReports = []
     for(const reportID of patient['reports']) {
       const response = await fetch(`http://localhost:8080/report/${reportID}`)
@@ -68,7 +68,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
     console.log(studentReports)
   }
 
-  const deleteReport = async () => {
+  const deleteReport = async (): Promise<void> => {
     const updatedReports = []
     patient['reports'].forEach((reportID) => {
       if (reportID !== ID) updatedReports.push(reportID)

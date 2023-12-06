@@ -1,7 +1,7 @@
 import styles from "../../styles/SearchList.module.css";
 import Link from "next/link";
 import SearchList from "../../components/SearchList";
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Button from "@material-ui/core/Button";
@@ -9,17 +9,38 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import CheckUser  from '../../auth0CheckUser';
+import { Employee, EmployeeSearchProps, Student } from "../../types";
 
 const buttonColor = "#0F5787";
 
-export default function EmployeeSearch({ employees }) {
+export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
   // Verifies if user has the correct permissions
   const {allowed, role} = CheckUser(["Admin"])
   if(!allowed) return(<div>Redirecting...</div>);
+  const[loading, setLoading] = useState(true);
+  const [canShow, setCanShow] = useState(false);
+  const finishedLoadingAndCanShow = !loading && canShow;
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const Conditional = ({
+    showWhen,
+    children,
+  }: {
+    showWhen: boolean;
+    children: ReactNode;
+  }) => {
+    if (showWhen) return <>{children}</>
+    return <></>;
+  };
+
   return (
     <div>
+      {
+        (!loading && canShow) 
+      }
+      <Conditional showWhen={finishedLoadingAndCanShow}>
+        <h1> Welcome</h1>
+      </Conditional>
       <Head>
         <title>Employee Search</title>
         <link rel="icon" href="/atc-logo.png" />
@@ -69,7 +90,7 @@ export const getServerSideProps = async () => {
 
   const data = await temp.json();
 
-  let employees = data.map((employee) => {
+  let employees: Employee[] = data.map((employee: any) => {
     employee.id = employee._id;
       delete employee._id;
       return {
@@ -78,7 +99,7 @@ export const getServerSideProps = async () => {
       };
   });
 
-  employees.sort(function (a, b) {
+  employees.sort(function (a: any, b: any) {
       const aName = a.firstName + a.lastName;
       const bName = b.firstName + b.lastName;
       if (aName < bName) {

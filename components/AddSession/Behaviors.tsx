@@ -1,8 +1,8 @@
-import React, { FC } from "react";
+import React from "react";
 import Behavior from "./Behavior";
 import { BehaviorsProps } from "../../types";
  
-const Behaviors: FC<BehaviorsProps> = ({ behaviors, returnResponses}) => {
+export const Behaviors = ({ behaviors, returnResponses}: BehaviorsProps) => {
   let responseArray: any[] = [];
   for (var i = 0; i < behaviors.length; i++)
   {

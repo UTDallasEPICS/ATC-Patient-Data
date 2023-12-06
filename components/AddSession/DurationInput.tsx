@@ -5,7 +5,7 @@ import styles from "../../styles/AddSession.module.css";
 import React, { useState, useEffect } from "react";
 import { DurationInputProps} from '../../types';
 
-const DurationInput: React.FC<DurationInputProps> = ({title, entryNumber, setResponses}) => {
+const DurationInput = ({title, entryNumber, setResponses}: DurationInputProps) => {
   let time: number = 0;
   const getTime = (time: number) =>
   {

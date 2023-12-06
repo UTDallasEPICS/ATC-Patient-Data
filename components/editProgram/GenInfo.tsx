@@ -1,4 +1,4 @@
-import React, { FC, useState, ChangeEvent} from "react";
+import React, { useState, ChangeEvent} from "react";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
@@ -10,23 +10,23 @@ import { Container } from "@material-ui/core";
 import { fchmod } from "fs";
 import { GenInfoProps } from "../../types";
 
-const GenInfo: FC<GenInfoProps> = ({
+const GenInfo = ({
   globalBehavior,
   behaviorId,
   setBehaviorId,
   updateBehavior,
-}) => {
+}: GenInfoProps) => {
   const handleChange = (event: ChangeEvent<{ value: unknown}>) => {
     setBehaviorId(event.target.value as string);
     updateBehavior(event.target.value as string);
   };
 
-  const [hide, setHide] = useState(false);
+  const [hide, setHide] = useState<boolean>(false);
 
-  const doNotShow = () => {
+  const doNotShow = (): void => {
     setHide(false);
   };
-  const show = () => {
+  const show = (): void => {
     setHide(true);
   };
   return (

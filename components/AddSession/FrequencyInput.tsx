@@ -1,9 +1,9 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { FrequencyInputProps } from "../../types";
 
-const FrequencyInput: FC<FrequencyInputProps> = ({title, entryNumber, setResponses}) => {
+const FrequencyInput = ({title, entryNumber, setResponses}: FrequencyInputProps) => {
   const [counter, setCounter] = useState<number>(0);
 
   const displayCounter: boolean = counter > 0;

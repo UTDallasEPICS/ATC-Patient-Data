@@ -34,7 +34,7 @@ export default function studentSearch({ students }: StudentSearchProps) {
     const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician"])
     if(!allowed) return(<div>Redirecting...</div>);
 
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
     return (
         <div>
@@ -96,7 +96,7 @@ export const getServerSideProps = async () => {
         };
     });
 
-    students.sort(function (a, b) {
+    students.sort(function (a: Student, b: Student) {
         const aName = a.firstName + a.lastName;
         const bName = b.firstName + b.lastName;
         if (aName < bName) {

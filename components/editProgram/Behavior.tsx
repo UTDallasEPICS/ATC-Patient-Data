@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, { useState } from "react";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -14,11 +14,11 @@ import {
 } from "@material-ui/core";
 import { BehaviorEditProgramProps } from "../../types";
 
-const Behavior: FC<BehaviorEditProgramProps> = ({ list, studentId, updateBehaviorList }) => {
+const Behavior = ({ list, studentId, updateBehaviorList }: BehaviorEditProgramProps) => {
   const options = [
     {
       name: "Delete",
-      onCall: (id) => {
+      onCall: (id): void => {
         openDialog(id);
       },
     },
@@ -27,17 +27,17 @@ const Behavior: FC<BehaviorEditProgramProps> = ({ list, studentId, updateBehavio
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [focusBehavior, setFocusBehavior] = useState<string>("");
 
-  const closeDialog = () => {
+  const closeDialog = (): void => {
     setDialogOpen(false);
     setFocusBehavior("");
   };
 
-  const openDialog = (id: string) => {
+  const openDialog = (id: string): void => {
     setDialogOpen(true);
     setFocusBehavior(id);
   };
 
-  const removeBehavior = async (behaviorId: string) => {
+  const removeBehavior = async (behaviorId: string): Promise<void> => {
     if (behaviorId == "" || !behaviorId) {
       console.log("No behavior ID");
       return;

@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
+import React from 'react';
 import PropTypes from "prop-types";
 import Avatar from "./Avatar";
 import styles from "../styles/SearchList.module.css";
 import Link from "next/link";
 import ListItem from "@material-ui/core/ListItem";
-import { StudentListItemProps } from '../types';
+import { SearchListProps, StudentListItemProps } from '../types';
 
-const StudentListItem: FC<StudentListItemProps> = ({ firstName, lastName, id, img, destinationPath }) => {
+const StudentListItem = ({ firstName, lastName, id, img, destinationPath }: StudentListItemProps) => {
   return (
     <Link href={{ pathname: destinationPath, query: { id: id } }}>
       <ListItem button key={id}>

@@ -1,5 +1,6 @@
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
+import { GetServerSideProps } from "next";
 import { useState, useEffect } from "react";
 import styles from "../../styles/Analytics.module.css";
 import Paper from "@material-ui/core/Paper";
@@ -8,15 +9,16 @@ import Tab from "@material-ui/core/Tab";
 import Graphs from "../../components/Analytics/Graphs/Graphs";
 import Reports from "../../components/Analytics/Reports/Reports";
 import CheckUser from "../../auth0CheckUser";
+import { IndexProps } from "../../types";
 
-const analytics = ({ patient, reports }) => {
+const analytics = ({ patient, reports }: IndexProps) => {
   // Verifies if user has the correct permissions
   const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"])
   if(!allowed) return(<div>Redirecting...</div>);
 
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState<number>(0);
 
-  const handlePageChange = (event, newValue) => {
+  const handlePageChange = (event: any, newValue: any) => {
     console.log(newValue);
     setPage(newValue);
   };
@@ -54,7 +56,7 @@ const analytics = ({ patient, reports }) => {
   );
 };
 
-export const getServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const studentID = query.studentID;
 
   const patientRes = await fetch(

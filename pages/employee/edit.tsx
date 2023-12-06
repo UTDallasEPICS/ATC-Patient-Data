@@ -3,11 +3,9 @@ import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import { Employee } from "../../components/Interfaces/Entities";
 import { useRouter } from "next/router";
 import CheckUser  from '../../auth0CheckUser';
-
-type EmployeeWithIdAndImg = Employee & { id: string; img: string };
+import { Employee, EmployeeWithIdAndImg} from "../../types";
 
 const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
   // Verifies if user has the correct permissions
@@ -17,7 +15,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
   const { employee } = props;
   const router = useRouter();
 
-  const formatDate = (d) => {
+  const formatDate = (d: any) => {
       d = new Date(d);
       return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   };
@@ -128,7 +126,7 @@ return (
 );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<{ employee: Employee }> = async (context) => {
   const { query } = context;
     if (!query.employeeID) {
         return {

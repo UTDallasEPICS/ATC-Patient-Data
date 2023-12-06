@@ -1,4 +1,4 @@
-import React, {FC, useState, useEffect} from "react";
+import React, { useState, useEffect} from "react";
 import Head from "next/head";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -20,18 +20,18 @@ import Behavior from "./Behavior";
 import BehaviorDialogForm from "./BehaviorDialogForm";
 import { CurrentProps } from "../../types";
 
-const Current: FC<CurrentProps> = ({ studentID, addedBehavior }) => {
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [activeStep, setActiveStep] = React.useState<number>(0);
+const Current = ({ studentID, addedBehavior }: CurrentProps) => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const steps: string[] = getSteps();
 
-  const [globalBehavior, setGlobalBehavior] = React.useState<any[]>([]);
-  const [behavior, setBehavior] = React.useState<any[]>([]);
-  const [behaviorId, setBehaviorId] = React.useState<string>("");
-  const [currentBehavior, setCurrentBehavior] = React.useState<any>(null);
+  const [globalBehavior, setGlobalBehavior] = useState<any[]>([]);
+  const [behavior, setBehavior] = useState<any[]>([]);
+  const [behaviorId, setBehaviorId] = useState<string>("");
+  const [currentBehavior, setCurrentBehavior] = useState<any>(null);
 
-  React.useEffect(() => {
+  useEffect((): void => {
     async function getBehaviors() {
       const temp = await fetch("http://localhost:8080/behaviour", {
         method: "get",

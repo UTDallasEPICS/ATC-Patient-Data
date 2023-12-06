@@ -1,7 +1,7 @@
-import React, { FC, SyntheticEvent  } from 'react';
+import React, { SyntheticEvent  } from 'react';
 import { AvatarProps } from '../types';
 
-const Avatar: FC<AvatarProps> = ({ img, diameter }) => {
+const Avatar = ({ img, diameter }: AvatarProps) => {
   const addDefaultSrc = (e: SyntheticEvent<HTMLImageElement>) => {
     console.log("addDefaultSrc called");
     e.currentTarget.src = defaultImg;

@@ -1,14 +1,14 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Behavior from "./Behavior";
 import { BehaviorItem, MasteredProps } from '../../types';
 
 
 
-const Mastered: FC<MasteredProps> = ( { studentID }) => {
+const Mastered = ( { studentID }: MasteredProps) => {
     
     const [behavior, setBehavior] = useState<BehaviorItem[]>([]);
   
-    useEffect(() => {
+    useEffect((): void => {
       setBehavior([
         {
           id: 0,
@@ -49,5 +49,5 @@ const Mastered: FC<MasteredProps> = ( { studentID }) => {
     )
 }
 
-export default Mastered
+export default Mastered;
 

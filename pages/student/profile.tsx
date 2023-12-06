@@ -15,8 +15,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
 import CheckUser  from '../../auth0CheckUser';
 import {StudentProfileProps, Student} from '../../types';
+import { GetServerSideProps } from "next";
 
-const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
+const studentProfile = ({ student }: StudentProfileProps) => {
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"]);
     if(!allowed) return <div>Redirecting...</div>;
@@ -46,7 +47,7 @@ const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
     }
 
     //State for handling when other info is being pressed
-    const [otherInfoOpen, setOtherInfo] = React.useState<boolean>(false);
+    const [otherInfoOpen, setOtherInfo] = useState<boolean>(false);
     //Opens other info
     const openOtherInfo = (): void => {
         setOtherInfo(true);
@@ -243,7 +244,7 @@ const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
 
 export default studentProfile;
 
-export const getServerSideProps = async ({ query }): Promise<{ props: { student: Student } }> => {
+export const getServerSideProps: GetServerSideProps<{student: Student}> = async ({ query }) => {
     const temp = await fetch(`http://localhost:8080/patient/${query.id}`, {
         method: "get",
     });

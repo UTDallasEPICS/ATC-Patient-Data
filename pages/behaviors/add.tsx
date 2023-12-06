@@ -13,7 +13,7 @@ import Navbar from "../../components/Navbar";
 import { useRouter } from "next/router";
 import CheckUser from "../../auth0CheckUser";
 
-export default function addBehavior() {
+export default function addBehavior(): JSX.Element {
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin", "BCBA"])
     if(!allowed) return(<div>Redirecting...</div>);
@@ -25,7 +25,7 @@ export default function addBehavior() {
     });
     const router = useRouter();
 
-    const submitForm = async () => {
+    const submitForm = async (): Promise<void> => {
         if (
             behaviorData.behaviorName.length === 0 ||
             behaviorData.description.length === 0

@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import Chip from "@material-ui/core/Chip";
 import styles from "../../styles/EditProgram.module.css";
 import Paper from "@material-ui/core/Paper";
@@ -6,8 +6,8 @@ import AddIcon from "@material-ui/icons/Add";
 import Fab from '@material-ui/core/Fab';
 import { ChipData } from "../../types";
 
-const DomainInput: FC = () => {
-  const [chipData, setChipData] = React.useState<ChipData[]>([
+const DomainInput = () => {
+  const [chipData, setChipData] = useState<ChipData[]>([
     { key: 0, label: "Tag 1" },
     { key: 1, label: "Tag 2" },
     { key: 2, label: "Tag 3" },

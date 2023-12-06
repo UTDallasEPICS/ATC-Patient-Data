@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 import {
   Button,
   FormControl,
@@ -12,7 +12,7 @@ import Paper from "@material-ui/core/Paper";
 import styles from "../../styles/EditProgram.module.css";
 import { BehaviorDialogFormProps } from '../../types';
 
-const BehaviorDialogForm: FC<BehaviorDialogFormProps> = ({ behavior, setBehavior }) => {
+const BehaviorDialogForm = ({ behavior, setBehavior }: BehaviorDialogFormProps) => {
   return (
     <Paper className={styles.domainPaper}>
       <FormControl fullWidth>

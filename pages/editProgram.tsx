@@ -3,8 +3,10 @@ import Navbar from "../components/Navbar";
 import Head from "next/head";
 import Current from "../components/editProgram/Current";
 import CheckUser  from '../auth0CheckUser';
+import { EditProgramProps } from "../types";
+import { QueryBuilderTwoTone } from "@material-ui/icons";
 
-const editProgram = ({ studentID, program }) => {
+const editProgram = ({ studentID, program }: EditProgramProps) => {
   const {allowed, role} = CheckUser(["Admin", "BCBA"])
   if(!allowed) return(<div>Redirecting...</div>);
 
@@ -21,7 +23,7 @@ const editProgram = ({ studentID, program }) => {
   );
 };
 
-export const getServerSideProps = async ({ query }) => {
+export const getServerSideProps = async ({ query }): Promise<{ props: { studentID: EditProgramProps; program: EditProgramProps } }> => {
   const temp = await fetch(
     `http://localhost:8080/patient/program/${query.studentID}`
   );

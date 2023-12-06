@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
@@ -6,11 +6,12 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../src/theme';
 import '../styles/globals.css'
+import { MyAppProps } from '../types';
 
 // serves as the entry point for the pages, ONLY here so we can use material-ui
-export default function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }: MyAppProps) {
   // part of the installation for global-wide material ui format
-  React.useEffect(() => {
+  useEffect((): void => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) {
