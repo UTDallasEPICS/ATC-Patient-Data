@@ -1,5 +1,5 @@
 ## Schemas
-The following Mongoose schemas are defined in `./models/schmea_name.ts`
+The following Mongoose schemas are defined in `./models/schema_name.ts`
 
 ```mermaid
 classDiagram
@@ -71,7 +71,7 @@ classDiagram
         +WithID~IBehavior~[] behavior
 
         updateSelf(this : DocumentType~Program~, data : any) : this.save()
-        findOrCreate(this : ReturnModelType~typeof Program~, DocumentType~Student~ dwa) program
+        findOrCreate(this : ReturnModelType~Program~, DocumentType~Student~ dwa) program
         addBehavior(this: DocumentType~Program~, behavior: IBehavior) : this.save()
     }
 ```
@@ -82,7 +82,6 @@ classDiagram
 classDiagram
     class Index {
         No Schema But Exports These Objects:
-        \n
         Therapist, therapistModel,
         Behavior, behaviorModel,
         Student, studentModel,
@@ -98,30 +97,14 @@ classDiagram
 classDiagram
     class Report {
         +Date sessionTime
-        +object data
+        +Object data
         +Student student
         +Therapist therapist
         +BehaviorInSession[] behaviors
 
         updateSelf(this : DocumentType~Report~, data : any) : this.save()
-        createFromProgram(this: ReturnModelType~typeof Report~, program: Program) report
+        createFromProgram(this: ReturnModelType~Report~, program: Program) : report
     }
 ```
 
 <br/><br/>
-
-```mermaid
-classDiagram
-    class Therapist {
-        +String firstName
-        +String lastName
-        +String email
-        +String username
-        +String password
-        +String phoneNUmber
-        +boolean isAdmin
-        +Student[] students
-
-        updateSelf(this : DocumentType~Therapist~, data : any) : this.save()
-    }
-```
