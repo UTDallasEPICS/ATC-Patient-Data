@@ -2,6 +2,7 @@
 ## Main Functionality
 ATC calls patients students and we will be referring to them as such. This is a database in the works for the Autism Treatment Center. It should store data about students, the technicians, parents, and doctors who are involved with said student. There needs to be roles that have certain permissisions depending on what they are. 
 ### Auxiliary Functionalities
+Note: The folder named analytics is currently useless and doesn't have a function, but Taz says to keep it just in case the idea of the code becomes useful later on.
 
 
 ## Third Party Integrations
