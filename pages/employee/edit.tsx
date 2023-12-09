@@ -23,7 +23,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(/api/employee, { method: 'GET' });
+                const response = await fetch(`/api/employee`, { method: 'GET' });
                 if (response.ok) {
                     const data = await response.json();
                     setEmployees(data);
@@ -40,7 +40,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
         if (employees) {
             const employeeList = employees.map((employee, idx) => ({ // this is acting like a copy constructor, sort of
                 firstName: employee.firstName,
-                birthday: convertStringToDate(employee.birthday),
+                dob: convertStringToDate(employee.dob),
                 phoneNumber: employee.phoneNumber,
                 email: employee.email,
                 otherInfo: employee.otherInfo,
@@ -81,7 +81,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     type: InputType.DATE,
     name: "Birth Date",
     required: true,
-    value: formatDate(employee.birthday),
+    value: formatDate(employee.dob),
   };
 
   const otherInfoInput: Input = {
@@ -95,7 +95,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     attributeName: "phone_number",
     type: InputType.TEXT,
     name: "Phone number",
-    value: employee.phoneNumber,
+    value: employee.phone,
   };
 
   const emailInput: Input = {
@@ -127,7 +127,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
         fields.map((field) => field.value || "");
 
     try {
-        await fetch(`http://localhost:3000/employee/${employee.id}`, {
+        await fetch(`/employee/${employee.id}`, {
             method: "patch",
             headers: {
                 "Content-Type": "application/json",
@@ -165,37 +165,6 @@ return (
         </Navbar>
     </div>
 );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { query } = context;
-    if (!query.employeeID) {
-        return {
-            notFound: true,
-        };
-    }
-    const temp = await fetch(
-        `/employee/${query.employeeID}`,
-        {
-            method: "get",
-        }
-    );
-  const { data } = await temp.json();
-  const employee: Employee = {
-    id: query.employeeID as string,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    dob: data.birthday,
-    phone: data.phoneNumber,
-    email: data.email,
-    otherInfo: data.otherInfo,
-  };
-
-  return {
-    props: {
-      employee: employee,
-    },
-  };
 };
 
 export default editEmployee;

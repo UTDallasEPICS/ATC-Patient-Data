@@ -20,7 +20,40 @@ const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"]);
     if(!allowed) return <div>Redirecting...</div>;
-
+  /*  const [students, setEmployees] = useState(null)
+    const [studentList, setEmployeeList] = useState([]);
+    // fetch data from client side
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(/api/student, { method: 'GET' });
+                if (response.ok) {
+                    const data = await response.json();
+                    setEmployees(data);
+                } else {
+                    console.error('Failed to fetch data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+    useEffect(() => {
+        if (students) {
+            const studentList = students.map((student, idx) => ({ // this is acting like a copy constructor, sort of
+                firstName: student.firstName,
+                birthday: convertStringToDate(student.birthday),
+                phoneNumber: student.phoneNumber,
+                email: student.email,
+                otherInfo: student.otherInfo,
+                id: idx + 1,
+                _id: student.id,
+            }));
+            console.log(studentList)
+            setEmployeeList(studentList);
+        }
+    }, [students]); */
     var editStudent: boolean = false;
     if (role == "Admin") editStudent = true;
     var studentAnalytics: boolean = false;

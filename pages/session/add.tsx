@@ -161,7 +161,7 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
   }
 
   const submitSession = async () => {
-    const reportPostResponse = await fetch('http://localhost:3000/report/', {
+    const reportPostResponse = await fetch('/report/', {
       method: "post",
       mode: "cors",
       headers: {
@@ -179,12 +179,12 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
     const reportId = reportPostData['data'];
     console.log(reportId)
 
-    const reportResponse = await fetch('http://localhost:3000/report/' + reportId)
+    const reportResponse = await fetch('/report/' + reportId)
     const reportData = await reportResponse.json();
     const report = reportData['data'];
     console.log(report)
 
-    const patientResponse = await fetch(`http://localhost:3000/patient/${patient._id}`, {
+    const patientResponse = await fetch(`/patient/${patient._id}`, {
       method: "PATCH",
       mode: "cors",
       headers: {

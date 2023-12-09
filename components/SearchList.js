@@ -4,17 +4,14 @@ import StudentListItem from "./searchListItem";
 import styles from "../styles/SearchList.module.css";
 
 const SearchList = ({ students, searchTerm, destinationPath }) => {
-    return (
+    return ( // Question mark needed for all calls of students in this JSX block because students may not be rendered yet.
         <div
             className={styles.studentList}
             style={
-                students.length > 7
-                    ? { overflowY: "scroll", maxHeight: "60vh" }
-                    : {}
+                 students?.length > 7 ? { overflowY: "scroll", maxHeight: "60vh" } : {}
             }
         >
-            {students
-                .filter((student) => {
+            { students?.filter((student) => {
                     if (searchTerm == "") {
                         return student;
                     } else if (

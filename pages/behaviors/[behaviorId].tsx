@@ -20,7 +20,7 @@ function BehaviorPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/search/behavior?id=${behaviorId}`, { method: 'GET' });
+                const response = await fetch(`/api/search/behavior?id=${behaviorId}`, { method: 'GET' });
                 if (response.ok) {
                     const data: Behavior = await response.json();
                     setBehaviorData(data);

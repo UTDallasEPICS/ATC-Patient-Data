@@ -6,6 +6,7 @@ import CheckUser  from '../../auth0CheckUser';
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
+import { Student } from "../../interfaces/Student";
 
 const newStudent = () => {
     // Verifies if user has the correct permissions
@@ -74,7 +75,7 @@ const newStudent = () => {
         const [firstName, lastName, birthday, email, parentPhone, parentEmail] =
             fields.map((field) => field.value || "");
 
-        const newUser: Patient = {
+        const newUser: Student = {
             firstName,
             lastName,
             birthday: convertStringToDate(birthday),
@@ -83,7 +84,7 @@ const newStudent = () => {
             parentEmail,
         };
 
-        await fetch("http://localhost:3000/patient/", {
+        await fetch("http://localhost:3000/student/", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",

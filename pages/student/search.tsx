@@ -1,7 +1,7 @@
 import styles from "../../styles/SearchList.module.css";
 import Link from "next/link";
 import SearchList from "../../components/SearchList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Button from "@material-ui/core/Button";
@@ -29,12 +29,37 @@ const theme = createTheme({
     },
 });
 
-export default function studentSearch({ students }: StudentSearchProps) {
+export default function studentSearch () { // destructure
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician"])
     if(!allowed) return(<div>Redirecting...</div>);
+const [students, setStudents] = useState(null);
+    useEffect(() => {
+        let temp = fetch('/api/search/user', {
+                     method: "POST",
+                 }).then(temp => temp.json()) // return value is now json
+        .then(body => { setStudents(body.filter()) // what is body??? ask rigre?
+        }); 
+        students?.map((student: any) => {
+            return {
+                ...student,
+                img: "",
+            };
+        }) || []; // If students doesn't exist, then this will return empty array (null). From this point on, we don't need to check if "s" is defined.
+        students.sort(function (a, b) {
+            const aName = a.firstName + a.lastName;
+            const bName = b.firstName + b.lastName;
+            if (aName < bName) {
+                return -1;
+            }
+            if (aName > bName) {
+                return 1;
+            }
+            return 0;
+        });
+    }, []); // called when component is mounted
 
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState(""); // NEVER mutate the value of searchTerm without the setSearchTerm function.
 
     return (
         <div>
@@ -76,41 +101,41 @@ export default function studentSearch({ students }: StudentSearchProps) {
     );
 }
 
-export const getServerSideProps = async () => {
-    // const res = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=6`)
-    // // const res = await fetch(`https://randomuser.me/api/`)
-    // const students = await res.json()
-  // TODO: search by whether has patient profile
-    let temp = await fetch(process.env.AUTH0_BASE_URL + '/api/search/user', {
-        method: "POST",
-    });
+// export const getServerSideProps = async () => {
+//     // const res = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=6`)
+//     // // const res = await fetch(`https://randomuser.me/api/`)
+//     // const students = await res.json()
+//   // TODO: search by whether has patient profile
+//     let temp = await fetch(process.env.AUTH0_BASE_URL + '/api/search/user', {
+//         method: "POST",
+//     });
 
-    const  data  = await temp.json();
+//     const  data  = await temp.json();
 
-    let students: Student[] = data.map((student: any) => {
-        student.id = student._id;
-        delete student._id;
-        return {
-            ...student,
-            img: "",
-        };
-    });
+//     let students: Student[] = data.map((student: any) => {
+//         student.id = student._id;
+//         delete student._id;
+//         return {
+//             ...student,
+//             img: "",
+//         };
+//     });
 
-    students.sort(function (a, b) {
-        const aName = a.firstName + a.lastName;
-        const bName = b.firstName + b.lastName;
-        if (aName < bName) {
-            return -1;
-        }
-        if (aName > bName) {
-            return 1;
-        }
-        return 0;
-    });
+//     students.sort(function (a, b) {
+//         const aName = a.firstName + a.lastName;
+//         const bName = b.firstName + b.lastName;
+//         if (aName < bName) {
+//             return -1;
+//         }
+//         if (aName > bName) {
+//             return 1;
+//         }
+//         return 0;
+//     });
 
-    return {
-        props: {
-            students,
-        },
-    };
-};
+//     return {
+//         props: {
+//             students,
+//         },
+//     };
+// };
