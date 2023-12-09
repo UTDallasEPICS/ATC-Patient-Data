@@ -1,9 +1,16 @@
 # ATC Student Database
 ## Main Functionality
-ATC calls patients students and we will be referring to them as such. This is a database in the works for the Autism Treatment Center. It should store data about students, the technicians, parents, and doctors who are involved with said student. There needs to be roles that have certain permissisions depending on what they are. 
-### Auxiliary Functionalities
-Note: The folder named analytics is currently useless and doesn't have a function, but Taz says to keep it just in case the idea of the code becomes useful later on.
-
+ATC calls patients "students" and we will be referring to them as such. This is a database in the works for the Autism Treatment Center. It should store data about students, the technicians, parents, and doctors who are involved with said student. There needs to be roles that have certain permissisions depending on what they are. 
+### Required Functionalities
+#### Note: The folder named analytics is currently useless and doesn't have a function, but Taz says to keep it just in case the idea of the code becomes useful later on.
+* Ideal functional requirements for the app are accessibility on Android and Mac Operating System
+* There has to be a login page that connects to Auth0. As of now, a developer will be able to sign in/create an account using Google, assuming that they have the Authorization key provided by the instructor. It will be the first thing you see when you open the link provided in the terminal ([auth0].tsx). 
+* Upon logging in, you are instantly taken to the Student Search Page. From this page, you can **add**, **edit**, view existing **profiles**, and **search** for students (Found in ATC-Patient-Data\pages\student\search.tsx).
+  * Pressing the **ADD NEW** button will result in going to a new page where you can create a new Student component/object with information tied to said objects (ATC-Patient-Data\pages\student\new.tsx).
+  * Pressing the **EDIT** button will result in going to a new page where you can edit existing information about a Student that already exists (ATC-Patient-Data\pages\student\edit.tsx).
+  * Clicking on a profile link will take you to a page that displays all existing information about said Student (ATC-Patient-Data\pages\student\profile.tsx).
+* It also needs to be able to list goals that are added by BCBAs and provide RBTs with the ability to take data on those goals that directly reflect the mastery criteria [PAGES TO BE ADDED WHEN ANUSHA'S PR GOES THROUGH]
+* Basic Student information would need to be added such as name, date of birth, diagnosis, any restrictions such as dietary, movement, etc., funding source, and supervising BCBA would need to be added. The app should be able to have a queue of targets for each goal that BCBAs can add.
 
 ## Third Party Integrations
 **Auth0**
