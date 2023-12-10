@@ -52,7 +52,7 @@ export default function manageBehaviorsPage({ behaviors }) {
 
     const removeBehavior = async () => {
         await fetch(
-            `http://localhost:8080/behaviour/${behaviorList[focusElement]._id}`,
+            `/behaviour/${behaviorList[focusElement]._id}`,
             {
                 method: "delete",
             }

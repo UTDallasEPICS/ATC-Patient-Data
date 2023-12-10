@@ -92,7 +92,7 @@ const newEmployee = () => {
       email,
       otherInfo,
     };
-    await fetch("http://localhost:8080/employee/", {
+    await fetch("/employee/", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",

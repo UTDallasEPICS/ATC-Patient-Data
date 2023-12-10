@@ -42,7 +42,7 @@ const StudentProfile: React.FC<{ student: any }> = ({ student }) => {
   };
 
   const handleArchive = async () => {
-    const temp = await fetch(`http://localhost:8080/patient/${student.id}`, {
+    const temp = await fetch(`/patient/${student.id}`, {
       method: "DELETE",
     });
     const { data } = await temp.json();
@@ -206,7 +206,7 @@ const StudentProfile: React.FC<{ student: any }> = ({ student }) => {
 export default StudentProfile;
 
 export const getServerSideProps = async ({ query }: { query: { id: string } }) => {
-  const temp = await fetch(`http://localhost:8080/patient/${query.id}`, {
+  const temp = await fetch(`/patient/${query.id}`, {
     method: "get",
   });
   const { data } = await temp.json();

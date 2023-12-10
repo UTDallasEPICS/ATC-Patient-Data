@@ -37,7 +37,7 @@ const Current: FC<CurrentProps> = ({ studentID, addedBehavior }) => {
 
   useEffect(() => {
     async function getBehaviors() {
-      const temp = await fetch("http://localhost:8080/behaviour", {
+      const temp = await fetch("/behaviour", {
         method: "get",
       });
       const { data } = await temp.json();
@@ -69,7 +69,7 @@ const Current: FC<CurrentProps> = ({ studentID, addedBehavior }) => {
     };
 
     try {
-      const temp = await fetch("http://localhost:8080/program", {
+      const temp = await fetch("/program", {
         method: "post",
         body: JSON.stringify(payload),
         headers: {

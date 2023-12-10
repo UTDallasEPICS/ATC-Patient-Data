@@ -34,7 +34,7 @@ function BehaviorPage({ behaviorData: { data } }) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const data = await fetch(
-        `http://localhost:8080/behaviour/${context.params.behaviorId}`,
+        `/behaviour/${context.params.behaviorId}`,
         {
             method: "get",
         }

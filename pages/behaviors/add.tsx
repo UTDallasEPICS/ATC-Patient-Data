@@ -32,7 +32,7 @@ export default function addBehavior() {
         ) {
             return;
         }
-        await fetch("http://localhost:8080/behaviour/", {
+        await fetch("/behaviour/", {
             method: "post",
             mode: "cors",
             headers: {

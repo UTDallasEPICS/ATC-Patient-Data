@@ -31,5 +31,5 @@
 4. Build and run project
 	* run `npm install`
 	* run `npm run start`
-	    * > NOTE: you should see terminal say "Application listening on 8080"
+	    * > NOTE: you should see terminal say "Application listening on 3000"
         * > NOTE: 127.0.0.1
