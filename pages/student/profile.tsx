@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Avatar from "../../components/Avatar";
@@ -16,20 +16,22 @@ import Link from "next/link";
 import CheckUser  from '../../auth0CheckUser';
 import {StudentProfileProps, Student} from '../../types';
 
-const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
+const studentProfile: React.FC<StudentProfileProps> = ( {student} ) => {
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"]);
     if(!allowed) return <div>Redirecting...</div>;
-  /*  const [students, setEmployees] = useState(null)
-    const [studentList, setEmployeeList] = useState([]);
+    const [students, setStudents] = useState(null)
+    const [studentList, setStudentList] = useState([]);
     // fetch data from client side
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(/api/student, { method: 'GET' });
+                const response = await fetch(`/patient/${student.id}`, {
+                            method: "get",
+                                            });
                 if (response.ok) {
                     const data = await response.json();
-                    setEmployees(data);
+                    setStudents(data);
                 } else {
                     console.error('Failed to fetch data:', response.status, response.statusText);
                 }
@@ -42,18 +44,21 @@ const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
     useEffect(() => {
         if (students) {
             const studentList = students.map((student, idx) => ({ // this is acting like a copy constructor, sort of
+                id: student.id,
                 firstName: student.firstName,
-                birthday: convertStringToDate(student.birthday),
-                phoneNumber: student.phoneNumber,
+                lastName: student.lastName,
+                img: "",
+                dob: student.birthday,
+                parentPhone: student.parentPhone,
                 email: student.email,
+                parentEmail: student.parentEmail,
+                funder: student.funder,
                 otherInfo: student.otherInfo,
-                id: idx + 1,
-                _id: student.id,
             }));
-            console.log(studentList)
-            setEmployeeList(studentList);
+            console.log(studentList);
+            setStudentList(studentList);
         }
-    }, [students]); */
+    }, [students]); 
     var editStudent: boolean = false;
     if (role == "Admin") editStudent = true;
     var studentAnalytics: boolean = false;
@@ -68,7 +73,14 @@ const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
     const handleClose = (): void => {
         setOpen(false);
     };
-
+    const convertStringToDate = (date: string) => {
+        const data = date.split("-");
+        return new Date(
+            parseInt(data[0]),
+            parseInt(data[1]) - 1,
+            parseInt(data[2])
+        );
+    };
     const handleArchive = async (): Promise<void> => {
         const temp = await fetch(`http://localhost:3000/patient/${student.id}`, {
             method: "DELETE",
@@ -276,26 +288,27 @@ const studentProfile: React.FC<StudentProfileProps> = ({ student }) => {
 
 export default studentProfile;
 
-export const getServerSideProps = async ({ query }): Promise<{ props: { student: Student } }> => {
-    const temp = await fetch(`http://localhost:3000/patient/${query.id}`, {
-        method: "get",
-    });
-    const { data } = await temp.json();
+// export const getServerSideProps = async ({ query }): Promise<{ props: { student: Student } }> => {
+//     const temp = await fetch(`http://localhost:3000/patient/${query.id}`, {
+//         method: "get",
+//     });
+//     const { data } = await temp.json();
 
-    const student = {
-        id: query.id,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        img: "",
-        dob: data.birthday,
-        parentPhone: data.parentPhone,
-        email: data.email,
-        parentEmail: data.parentEmail,
-        otherInfo: data.otherInfo,
-    };
-    return {
-        props: {
-            student,
-        },
-    };
-};
+//     const student = {
+//         id: query.id,
+//         firstName: data.firstName,
+//         lastName: data.lastName,
+//         img: "",
+//         dob: data.birthday,
+//         parentPhone: data.parentPhone,
+//         email: data.email,
+//         parentEmail: data.parentEmail,
+//         funder: data.funder,
+//         otherInfo: data.otherInfo,
+//     };
+//     return {
+//         props: {
+//             student,
+//         },
+//     };
+// };
