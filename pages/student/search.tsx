@@ -13,6 +13,11 @@ import { StudentSearchProps, Student } from "../../types";
 
 // import theme from '../src/theme';
 
+// // Issue I am having
+// //Server Error
+// TypeError: Failed to parse URL from /api/search/user
+// This error happened while generating the page. Any console logs will be displayed in the terminal window.
+
 import { green } from "@material-ui/core/colors";
 
 // import {
@@ -81,6 +86,7 @@ export const getServerSideProps = async () => {
   // // const res = await fetch(`https://randomuser.me/api/`)
   // const students = await res.json()
   // TODO: search by whether has patient profile
+
   let temp = await fetch("/api/search/user", {
     method: "POST",
   });
