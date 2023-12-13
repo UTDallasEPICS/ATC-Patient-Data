@@ -63,10 +63,30 @@ Before attempting to run the website, please visit [the prerequisites file:](htt
 3. run `npm run dev` to start the website
     * > NOTE: Docker should be running if you are developing
 4. go to `http://localhost:3000` in your console to see the app
-
+<br></br>
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Promises/async/await
+* https://javascript.info/async    
+ * go through from 1 to 8
+### fetch() 
+* https://developer.mozilla.org/en-US/docs/Web/API/fetch
+### API Route 
+* https://nextjs.org/docs/pages/building-your-application/routing/api-routes
+### Server Side Data Fetching 
+* https://nextjs.org/docs/pages/building-your-application/data-fetching/get-server-side-props
+### Client Side Data Fetching 
+* https://nextjs.org/docs/pages/building-your-application/data-fetching/client-side
+### Prisma with Next.js 
+* https://www.prisma.io/docs/reference/api-reference/prisma-client-reference
+### Destructing Props (properties)
+* https://medium.com/@lcriswell/destructuring-props-in-react-b1c295005ce0
+### useUser 
+* https://auth0.github.io/nextjs-auth0/functions/client_use_user.useUser.html
+ * Auth0 and role permission related
+### use Functions 
+* https://youtu.be/TNhaISOUy6Q?si=vQNsKWl_1aZlGxhM
+### useEffect (MUST READ IF YOU ARE WORKING ON CLIENT SIDE DATA FETCHING) 
+* https://youtu.be/0ZJgIjIuY7U?si=-mrezPqGnbbstYAx
+### useRouter 
+* https://nextjs.org/docs/pages/api-reference/functions/use-router#router-object
