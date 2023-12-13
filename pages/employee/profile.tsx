@@ -115,7 +115,7 @@ const employeeProfile = ({students, employee, currentStudent}: EmployeeProfilePr
   };
 
   const handleArchive = async() => {
-    const response = await fetch(`http://localhost:8080/employee/${employee._id}`, {
+    const response = await fetch(`/employee/${employee._id}`, {
       method: "DELETE"
     })
     const data = await response.json()
@@ -139,7 +139,7 @@ const employeeProfile = ({students, employee, currentStudent}: EmployeeProfilePr
   };
 
   const handleSaveStudents = async () => {
-    const response = await fetch(`http://localhost:8080/employee/${employee._id}`, {
+    const response = await fetch(`/employee/${employee._id}`, {
       method: "PATCH",
       headers: {
           "Content-Type": "application/json",
@@ -441,17 +441,17 @@ const employeeProfile = ({students, employee, currentStudent}: EmployeeProfilePr
 export default employeeProfile;
 
 export const getServerSideProps: GetServerSideProps <{ students: any[]; employee: Employee; currentStudent: any[]}> = async ({ query }) => {
-  const allPatientsRes = await fetch(`http://localhost:8080/patient`);
+  const allPatientsRes = await fetch(`/patient`);
   const allPatients = await allPatientsRes.json()
 
   const employeeID = query.id
-  const employeeRes = await fetch(`http://localhost:8080/employee/${employeeID}`);
+  const employeeRes = await fetch(`/employee/${employeeID}`);
   const employee = await employeeRes.json()
 
   const { data: { patients},} = employee
   var currentStudents = []
   for(const patientID of patients) {
-    const currentStudentRes = await fetch(`http://localhost:8080/patient/${patientID}`)
+    const currentStudentRes = await fetch(`/patient/${patientID}`)
     const currentStudent = await currentStudentRes.json()
     currentStudents.push(currentStudent['data'])
   }

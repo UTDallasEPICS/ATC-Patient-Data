@@ -91,7 +91,7 @@ const editStudent = (props: { student: PatientWithIdAndImg }) => {
             fields.map((field) => field.value || "");
 
         try {
-            await fetch(`http://localhost:8080/patient/${student.id}`, {
+            await fetch(`/patient/${student.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -139,7 +139,7 @@ export const getServerSideProps: GetServerSideProps <{ student: PatientWithIdAnd
         };
     }
     const temp = await fetch(
-        `http://localhost:8080/patient/${query.studentID}`,
+        `/patient/${query.studentID}`,
         {
             method: "GET",
         }

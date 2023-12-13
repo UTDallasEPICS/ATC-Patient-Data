@@ -25,7 +25,7 @@ const editProgram = ({ studentID, program }: EditProgramProps) => {
 
 export const getServerSideProps = async ({ query }): Promise<{ props: { studentID: EditProgramProps; program: EditProgramProps } }> => {
   const temp = await fetch(
-    `http://localhost:8080/patient/program/${query.studentID}`
+    `/patient/program/${query.studentID}`
   );
   const { data } = await temp.json();
   return {

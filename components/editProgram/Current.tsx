@@ -33,7 +33,7 @@ const Current = ({ studentID, addedBehavior }: CurrentProps) => {
 
   useEffect((): void => {
     async function getBehaviors() {
-      const temp = await fetch("http://localhost:8080/behaviour", {
+      const temp = await fetch("/behaviour", {
         method: "get",
       });
       const { data } = await temp.json();
@@ -60,7 +60,7 @@ const Current = ({ studentID, addedBehavior }: CurrentProps) => {
     };
 
     try {
-      const temp = await fetch("http://localhost:8080/program", {
+      const temp = await fetch("/program", {
         method: "post",
         body: JSON.stringify(payload),
         headers: {

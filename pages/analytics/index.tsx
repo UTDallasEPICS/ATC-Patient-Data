@@ -60,13 +60,13 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const studentID = query.studentID;
 
   const patientRes = await fetch(
-    `http://localhost:8080/patient/${query.studentID}`
+    `/patient/${query.studentID}`
   );
   const patientData = await patientRes.json(); 
 
   let reports = []
   for(const reportID of patientData['data']['reports']) {
-    const response = await fetch(`http://localhost:8080/report/${reportID}`)
+    const response = await fetch(`/report/${reportID}`)
     const {data} = await response.json();
     reports.push(data)
   }

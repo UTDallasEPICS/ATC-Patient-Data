@@ -84,7 +84,7 @@ const newStudent = (): JSX.Element => {
             parentEmail,
         };
 
-        await fetch("http://localhost:8080/patient/", {
+        await fetch("/patient/", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
