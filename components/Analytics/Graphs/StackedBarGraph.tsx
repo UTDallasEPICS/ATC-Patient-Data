@@ -14,6 +14,11 @@ import {
 
 import Typography from "@material-ui/core/Typography";
 
+interface StackedBarGraphProps {
+  data: any;
+  title: string;
+}
+
 const StackedBarGraph = ({ data, title }) => {
   // useEffect(() => {
   //   console.log("Use Effect on bar graph");

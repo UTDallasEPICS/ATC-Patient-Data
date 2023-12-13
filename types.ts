@@ -28,7 +28,7 @@ export interface Student {
     email?: string;
     parentEmail: string;
     otherInfo?: string;
-    students?: Student[];
+    students?: Student[];x
 }
 
 export interface ProgramAsProps

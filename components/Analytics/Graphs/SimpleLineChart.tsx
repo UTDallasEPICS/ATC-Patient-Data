@@ -17,7 +17,14 @@ import {PRIMARY_COLOR} from "../../../styles/constants"
 
 // import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const SimpleLineChart = ({ data, title, dataKey }) => {
+interface SimpleLineChartProps {
+  data: any;
+  title: string;
+  dataKey: any;
+}
+
+
+const SimpleLineChart = ({ data, title, dataKey }: SimpleLineChartProps) => {
 
   return (
     <div style={{ marginBottom: "50px", marginTop: "20px", height: "400px" }}>
