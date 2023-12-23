@@ -8,10 +8,10 @@ import {
     Select,
 } from "@material-ui/core";
 import Head from "next/head";
-import { useState } from "react";
-import Navbar from "../../components/Navbar";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import CheckUser from "../../auth0CheckUser";
+import Navbar from "../../components/Navbar";
 
 export default function addBehavior() {
     // Verifies if user has the correct permissions
@@ -32,7 +32,7 @@ export default function addBehavior() {
         ) {
             return;
         }
-        await fetch("/api/behavior/", {
+        await fetch("http://localhost:3000/api/behavior/", {
             method: "POST",
             mode: "cors",
             headers: {

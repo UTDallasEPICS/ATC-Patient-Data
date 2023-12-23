@@ -2,7 +2,7 @@ import React from 'react'
 import Behavior from "./Behavior";
 
 
-
+// studentID isn't read here, is that intentional?
 const Mastered = ( { studentID }) => {
     
     const [behavior, setBehavior] = React.useState([]);

@@ -2,17 +2,55 @@ import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
-import { Patient } from "../../interfaces/Patient";
-import { GetServerSideProps } from "next";
+import { Student } from "../../interfaces/Student";
 import CheckUser  from '../../auth0CheckUser';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from "react";
 
-type PatientWithIdAndImg = Patient & { id: string; img: string };
 
-const editStudent = (props: { student: PatientWithIdAndImg }) => {
+type StudentWithIdAndImg = Student & { id: string; img: string };
+
+const editStudent = (props: { student: StudentWithIdAndImg }) => { // props has to have an attribute named student of type StudentWithIdAndImg
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin"])
     if(!allowed) return(<div>Redirecting...</div>);
+    const [students, setStudents] = useState(null)
+    const [studentList, setStudentList] = useState([]);
+    // fetch data from client side
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/api/student`, { method: 'GET' });
+                if (response.ok) {
+                    const data = await response.json();
+                    setStudents(data);
+                } else {
+                    console.error('Failed to fetch data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []); // called when component is mounted
+    useEffect(() => {
+        if (students) {
+            const studentList = students.map((student, idx) => ({ // this is acting like a copy constructor, sort of
+                firstName: student.firstName,
+                lastName: student.lastName,
+                img: student.img,
+                dob: convertStringToDate(student.dob),
+                parentPhone: student.parentPhone,
+                email: student.email,
+                parentEmail: student.parentEmail,
+                otherInfo: student.otherInfo,
+                id: idx + 1,
+                _id: student.id,
+            }));
+            console.log(studentList)
+            setStudentList(studentList);
+        }
+    }, [students]); // called when editing a student
     
     const { student } = props;
     const router = useRouter();
@@ -90,7 +128,7 @@ const editStudent = (props: { student: PatientWithIdAndImg }) => {
             fields.map((field) => field.value || "");
 
         try {
-            await fetch(`http://localhost:8080/patient/${student.id}`, {
+            await fetch(`/student/${student.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -128,37 +166,6 @@ const editStudent = (props: { student: PatientWithIdAndImg }) => {
             </Navbar>
         </div>
     );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const { query } = context;
-    if (!query.studentID) {
-        return {
-            notFound: true,
-        };
-    }
-    const temp = await fetch(
-        `http://localhost:8080/patient/${query.studentID}`,
-        {
-            method: "GET",
-        }
-    );
-    const { data } = await temp.json();
-    const student: PatientWithIdAndImg = {
-        id: query.studentID as string,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        img: "",
-        birthday: data.birthday,
-        parentPhone: data.parentPhone,
-        email: data.email,
-        parentEmail: data.parentEmail,
-    };
-    return {
-        props: {
-            student,
-        },
-    };
 };
 
 export default editStudent;

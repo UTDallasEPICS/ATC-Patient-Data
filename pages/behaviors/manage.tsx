@@ -1,16 +1,20 @@
-import Head from "next/head";
-import Navbar from "../../components/Navbar";
-import Link from "next/link";
-import { Button, makeStyles, Paper,
-        Table, TableBody, TableCell,
-        TableContainer, TableHead,
-        TableRow, Dialog, DialogActions,
-        DialogContent, DialogContentText,
-        DialogTitle,
+import {
+    Button,
+    Dialog, DialogActions,
+    DialogContent, DialogContentText,
+    DialogTitle,
+    Paper,
+    Table, TableBody, TableCell,
+    TableContainer, TableHead,
+    TableRow,
+    makeStyles,
 } from "@material-ui/core";
 import { Behavior } from '@prisma/client';
-import { useState, useEffect } from "react";
+import Head from "next/head";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import CheckUser from "../../auth0CheckUser";
+import Navbar from "../../components/Navbar";
 
 const useStyles = makeStyles({
     table: {
@@ -30,7 +34,7 @@ export default function manageBehaviorsPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/search/behavior`, { method: 'GET' });
+                const response = await fetch(`http://localhost:3000/api/search/behavior`, { method: 'GET' });
                 if (response.ok) {
                     const data : Behavior[] = await response.json();
                     setBehaviors(data);
@@ -43,10 +47,11 @@ export default function manageBehaviorsPage() {
             }
         };
         fetchData();
-    }, [behaviors]);
+    }, []);
 
+    // These two functions don't do data fetching
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const [focusElement, setFocusElement] = useState<number>(-1);
+    const [focusElement, setFocusElement] = useState<number>(-1); // -1 is initial value
 
     const removeBehavior = async () => {
         await fetch(

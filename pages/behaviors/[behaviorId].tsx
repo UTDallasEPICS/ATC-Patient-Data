@@ -1,11 +1,11 @@
-import Head from "next/head";
-import Navbar from "../../components/Navbar";
-import Link from "next/link";
 import { Button } from "@material-ui/core";
-import CheckUser from "../../auth0CheckUser";
-import { useState, useEffect } from "react";
-import { useRouter } from 'next/router';
 import { Behavior } from '@prisma/client';
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from 'next/router';
+import { useEffect, useState } from "react";
+import CheckUser from "../../auth0CheckUser";
+import Navbar from "../../components/Navbar";
 
 function BehaviorPage() {
     // Verifies if user has the correct permissions
@@ -20,7 +20,7 @@ function BehaviorPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/search/behavior?id=${behaviorId}`, { method: 'GET' });
+                const response = await fetch(`/api/behavior?id=${behaviorId}`, { method: 'GET' });
                 if (response.ok) {
                     const data: Behavior = await response.json();
                     setBehaviorData(data);
