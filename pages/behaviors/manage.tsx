@@ -8,10 +8,8 @@ import { Button, makeStyles, Paper,
         DialogContent, DialogContentText,
         DialogTitle,
 } from "@material-ui/core";
-import { Behavior } from '@prisma/client';
 import { useState, useEffect } from "react";
 import CheckUser from "../../auth0CheckUser";
-
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
