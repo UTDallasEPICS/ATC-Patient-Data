@@ -54,7 +54,7 @@ After Git is downloaded, run these commands:
 
 ```bash
 git checkout -b [Branch Name] # Create a new branch named whatever you want
-git clone UTDallasEPICS/ATC-Patient-Data
+git clone https://github.com/UTDallasEPICS/ATC-Patient-Data.git # This is the current URL that Git will see
 ```
 ![BashTerminal](https://github.com/UTDallasEPICS/ATC-Patient-Data/assets/126997597/978488c2-458b-432f-b282-bba42fd9d823)
 
@@ -83,6 +83,10 @@ Every time you start working on code, stash your code with `git stash` and then 
 
 * If the database does not show up, refer to this
     *   ATC-Patient-Data/Documentation/Docker and PostgreSQL.md at master · UTDallasEPICS/ATC-Patient-Data (github.com), [Link](https://github.com/UTDallasEPICS/ATC-Patient-Data/tree/master/Documentation)
+    *   If the link doesn't work, run:
+            * `docker-compose up`
+            * `npx prisma migrate reset` 
+              * `npx prisma db migrate` migrates the database to Docker Container
 * While coding/developing, the database should always be running.
 
 
