@@ -7,6 +7,7 @@ export interface Student {
     parentPhone: string;
     email: string;
     parentEmail: string;
+    funder: string;
     otherInfo: string;
   }
 export interface StudentProfileProps {

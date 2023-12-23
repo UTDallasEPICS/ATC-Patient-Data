@@ -15,7 +15,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
 
   const handleClick = async () => {
     
-    const response = await fetch('http://localhost:8080/report/', {
+    const response = await fetch('http://localhost:3000/report/', {
       method: "post",
       mode: "cors",
       headers: {
@@ -36,7 +36,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
 
   const updateUser = async () => {
     console.log(patient._id)
-    const response = await fetch(`http://localhost:8080/patient/${patient._id}`, {
+    const response = await fetch(`http://localhost:3000/patient/${patient._id}`, {
       method: "PATCH",
       mode: "cors",
       headers: {
@@ -52,7 +52,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
   }
 
   const getReport = async () => {
-    const response = await fetch('http://localhost:8080/report/' + reportId)
+    const response = await fetch('http://localhost:3000/report/' + reportId)
     const {data} = await response.json();
     report = data;
     console.log(data)
@@ -61,7 +61,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
   const getStudentReports = async () => {
     let studentReports = []
     for(const reportID of patient['reports']) {
-      const response = await fetch(`http://localhost:8080/report/${reportID}`)
+      const response = await fetch(`http://localhost:3000/report/${reportID}`)
       const {data} = await response.json();
       studentReports.push(data)
     }
@@ -74,7 +74,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
       if (reportID !== ID) updatedReports.push(reportID)
     })
     console.log(updatedReports)
-    const response = await fetch(`http://localhost:8080/patient/${patient._id}`, {
+    const response = await fetch(`http://localhost:3000/patient/${patient._id}`, {
       method: "PATCH",
       mode: "cors",
       headers: {
@@ -96,7 +96,7 @@ const editProgram = ({ patient, employee, behaviors }) => {
 
       <button onClick={async() => {
         const employeeRes = await fetch(
-          `http://localhost:8080/employee`
+          `/employee`
         );
         
         const employeeData = await employeeRes.json();
@@ -132,17 +132,17 @@ const editProgram = ({ patient, employee, behaviors }) => {
 
 export const getServerSideProps = async ({ query }) => {
   const patientRes = await fetch(
-    `http://localhost:8080/patient/${query.studentID}`
+    `/patient/${query.studentID}`
   );
   const patientData = await patientRes.json(); 
 
   const employeeRes = await fetch(
-    `http://localhost:8080/employee/64518555b5b62f1086e74d80`
+    `/employee/64518555b5b62f1086e74d80`
   );
   const employeeData = await employeeRes.json();
 
   const programRes = await fetch(
-    `http://localhost:8080/patient/program/${query.studentID}`
+    `/patient/program/${query.studentID}`
   );
   const programData = await programRes.json();
 

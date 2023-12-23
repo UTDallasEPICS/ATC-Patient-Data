@@ -23,7 +23,7 @@ const editProgram = ({ studentID, program }) => {
 
 export const getServerSideProps = async ({ query }) => {
   const temp = await fetch(
-    `http://localhost:8080/patient/program/${query.studentID}`
+    `http://localhost:3000/patient/program/${query.studentID}`
   );
   const { data } = await temp.json();
   return {

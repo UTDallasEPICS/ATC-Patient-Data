@@ -34,7 +34,7 @@ export default function manageBehaviorsPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/search/behavior`, { method: 'GET' });
+                const response = await fetch(`http://localhost:3000/api/search/behavior`, { method: 'GET' });
                 if (response.ok) {
                     const data : Behavior[] = await response.json();
                     setBehaviors(data);
@@ -49,8 +49,9 @@ export default function manageBehaviorsPage() {
         fetchData();
     }, []);
 
+    // These two functions don't do data fetching
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    const [focusElement, setFocusElement] = useState<number>(-1);
+    const [focusElement, setFocusElement] = useState<number>(-1); // -1 is initial value
 
     const removeBehavior = async () => {
         await fetch(

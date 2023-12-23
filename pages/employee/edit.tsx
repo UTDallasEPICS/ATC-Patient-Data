@@ -2,10 +2,11 @@ import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
-import { GetServerSideProps } from "next";
 import { Employee } from "../../components/Interfaces/Entities";
 import { useRouter } from "next/router";
 import CheckUser  from '../../auth0CheckUser';
+import { useState, useEffect } from "react";
+
 
 type EmployeeWithIdAndImg = Employee & { id: string; img: string };
 
@@ -13,6 +14,44 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
   // Verifies if user has the correct permissions
   const {allowed, role} = CheckUser(["Admin"])
   if(!allowed) return(<div>Redirecting...</div>);
+
+  // fetch the employee data on the client side
+    // from here to...
+    const [employees, setEmployees] = useState(null)
+    const [employeeList, setEmployeeList] = useState([]);
+    // fetch data from client side
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/api/employee`, { method: 'GET' });
+                if (response.ok) {
+                    const data = await response.json();
+                    setEmployees(data);
+                } else {
+                    console.error('Failed to fetch data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+    useEffect(() => {
+        if (employees) {
+            const employeeList = employees.map((employee, idx) => ({ // this is acting like a copy constructor, sort of
+                firstName: employee.firstName,
+                dob: convertStringToDate(employee.dob),
+                phoneNumber: employee.phoneNumber,
+                email: employee.email,
+                otherInfo: employee.otherInfo,
+                id: idx + 1,
+                _id: employee.id,
+            }));
+            console.log(employeeList)
+            setEmployeeList(employeeList);
+        }
+    }, [employees]);
+    // ... to here
 
   const { employee } = props;
   const router = useRouter();
@@ -42,7 +81,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     type: InputType.DATE,
     name: "Birth Date",
     required: true,
-    value: formatDate(employee.birthday),
+    value: formatDate(employee.dob),
   };
 
   const otherInfoInput: Input = {
@@ -56,7 +95,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     attributeName: "phone_number",
     type: InputType.TEXT,
     name: "Phone number",
-    value: employee.phoneNumber,
+    value: employee.phone,
   };
 
   const emailInput: Input = {
@@ -88,7 +127,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
         fields.map((field) => field.value || "");
 
     try {
-        await fetch(`http://localhost:8080/employee/${employee.id}`, {
+        await fetch(`/employee/${employee.id}`, {
             method: "patch",
             headers: {
                 "Content-Type": "application/json",
@@ -126,37 +165,6 @@ return (
         </Navbar>
     </div>
 );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { query } = context;
-    if (!query.employeeID) {
-        return {
-            notFound: true,
-        };
-    }
-    const temp = await fetch(
-        `http://localhost:8080/employee/${query.employeeID}`,
-        {
-            method: "get",
-        }
-    );
-  const { data } = await temp.json();
-  const employee: Employee = {
-    id: query.employeeID as string,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    dob: data.birthday,
-    phone: data.phoneNumber,
-    email: data.email,
-    otherInfo: data.otherInfo,
-  };
-
-  return {
-    props: {
-      employee: employee,
-    },
-  };
 };
 
 export default editEmployee;
