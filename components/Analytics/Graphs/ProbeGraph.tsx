@@ -6,27 +6,32 @@ import styles from "../../../styles/Analytics.module.css";
 
 import "react-calendar-heatmap/dist/styles.css";
 
-const ProbeGraph = ({ data, title }) => {
-  const today = new Date();
+interface ProbeGraphProps {
+  data: any;
+  title: string;
+}
 
-  const randomValues = getRange(200).map((index) => {
+const ProbeGraph = ({ data, title }: ProbeGraphProps) => {
+  const today: Date = new Date();
+
+  const randomValues = getRange(200).map((index: number) => {
     return {
       date: shiftDate(today, -index),
       result: getRandomInt(0, 1),
     };
   });
 
-  function shiftDate(date, numDays) {
+  function shiftDate(date: any, numDays: any) {
     const newDate = new Date(date);
     newDate.setDate(newDate.getDate() + numDays);
     return newDate;
   }
 
-  function getRange(result) {
+  function getRange(result: any) {
     return Array.from({ length: result }, (_, i) => i);
   }
 
-  function getRandomInt(min, max) {
+  function getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 

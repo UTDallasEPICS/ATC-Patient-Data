@@ -9,11 +9,11 @@ import {
     TableRow,
     makeStyles,
 } from "@material-ui/core";
+import { useState, useEffect } from "react";
+import CheckUser from "../../auth0CheckUser";
 import { Behavior } from '@prisma/client';
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import CheckUser from "../../auth0CheckUser";
 import Navbar from "../../components/Navbar";
 
 const useStyles = makeStyles({

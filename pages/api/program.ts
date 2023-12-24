@@ -1,3 +1,4 @@
+import { Behavior } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../lib/prisma';
 

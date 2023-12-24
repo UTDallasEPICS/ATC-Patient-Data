@@ -13,11 +13,10 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
 import CheckUser  from '../../auth0CheckUser';
-import { Employee, Student } from "../../types"; // this isn't actually called anywhere...
+import { EmployeeProfileProps, Employee, Student } from "../../types";
+import { GetServerSideProps } from "next";
 
-
-
-const employeeProfile = ({students, employee, currentStudent}) => {
+const employeeProfile = ({students, employee, currentStudent}: EmployeeProfileProps) => {
   // Verifies if user has the correct permissions
   const {allowed, role} = CheckUser(["Admin"])
   if(!allowed) return(<div>Redirecting...</div>);
@@ -26,29 +25,29 @@ const employeeProfile = ({students, employee, currentStudent}) => {
   currentStudent = (currentStudent[0] == null) ? [] : currentStudent
 
   //State handles the notifications for when the archive is clicked
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
+  const [open, setOpen] = useState<boolean>(false);
+  const handleClickOpen = (): void => {
     setOpen(true);
   };
-  const handleClose = () => {
+  const handleClose = (): void => {
     setOpen(false);
   };
 
   //State that handles opening the list of students so that an administrator can assign students to certain employees
-  const [listOpen, setListOpen] = React.useState(false);
-  const openList = () => {
+  const [listOpen, setListOpen] = useState<boolean>(false);
+  const openList = (): void => {
     setListOpen(true);
   };
-  const closeList = () => {
+  const closeList = (): void => {
     setListOpen(false);
   };
 
   //State that handles the checking and unchecking of students within the list.
   //const classes = useStyles();
 
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = useState<number[]>([0]);
 
-  const handleToggle = (value) => () => {
+  const handleToggle = (value: any) => () => {
     const currentIndex = checked.indexOf(value.id - 1);
     const newChecked = [...checked];
     
@@ -66,51 +65,51 @@ const employeeProfile = ({students, employee, currentStudent}) => {
   };
 
   //state for handling submit button
-  const [submitCheckOpen, setSubmitCheckOpen] = React.useState(false);
+  const [submitCheckOpen, setSubmitCheckOpen] = useState<boolean>(false);
 
   //Opens the verification on saving student access
-  const openSubmitCheck = () => {
+  const openSubmitCheck = (): void => {
     setSubmitCheckOpen(true);
   };
   //When save it closes both the alert and the list
-  const closeSubmitCheckSave = () => {
+  const closeSubmitCheckSave = (): void => {
     setSubmitCheckOpen(false);
     setListOpen(false);
   };
   //On no save it closes just the alert
-  const closeSubmitCheckNoSave = () => {
+  const closeSubmitCheckNoSave = (): void => {
     setSubmitCheckOpen(false);
   };
 
   //State for handling when other info is being pressed
-  const [otherInfoOpen, setOtherInfo] = React.useState(false);
+  const [otherInfoOpen, setOtherInfo] = useState<boolean>(false);
   //Opens other info
-  const openOtherInfo = () => {
+  const openOtherInfo = (): void => {
     setOtherInfo(true);
   };
   //Close Other Info
-  const closeOtherInfo = () => {
+  const closeOtherInfo = (): void => {
     setOtherInfo(false);
   };
 
   //State for handling when the x button is pressed on list
-  const [xValidation, setXValidation] = React.useState(false);
+  const [xValidation, setXValidation] = useState<boolean>(false);
   //Opens x validation
-  const openXValidation = () => {
+  const openXValidation = (): void => {
     setXValidation(true);
   };
   //Closes x validation
-  const closeXValidation = () => {
+  const closeXValidation = (): void => {
     setXValidation(false);
   };
   //close x validation when user says yes
   //Closes x validation
-  const closeXValidationYes = () => {
+  const closeXValidationYes = (): void => {
     setXValidation(false);
     setListOpen(false);
   };
 
-  const formatDate = (d) => {
+  const formatDate = (d: Date) => {
     return d.toLocaleDateString('en-us', { year:"numeric", month:"short", day: 'numeric'})
     //return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   };
@@ -129,13 +128,13 @@ const employeeProfile = ({students, employee, currentStudent}) => {
     For Updating Student Access
     --------------------------
   */ 
-  const [selectedStudents, setSelectedStudents] = useState(currentStudent);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedStudents, setSelectedStudents] = useState<any[]>(currentStudent);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (): void => {
     setDialogOpen(true);
   };
-  const handleCancelDialog = () => {
+  const handleCancelDialog = (): void => {
     setDialogOpen(false);
   };
 
@@ -441,9 +440,9 @@ const employeeProfile = ({students, employee, currentStudent}) => {
 
 export default employeeProfile;
 
-export const getServerSideProps = async ({ query }) => {
-  const allStudentsRes = await fetch(`/patient`);
-  const allStudents = await allStudentsRes.json()
+export const getServerSideProps: GetServerSideProps <{ students: any[]; employee: Employee; currentStudent: any[]}> = async ({ query }) => {
+  const allPatientsRes = await fetch(`/patient`);
+  const allPatients = await allPatientsRes.json()
 
   const employeeID = query.id
   const employeeRes = await fetch(`/employee/${employeeID}`);
@@ -459,7 +458,7 @@ export const getServerSideProps = async ({ query }) => {
 
   return {
     props: {
-      students: allStudents['data'],
+      students: allPatients['data'],
       employee: employee['data'],
       currentStudent: currentStudents,
     }

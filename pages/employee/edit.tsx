@@ -2,9 +2,10 @@ import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
-import { Employee } from "../../components/Interfaces/Entities";
-import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
 import CheckUser  from '../../auth0CheckUser';
+import { Employee, EmployeeWithIdAndImg} from "../../types";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 
@@ -56,7 +57,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
   const { employee } = props;
   const router = useRouter();
 
-  const formatDate = (d) => {
+  const formatDate = (d: any) => {
       d = new Date(d);
       return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   };

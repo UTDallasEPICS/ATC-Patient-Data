@@ -51,7 +51,7 @@ const [students, setStudents] = useState(null);
                 img: "",
             };
         }) || []; // If students doesn't exist, then this will return empty array (null). From this point on, we don't need to check if "s" is defined.
-        students?.sort(function (a, b) {
+        students?.sort(function (a: Student, b: Student) {
             const aName = a.firstName + a.lastName;
             const bName = b.firstName + b.lastName;
             if (aName < bName) {
@@ -64,7 +64,7 @@ const [students, setStudents] = useState(null);
         }) || [];
     }, []); // called when component is mounted
 
-    const [searchTerm, setSearchTerm] = useState(""); // NEVER mutate the value of searchTerm without the setSearchTerm function.
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
     <div>

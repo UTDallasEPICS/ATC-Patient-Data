@@ -4,9 +4,9 @@ import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
-import { Employee } from "../../interfaces/Employee";
 import { useRouter } from "next/router";
 import CheckUser  from '../../auth0CheckUser';
+import { Employee } from "../../types";
 
 const newEmployee = () => {
   // Verifies if user has the correct permissions
@@ -92,7 +92,7 @@ const newEmployee = () => {
       email,
       otherInfo,
     };
-    await fetch("http://localhost:3000/employee/", {
+    await fetch("/employee/", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",

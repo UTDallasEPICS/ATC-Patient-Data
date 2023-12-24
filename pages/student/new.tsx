@@ -6,9 +6,10 @@ import CheckUser  from '../../auth0CheckUser';
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
+import { Patient } from "../../types";
 import { Student } from "../../interfaces/Student";
 
-const newStudent = () => {
+const newStudent = (): JSX.Element => {
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin"])
     if(!allowed) return(<div>Redirecting...</div>);
@@ -84,7 +85,7 @@ const newStudent = () => {
             parentEmail,
         };
 
-        await fetch("http://localhost:3000/student/", {
+        await fetch("/patient/", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",

@@ -2,11 +2,11 @@ import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
-import { Student } from "../../interfaces/Student";
+import { GetServerSideProps } from "next";
 import CheckUser  from '../../auth0CheckUser';
 import { useRouter } from 'next/router';
+import { Patient, Student } from "../../types";
 import { useState, useEffect } from "react";
-
 
 type StudentWithIdAndImg = Student & { id: string; img: string };
 
@@ -55,7 +55,7 @@ const editStudent = (props: { student: StudentWithIdAndImg }) => { // props has 
     const { student } = props;
     const router = useRouter();
 
-    const formatDate = (d) => {
+    const formatDate = (d: any) => {
         d = new Date(d);
         return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
     };

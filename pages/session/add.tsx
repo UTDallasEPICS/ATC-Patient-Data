@@ -2,7 +2,7 @@ import Navbar from "../../components/Navbar";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import styles from "../../styles/AddSession.module.css";
-import Behaviors from "../../components/AddSession/Behaviors";
+import { Behaviors } from "../../components/AddSession/Behaviors";
 import Head from "next/head";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
@@ -66,7 +66,7 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
   }
 
   //Takes array for a probe and returns an object for JSON conversion
-  function getProbe(results)
+  function getProbe(results: any)
   {
       let success = 0;
       let fails = 0;
@@ -87,7 +87,7 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
   }
 
   //Takes array for a trial and returns an object for JSON conversion
-  function getTrial(result)
+  function getTrial(result: any)
   {
     let score = false;
     if(result[0] == "+")
@@ -113,7 +113,7 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
   };
 
   //Converts all response data into JSON
-  const convertToJSON = (responses) =>
+  const convertToJSON = (responses: any) =>
   {
       for(var i = 0; i < responses.length; i++)
       {
@@ -154,7 +154,7 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
   }
 
   //Get response data from componenents/AddSession/Behaviors
-  const getResponses = (responseArray) =>
+  const getResponses = (responseArray: any) =>
   {
       programData.responses = responseArray;
       console.log(programData.responses);
@@ -227,7 +227,7 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
 
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps<{}> = async ({ query }) => {
   const patientRes = await fetch(
     `/patient/${query.studentID}`
   );

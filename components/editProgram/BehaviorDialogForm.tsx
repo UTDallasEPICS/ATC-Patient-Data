@@ -1,0 +1,84 @@
+import React, { ChangeEvent } from 'react';
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
+import styles from "../../styles/EditProgram.module.css";
+import { BehaviorDialogFormProps } from '../../types';
+
+const BehaviorDialogForm = ({ behavior, setBehavior }: BehaviorDialogFormProps) => {
+  return (
+    <Paper className={styles.domainPaper}>
+      <FormControl fullWidth>
+        <InputLabel htmlFor="my-input">Behavior Name</InputLabel>
+        <Input
+          id="my-input"
+          aria-describedby="my-helper-text"
+          value={behavior.name}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setBehavior({
+              ...behavior,
+              name: e.target.value,
+            })
+          }
+        />
+        <FormHelperText id="my-helper-text">
+          Enter the name of your behavior here
+        </FormHelperText>
+      </FormControl>
+      <FormControl
+        fullWidth
+        style={{ marginTop: "1rem", marginBottom: "1rem" }}
+      >
+        <InputLabel htmlFor="my-input">Behavior Description</InputLabel>
+        <Input
+          id="my-input"
+          aria-describedby="my-helper-text"
+          value={behavior.description}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setBehavior({
+              ...behavior,
+              description: e.target.value,
+            })
+          }
+        />
+        <FormHelperText id="my-helper-text">
+          Enter the description of your behavior here
+        </FormHelperText>
+      </FormControl>
+      <FormControl fullWidth style={{ marginBottom: "1rem" }}>
+        <InputLabel id="demo-simple-select-label">Behavior Type</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={behavior.datatype}
+          onChange={(e: ChangeEvent <{ value: unknown}>) => {
+            setBehavior((prev) => ({
+              ...prev,
+              datatype: e.target.value as string,
+            }));
+          }}
+        >
+          <MenuItem value="" disabled>
+            Choose a behavior type
+          </MenuItem>
+          <MenuItem value="trial">Trial</MenuItem>
+          <MenuItem value="probe">Probe</MenuItem>
+          <MenuItem value="duration">Duration</MenuItem>
+          <MenuItem value="frequency">Frequency</MenuItem>
+        </Select>
+        <FormHelperText id="my-helper-text">
+          Choose a behavior type
+        </FormHelperText>
+      </FormControl>
+    </Paper>
+  );
+}
+
+export default BehaviorDialogForm;

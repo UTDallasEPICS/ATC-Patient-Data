@@ -9,13 +9,27 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import CheckUser  from '../../auth0CheckUser';
+import { Employee, EmployeeSearchProps, Student } from "../../types";
 
-const buttonColor = "#0F5787"; // this isn't read in the program, where is it used?
-
-export default function EmployeeSearch() {
+export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
   // Verifies if user has the correct permissions
   const {allowed, role} = CheckUser(["Admin"])
   if(!allowed) return(<div>Redirecting...</div>);
+  const[loading, setLoading] = useState(true);
+  const [canShow, setCanShow] = useState(false);
+  const finishedLoadingAndCanShow = !loading && canShow;
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const Conditional = ({
+    showWhen,
+    children,
+  }: {
+    showWhen: boolean;
+    children: ReactNode;
+  }) => {
+    if (showWhen) return <>{children}</>
+    return <></>;
+  };
 
   const [employees, setEmployees] = useState(null)
   const [employeeList, setEmployeeList] = useState([]);
@@ -61,6 +75,12 @@ export default function EmployeeSearch() {
   const [searchTerm, setSearchTerm] = useState("");
   return (
     <div>
+      {
+        (!loading && canShow) 
+      }
+      <Conditional showWhen={finishedLoadingAndCanShow}>
+        <h1> Welcome</h1>
+      </Conditional>
       <Head>
         <title>Employee Search</title>
         <link rel="icon" href="/atc-logo.png" />

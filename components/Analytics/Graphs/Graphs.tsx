@@ -18,20 +18,25 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const Graphs = ( {studentID} ) => {
+
+interface GraphsProps {
+  studentID: any;
+}
+
+const Graphs = ( {studentID}: GraphsProps ) => {
   const [domains, setDomains] = useState([]);
   const [selectedDomain, setSelectedDomain] = useState(null);
   const [data, setData] = useState([]);
 
-  useEffect(() => {}, []);
+  useEffect((): void => {}, []);
 
-  useEffect(() => {
+  useEffect((): void => {
     console.log("Use Effect called");
     setDomains(["Domain 1", "Domain 2", "Domain 3"]);
     fetchData();
   }, []);
 
-  const fetchData = () => {
+  const fetchData = (): void => {
     console.log("Fetch data called");
     console.log("studentID = " + studentID);
 
