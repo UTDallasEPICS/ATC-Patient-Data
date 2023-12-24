@@ -38,8 +38,11 @@ const SearchList = ({ students, searchTerm, destinationPath }: SearchListProps) 
 };
 
 SearchList.propTypes = {
-    students: PropTypes.array.isRequired,
-    searchTerm: PropTypes.string.isRequired,
+  searchResults: PropTypes.array.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  destinationPath: PropTypes.string.isRequired,
+  onSearch: PropTypes.func.isRequired,
+  pageSize: PropTypes.number.isRequired,
 };
 
 export default SearchList;

@@ -14,63 +14,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(405).end();
   }
 }
-
+// TODO: model is actually part of the route params, we dont need to pass in the body. 
 const search = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { type } = req.query
-  // TODO: get where and data to select (from request body)
-  // TODO: perform search and return with pagination cursor
+  const { model, searchQuery, pageSize = 20, cursor } = req.body;
+
+  const searchFields = ["name", "email"];
+
+  const whereClause = {
+    OR: searchFields.map((field) => ({
+      [field]: {
+        contains: searchQuery,
+        mode: "insensitive",
+      },
+    })),
+  };
+
+  const paginationOptions = {
+    take: pageSize,
+    skip: cursor ? 1 : 0,
+    cursor: cursor ? { id: Number(cursor) } : undefined,
+    orderBy: { id: "asc" },
+  };
+
   try {
-    let data: Behavior[] | User[] | Session[] | Program[];
-    switch (type) {
-      case 'user':
-        data = await getUsers();
-        break;
-      case 'program':
-        data = await getPrograms();
-        break;
-      case 'session':
-        data = await getSessions();
-        break;
-      case 'behavior':
-        data = await getBehaviors();
-        break;
-      default:
-        data = [];
-    }
-    return res.status(200).json(data);;
+    const results = await prisma[model].findMany({
+      where: whereClause,
+      ...paginationOptions,
+    });
+
+    const totalCount = await prisma[model].count({ where: whereClause });
+
+    const nextCursor =
+      results.length === pageSize ? results[pageSize - 1].id : null;
+
+    return res.status(200).json({ results, nextCursor, totalCount });
   } catch (error) {
-    return res.status(500).json({ error });
+    return res.status(500).json({ error: error.message });
   }
-}
-
-const getUsers = async () => {
-    return await prisma.user.findMany({
-      where: {
-        // search logic goes in here
-      }
-    });
-}
-
-const getPrograms = async () => {
-    return await prisma.program.findMany({
-      where: {
-        // search logic goes in here
-      }
-    });
-}
-
-const getSessions = async () => {
-    return await prisma.session.findMany({
-      where: {
-        // search logic goes in here
-      }
-    });
-}
-
-const getBehaviors = async () => {
-    return await prisma.behavior.findMany({
-      where: {
-        // search logic goes in here
-      }
-    });
-}
+};
