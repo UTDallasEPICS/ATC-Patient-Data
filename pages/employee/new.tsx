@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
-import { Employee } from "../../types.ts";
+import { Employee } from "../../types";
 import { useRouter } from "next/router";
 import CheckUser  from '../../auth0CheckUser';
 
@@ -58,15 +58,7 @@ const newEmployee = () => {
     type: InputType.TEXT,
     name: "Email address",
   };
-/* As of 12/23/2023, this code is deprecated due to the fact that Employees should not have birthdays
-  const convertStringToDate = (date: string) => {
-    const data = date.split("-");
-    return new Date(
-        parseInt(data[0]),
-        parseInt(data[1]) - 1,
-        parseInt(data[2])
-    );
-  }; */
+
 
   const textInputs: Input[] = [
     firstNameInput,
@@ -101,7 +93,7 @@ const newEmployee = () => {
       otherInfo,
     };
 
-    await fetch("http://localhost:3000/employee/", {
+    await fetch("/employee/", {
             method: "post",
             headers: {
                 "Content-Type": "application/json",

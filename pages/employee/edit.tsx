@@ -2,7 +2,7 @@ import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
-import { Employee } from "../../components/Interfaces/Entities";
+import { Employee } from "../../types";
 import { useRouter } from "next/router";
 import CheckUser  from '../../auth0CheckUser';
 import { useState, useEffect } from "react";
@@ -36,16 +36,31 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
         };
         fetchData();
     }, []);
+/*
+export interface Employee {
+    _id: string;
+    img: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    otherInfo: string;
+    students: string[];
+} 
+*/
+
     useEffect(() => {
         if (employees) {
             const employeeList = employees.map((employee, idx) => ({ // this is acting like a copy constructor, sort of
                 firstName: employee.firstName,
-                dob: convertStringToDate(employee.dob),
+                lastName: employee.lastName,
                 phoneNumber: employee.phoneNumber,
                 email: employee.email,
                 otherInfo: employee.otherInfo,
+                students: employee.students,
                 id: idx + 1,
                 _id: employee.id,
+                img: employee.img,
             }));
             console.log(employeeList)
             setEmployeeList(employeeList);
@@ -56,10 +71,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
   const { employee } = props;
   const router = useRouter();
 
-  const formatDate = (d) => {
-      d = new Date(d);
-      return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-  };
+
   const firstNameInput: Input = {
     attributeName: "first_name",
     name: "First Name",
@@ -76,14 +88,6 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     value: employee.lastName,
   };
 
-  const birthDateInput: Input = {
-    attributeName: "birth_date",
-    type: InputType.DATE,
-    name: "Birth Date",
-    required: true,
-    value: formatDate(employee.dob),
-  };
-
   const otherInfoInput: Input = {
     attributeName: "other_info",
     type: InputType.MULTILINE_TEXT,
@@ -95,7 +99,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     attributeName: "phone_number",
     type: InputType.TEXT,
     name: "Phone number",
-    value: employee.phone,
+    value: employee.phoneNumber,
   };
 
   const emailInput: Input = {
@@ -104,27 +108,25 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     name: "Email address",
     value: employee.email,
   };
+  const studentsInput: Input = {
+    attributeName: "students",
+    type: InputType.MULTIPLE_ITEMS,
+    name: "Students",
+    value: employee.students,
+  };
   const textInputs: Input[] = [
     firstNameInput,
     lastNameInput,
-    birthDateInput,
     phoneNumberInput,
     emailInput,
+    studentsInput,
     otherInfoInput,
   ];
 
-  const convertStringToDate = (date: string) => {
-    const data = date.split("-");
-    return new Date(
-        parseInt(data[0]),
-        parseInt(data[1]) - 1,
-        parseInt(data[2])
-    );
-  };
 
   const handleSubmit = async (fields: Input[]) => {
-    const [firstName, lastName, dob, phoneNumber, email, otherInfo] =
-        fields.map((field) => field.value || "");
+    const [firstName, lastName, , phoneNumber, email, otherInfo] =
+        fields?.map((field) => field?.value || "");
 
     try {
         await fetch(`/employee/${employee.id}`, {
@@ -135,7 +137,6 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
             body: JSON.stringify({
                 firstName,
                 lastName,
-                dob: convertStringToDate(dob),
                 email,
                 phoneNumber,
                 otherInfo,
