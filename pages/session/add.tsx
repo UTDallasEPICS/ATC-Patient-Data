@@ -29,7 +29,7 @@ interface ProgramAsProps
   responses: string[];
 }
 
-const addSession = ({ studentID_, firstName, lastName, patient, employee, behaviors, program}) => {
+const addSession = ({ studentID_, firstName, lastName, student, employee, behaviors, program}) => {
   // Verifies if user has the correct permissions
   const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician"])
   if(!allowed) return(<div>Redirecting...</div>);
@@ -170,7 +170,7 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
       body: JSON.stringify({
         sessionTime: new Date(),
         data: convertToJSON(programData.responses),
-        patient,
+        student,
         employee,
         behaviors,
       }),
@@ -184,19 +184,19 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
     const report = reportData['data'];
     console.log(report)
 
-    const patientResponse = await fetch(`/patient/${patient._id}`, {
+    const studentResponse = await fetch(`/student/${student._id}`, {
       method: "PATCH",
       mode: "cors",
       headers: {
         "Content-Type" : "application/json",
       },
       body: JSON.stringify({
-        reports: [...patient["reports"], report],
+        reports: [...student["reports"], report],
       }),
     })
 
-    const patientData = await patientResponse.json();
-    console.log(patientData)
+    const studentData = await studentResponse.json();
+    console.log(studentData)
   }
 
   return (
@@ -228,10 +228,10 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const patientRes = await fetch(
-    `/patient/${query.studentID}`
+  const studentRes = await fetch(
+    `/student/${query.studentID}`
   );
-  const patientData = await patientRes.json(); 
+  const studentData = await studentRes.json(); 
 
   const employeeRes = await fetch(
     `/employee/64518555b5b62f1086e74d80`
@@ -239,7 +239,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const employeeData = await employeeRes.json();
 
   const programRes = await fetch(
-    `/patient/program/${query.studentID}`
+    `/student/program/${query.studentID}`
   );
   const programData = await programRes.json();
 
@@ -248,7 +248,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       studentID_: query.studentID,
       firstName: query.firstName,
       lastName: query.lastName,
-      patient: patientData['data'],
+      student: studentData['data'],
       employee: employeeData['data'],
       behaviors: programData['data'][0]["behaviours"],
       program: programData['data'][0],

@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
-import { Employee } from "../../interfaces/Employee";
+import { Employee } from "../../types.ts";
 import { useRouter } from "next/router";
 import CheckUser  from '../../auth0CheckUser';
 
@@ -28,16 +28,16 @@ const newEmployee = () => {
     required: true,
   };
 
-  const birthDateInput: Input = {
-    attributeName: "birth_date",
-    type: InputType.DATE,
-    name: "Birth Date",
+  const IDinput: Input = {
+    attributeName: "id",
+    name: "ID",
+    type: InputType.TEXT,
     required: true,
-  };
+  }
 
   const otherInfoInput: Input = {
     attributeName: "other_info",
-    type: InputType.MUTILINE_TEXT,
+    type: InputType.MULTILINE_TEXT,
     name: "Other info",
   };
 
@@ -47,12 +47,18 @@ const newEmployee = () => {
     name: "Phone number",
   };
 
+  const studentsInput: Input = {
+    attributeName: "students",
+    name: "Students: ",
+    type: InputType.MULTILINE_TEXT,
+  }
+
   const emailInput: Input = {
     attributeName: "email",
     type: InputType.TEXT,
     name: "Email address",
   };
-
+/* As of 12/23/2023, this code is deprecated due to the fact that Employees should not have birthdays
   const convertStringToDate = (date: string) => {
     const data = date.split("-");
     return new Date(
@@ -60,14 +66,15 @@ const newEmployee = () => {
         parseInt(data[1]) - 1,
         parseInt(data[2])
     );
-  };
+  }; */
 
   const textInputs: Input[] = [
     firstNameInput,
     lastNameInput,
-    birthDateInput,
     phoneNumberInput,
     emailInput,
+    IDinput,
+    studentsInput,
     otherInfoInput,
   ];
 
@@ -79,19 +86,21 @@ const newEmployee = () => {
           return field.name + ": " + field.value;
         })
 
-    );
-    */
-    const [firstName, lastName, birthday, phoneNumber, email, otherInfo] =
+    );*/
+    const [firstName, lastName, img, _id, students, phoneNumber, email, otherInfo] =
             fields.map((field) => field.value || "");
 
     const newUser: Employee = {
+      _id,
+      img,
       firstName,
       lastName,
-      birthday: convertStringToDate(birthday),
       phoneNumber,
       email,
+      students,
       otherInfo,
     };
+
     await fetch("http://localhost:3000/employee/", {
             method: "post",
             headers: {

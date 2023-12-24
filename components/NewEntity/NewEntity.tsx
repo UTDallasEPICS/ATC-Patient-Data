@@ -75,7 +75,7 @@ export const NewEntity = (props: {
                     />
                 );
 
-            case InputType.MUTILINE_TEXT:
+            case InputType.MULTILINE_TEXT:
                 return (
                     <TextField
                         id={input.attributeName}

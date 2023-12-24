@@ -23,11 +23,10 @@ export interface Employee {
     img: string;
     firstName: string;
     lastName: string;
-    birthday: string;
     phoneNumber: string;
     email: string;
     otherInfo: string;
-    patients: string[];
+    students: string[];
 }
   
 export interface EmployeeProfileProps {

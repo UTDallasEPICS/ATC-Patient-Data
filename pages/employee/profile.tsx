@@ -146,7 +146,7 @@ const employeeProfile = ({students, employee, currentStudent}) => {
           "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        patients: selectedStudents
+        students: selectedStudents
       }),
     })
     const data = await response.json()
@@ -278,10 +278,6 @@ const employeeProfile = ({students, employee, currentStudent}) => {
         <br />
         <Divider variant="middle" />
         <p className={styles.label}>Date of Birth:</p>{" "}
-        <p className={styles.info}>
-                        {" "}
-                        {formatDate(new Date(employee.birthday))}
-                    </p>
         <p className={styles.label}>Phone Number:</p>{" "}
         <p className={styles.info}> {`(${employee.phoneNumber.slice(0,3)}) ${employee.phoneNumber.slice(3,6)}-${employee.phoneNumber.slice(6,10)}`}</p>
         <p className={styles.label}>Email: </p>{" "}

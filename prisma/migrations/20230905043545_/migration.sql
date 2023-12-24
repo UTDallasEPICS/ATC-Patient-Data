@@ -25,11 +25,11 @@ CREATE TABLE "EmployeeProfile" (
 );
 
 -- CreateTable
-CREATE TABLE "PatientProfile" (
+CREATE TABLE "StudentProfile" (
     "id" SERIAL NOT NULL,
     "employeeProfileId" INTEGER,
 
-    CONSTRAINT "PatientProfile_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "StudentProfile_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -50,7 +50,7 @@ CREATE TABLE "Session" (
     "id" SERIAL NOT NULL,
     "sessionTime" TIMESTAMP(3) NOT NULL,
     "data" JSONB NOT NULL,
-    "patientId" INTEGER NOT NULL,
+    "studentId" INTEGER NOT NULL,
     "employeeId" INTEGER NOT NULL,
     "userId" INTEGER,
 
@@ -60,7 +60,7 @@ CREATE TABLE "Session" (
 -- CreateTable
 CREATE TABLE "Program" (
     "id" SERIAL NOT NULL,
-    "patientId" INTEGER NOT NULL,
+    "studentId" INTEGER NOT NULL,
     "behaviors" JSONB NOT NULL DEFAULT '[]',
 
     CONSTRAINT "Program_pkey" PRIMARY KEY ("id")
@@ -85,13 +85,13 @@ CREATE INDEX "_dependents_B_index" ON "_dependents"("B");
 ALTER TABLE "EmployeeProfile" ADD CONSTRAINT "EmployeeProfile_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PatientProfile" ADD CONSTRAINT "PatientProfile_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "StudentProfile" ADD CONSTRAINT "StudentProfile_id_fkey" FOREIGN KEY ("id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PatientProfile" ADD CONSTRAINT "PatientProfile_employeeProfileId_fkey" FOREIGN KEY ("employeeProfileId") REFERENCES "EmployeeProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "StudentProfile" ADD CONSTRAINT "StudentProfile_employeeProfileId_fkey" FOREIGN KEY ("employeeProfileId") REFERENCES "EmployeeProfile"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Session" ADD CONSTRAINT "Session_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "PatientProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Session" ADD CONSTRAINT "Session_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "StudentProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "EmployeeProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -100,10 +100,10 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_employeeId_fkey" FOREIGN KEY ("emp
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Program" ADD CONSTRAINT "Program_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "PatientProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Program" ADD CONSTRAINT "Program_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "StudentProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_dependents" ADD CONSTRAINT "_dependents_A_fkey" FOREIGN KEY ("A") REFERENCES "PatientProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_dependents" ADD CONSTRAINT "_dependents_A_fkey" FOREIGN KEY ("A") REFERENCES "StudentProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_dependents" ADD CONSTRAINT "_dependents_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

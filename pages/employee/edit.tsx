@@ -86,7 +86,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
 
   const otherInfoInput: Input = {
     attributeName: "other_info",
-    type: InputType.MUTILINE_TEXT,
+    type: InputType.MULTILINE_TEXT,
     name: "Other info",
     value: employee.otherInfo,
   };

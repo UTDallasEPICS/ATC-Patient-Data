@@ -1,7 +1,7 @@
 export enum InputType {
     DATE,
     TEXT,
-    MUTILINE_TEXT,
+    MULTILINE_TEXT,
   }
 
   
