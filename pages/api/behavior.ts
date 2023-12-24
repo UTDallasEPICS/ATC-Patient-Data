@@ -1,12 +1,12 @@
-// pages/api/behaviors.ts
-
-import { NextApiRequest, NextApiResponse } from 'next';
-import  prisma  from '../../lib/prisma';
 import { Behavior } from '@prisma/client';
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '../../lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req;
-  switch(method) {
+  switch( req.method ) {
+    case 'GET':
+      return await getBehavior(req, res);
+
     case 'POST':
       return await createBehavior(req, res);
 
@@ -18,9 +18,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     default:  
       return res.status(405).end();
-
   }
 
+}
+
+const getBehavior = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { id } = req.query;
+  try {
+    const behavior = await prisma.behavior.findFirst({
+      where: { id: Number(id) }
+    });
+    return res.status(200).json(behavior);
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
 }
 
 const createBehavior = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -48,7 +59,7 @@ const deleteBehavior = async (req: NextApiRequest, res: NextApiResponse) => {
     await prisma.behavior.delete({
       where: { id: Number(id) }
     });
-    return res.status(200).json({ message: `Behavior deleted successfully` });;
+    return res.status(200).json({ message: `Behavior deleted successfully` });
   } catch (error) {
     return res.status(500).json({ error });
   }

@@ -1,7 +1,7 @@
 import styles from "../../styles/SearchList.module.css";
 import Link from "next/link";
 import SearchList from "../../components/SearchList";
-import { useState, ReactNode } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Button from "@material-ui/core/Button";
@@ -10,8 +10,6 @@ import FormControl from "@material-ui/core/FormControl";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import CheckUser  from '../../auth0CheckUser';
 import { Employee, EmployeeSearchProps, Student } from "../../types";
-
-const buttonColor = "#0F5787";
 
 export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
   // Verifies if user has the correct permissions
@@ -33,6 +31,48 @@ export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
     return <></>;
   };
 
+  const [employees, setEmployees] = useState(null)
+  const [employeeList, setEmployeeList] = useState([]);
+  
+  // fetch data from client side
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+          const response = await fetch('/api/search/user', {
+            method: "POST",
+        });
+          if (response.ok) {
+              const data = await response.json();
+              setEmployees(data);
+          } else {
+              console.error('Failed to fetch data:', response.status, response.statusText);
+          }
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+  };
+  fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (employees) {
+      employees.sort(function (a, b) {
+      const aName = a.firstName + a.lastName;
+      const bName = b.firstName + b.lastName;
+      if (aName < bName) {
+        return -1;
+      }
+      if (aName > bName) {
+        return 1;
+      }
+    return 0;
+    });
+    }
+}, [employees]); // called when employees has to be rerendered
+
+
+
+  const [searchTerm, setSearchTerm] = useState("");
   return (
     <div>
       {
@@ -78,42 +118,3 @@ export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
     </div>
   );
 }
-
-export const getServerSideProps = async () => {
-  // const res = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=6`)
-  // // const res = await fetch(`https://randomuser.me/api/`)
-  // const employees = await res.json()
-  // TODO: search by whether has employee profile
-  let temp = await fetch(process.env.AUTH0_BASE_URL + '/api/search/user', {
-        method: "POST",
-    });
-
-  const data = await temp.json();
-
-  let employees: Employee[] = data.map((employee: any) => {
-    employee.id = employee._id;
-      delete employee._id;
-      return {
-          ...employee,
-          img: "",
-      };
-  });
-
-  employees.sort(function (a: any, b: any) {
-      const aName = a.firstName + a.lastName;
-      const bName = b.firstName + b.lastName;
-      if (aName < bName) {
-          return -1;
-      }
-      if (aName > bName) {
-          return 1;
-      }
-      return 0;
-  });
-
-  return {
-      props: {
-        employees,
-      },
-  };
-};

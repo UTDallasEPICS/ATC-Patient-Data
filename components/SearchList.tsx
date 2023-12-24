@@ -9,13 +9,10 @@ const SearchList = ({ students, searchTerm, destinationPath }: SearchListProps) 
         <div
             className={styles.studentList}
             style={
-                students.length > 7
-                    ? { overflowY: "scroll", maxHeight: "60vh" }
-                    : {}
+                 students?.length > 7 ? { overflowY: "scroll", maxHeight: "60vh" } : {}
             }
         >
-            {students
-                .filter((student) => {
+            { students?.filter((student) => {
                     if (searchTerm == "") {
                         return student;
                     } else if (

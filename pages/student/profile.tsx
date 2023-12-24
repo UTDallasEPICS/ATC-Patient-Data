@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Avatar from "../../components/Avatar";
@@ -17,11 +17,49 @@ import CheckUser  from '../../auth0CheckUser';
 import {StudentProfileProps, Student} from '../../types';
 import { GetServerSideProps } from "next";
 
-const studentProfile = ({ student }: StudentProfileProps) => {
+const studentProfile: React.FC = ( ) => {
     // Verifies if user has the correct permissions
     const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"]);
     if(!allowed) return <div>Redirecting...</div>;
-
+    const [students, setStudents] = useState(null)
+    const [studentList, setStudentList] = useState([]);
+    // fetch data from client side
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/patient/${student.id}`, {
+                            method: "get",
+                                            });
+                if (response.ok) {
+                    const data = await response.json();
+                    setStudents(data);
+                } else {
+                    console.error('Failed to fetch data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
+    useEffect(() => {
+        if (students) {
+            const studentList = students.map((student, idx) => ({ // this is acting like a copy constructor, sort of
+                id: student.id,
+                firstName: student.firstName,
+                lastName: student.lastName,
+                img: "",
+                dob: student.birthday,
+                parentPhone: student.parentPhone,
+                email: student.email,
+                parentEmail: student.parentEmail,
+                funder: student.funder,
+                otherInfo: student.otherInfo,
+            }));
+            console.log(studentList);
+            setStudentList(studentList);
+        }
+    }, [students]); 
     var editStudent: boolean = false;
     if (role == "Admin") editStudent = true;
     var studentAnalytics: boolean = false;
@@ -36,7 +74,14 @@ const studentProfile = ({ student }: StudentProfileProps) => {
     const handleClose = (): void => {
         setOpen(false);
     };
-
+    const convertStringToDate = (date: string) => {
+        const data = date.split("-");
+        return new Date(
+            parseInt(data[0]),
+            parseInt(data[1]) - 1,
+            parseInt(data[2])
+        );
+    };
     const handleArchive = async (): Promise<void> => {
         const temp = await fetch(`/patient/${student.id}`, {
             method: "DELETE",
@@ -243,27 +288,3 @@ const studentProfile = ({ student }: StudentProfileProps) => {
 };
 
 export default studentProfile;
-
-export const getServerSideProps: GetServerSideProps<{student: Student}> = async ({ query }) => {
-    const temp = await fetch(`\/patient/${query.id}`, {
-        method: "get",
-    });
-    const { data } = await temp.json();
-
-    const student = {
-        id: query.id,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        img: "",
-        dob: data.birthday,
-        parentPhone: data.parentPhone,
-        email: data.email,
-        parentEmail: data.parentEmail,
-        otherInfo: data.otherInfo,
-    };
-    return {
-        props: {
-            student,
-        },
-    };
-};

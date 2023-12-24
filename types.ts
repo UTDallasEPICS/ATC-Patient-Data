@@ -27,18 +27,10 @@ export interface Student {
     parentPhone: string,
     email?: string;
     parentEmail: string;
-    otherInfo?: string;
-    students?: Student[];x
-}
-
-export interface ProgramAsProps
-{
-  studentID: string;
-  studentName: string;
-  behaviors: Behavior[];
-  responses: string[];
-}
-
+    funder: string;
+    otherInfo: string;
+    students?: Student[];
+  }
 export interface StudentProfileProps {
     student: Student;
 }

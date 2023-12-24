@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
 import { Patient } from "../../types";
+import { Student } from "../../interfaces/Student";
 
 const newStudent = (): JSX.Element => {
     // Verifies if user has the correct permissions
@@ -75,7 +76,7 @@ const newStudent = (): JSX.Element => {
         const [firstName, lastName, birthday, email, parentPhone, parentEmail] =
             fields.map((field) => field.value || "");
 
-        const newUser: Patient = {
+        const newUser: Student = {
             firstName,
             lastName,
             birthday: convertStringToDate(birthday),
