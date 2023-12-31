@@ -13,14 +13,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
-import CheckUser  from '../../auth0CheckUser';
+
 import {StudentProfileProps, Student} from '../../types';
 import { GetServerSideProps } from "next";
 
 const studentProfile: React.FC = ( ) => {
-    // Verifies if user has the correct permissions
-    const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"]);
-    if(!allowed) return <div>Redirecting...</div>;
     const [students, setStudents] = useState(null)
     const [studentList, setStudentList] = useState([]);
     // fetch data from client side

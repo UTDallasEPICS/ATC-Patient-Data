@@ -12,15 +12,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
-import CheckUser  from '../../auth0CheckUser';
+
 import { EmployeeProfileProps, Employee, Student } from "../../types";
 import { GetServerSideProps } from "next";
 
 const employeeProfile = ({students, employee, currentStudent}: EmployeeProfileProps) => {
-  // Verifies if user has the correct permissions
-  const {allowed, role} = CheckUser(["Admin"])
-  if(!allowed) return(<div>Redirecting...</div>);
-
   // prevents current students from being null, which causes HELLA erorros
   currentStudent = (currentStudent[0] == null) ? [] : currentStudent
 

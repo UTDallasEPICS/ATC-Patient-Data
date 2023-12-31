@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
     "target": "es5",
     "lib": [
       "dom",
@@ -25,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/test/index.tsx"
-, "auth0CheckUser.tsx", "pages/add-user-test.js", "pages/employee/test.jsx", "pages/student/profile.js"  ],
+, "auth0CheckUser.ts", "pages/add-user-test.js", "pages/employee/test.jsx", "pages/student/profile.js"  ],
   "exclude": [
     "node_modules"
   ]

@@ -2,14 +2,10 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Head from "next/head";
 import Current from "../components/editProgram/Current";
-import CheckUser  from '../auth0CheckUser';
 import { EditProgramProps } from "../types";
 import { QueryBuilderTwoTone } from "@material-ui/icons";
 
 const editProgram = ({ studentID, program }: EditProgramProps) => {
-  const {allowed, role} = CheckUser(["Admin", "BCBA"])
-  if(!allowed) return(<div>Redirecting...</div>);
-
   return (
     <div>
       <Head>

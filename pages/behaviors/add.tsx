@@ -10,14 +10,10 @@ import {
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import CheckUser from "../../auth0CheckUser";
+
 import Navbar from "../../components/Navbar";
 
 export default function addBehavior(): JSX.Element {
-    // Verifies if user has the correct permissions
-    const {allowed, role} = CheckUser(["Admin", "BCBA"])
-    if(!allowed) return(<div>Redirecting...</div>);
-
     const [behaviorData, setBehaviorData] = useState({
         behaviorName: "",
         description: "",

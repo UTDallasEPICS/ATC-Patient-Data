@@ -8,7 +8,7 @@ import Link from "next/link";
 import { GetServerSideProps } from "next";
 import React from "react";
 import { useState, useEffect } from "react";
-import CheckUser  from '../../auth0CheckUser';
+
 
 //Takes behaviour data from a student's unique program and sends it to components/AddSession/behaviors to load onto session page
 
@@ -30,9 +30,6 @@ interface ProgramAsProps
 }
 
 const addSession = ({ studentID_, firstName, lastName, patient, employee, behaviors, program}) => {
-  // Verifies if user has the correct permissions
-  const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician"])
-  if(!allowed) return(<div>Redirecting...</div>);
 
   //Create an array of behaviours
   const behaviours = program.behaviours;

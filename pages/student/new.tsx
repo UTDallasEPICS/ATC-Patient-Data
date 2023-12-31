@@ -2,7 +2,7 @@ import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
-import CheckUser  from '../../auth0CheckUser';
+
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import Button from "@material-ui/core/Button";
@@ -10,10 +10,6 @@ import { Patient } from "../../types";
 import { Student } from "../../interfaces/Student";
 
 const newStudent = (): JSX.Element => {
-    // Verifies if user has the correct permissions
-    const {allowed, role} = CheckUser(["Admin"])
-    if(!allowed) return(<div>Redirecting...</div>);
-
     const router = useRouter();
     const firstNameInput: Input = {
         attributeName: "first_name",

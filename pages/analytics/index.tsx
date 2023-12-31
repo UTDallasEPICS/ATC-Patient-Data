@@ -8,13 +8,10 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Graphs from "../../components/Analytics/Graphs/Graphs";
 import Reports from "../../components/Analytics/Reports/Reports";
-import CheckUser from "../../auth0CheckUser";
+
 import { IndexProps } from "../../types";
 
 const analytics = ({ patient, reports }: IndexProps) => {
-  // Verifies if user has the correct permissions
-  const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"])
-  if(!allowed) return(<div>Redirecting...</div>);
 
   const [page, setPage] = useState<number>(0);
 

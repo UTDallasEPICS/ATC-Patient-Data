@@ -3,7 +3,7 @@ import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import CheckUser  from '../../auth0CheckUser';
+
 import { Employee, EmployeeWithIdAndImg} from "../../types";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -12,9 +12,6 @@ import { useState, useEffect } from "react";
 type EmployeeWithIdAndImg = Employee & { id: string; img: string };
 
 const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
-  // Verifies if user has the correct permissions
-  const {allowed, role} = CheckUser(["Admin"])
-  if(!allowed) return(<div>Redirecting...</div>);
 
   // fetch the employee data on the client side
     // from here to...

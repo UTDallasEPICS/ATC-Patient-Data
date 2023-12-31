@@ -4,13 +4,10 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
-import CheckUser from "../../auth0CheckUser";
+
 import Navbar from "../../components/Navbar";
 
 function BehaviorPage() {
-    // Verifies if user has the correct permissions
-    const {allowed, role} = CheckUser(["Admin", "BCBA"])
-    if(!allowed) return(<div>Redirecting...</div>);
 
     const router = useRouter();
     const { behaviorId } = router.query;

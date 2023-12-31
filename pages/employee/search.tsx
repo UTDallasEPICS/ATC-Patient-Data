@@ -8,13 +8,10 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import CheckUser  from '../../auth0CheckUser';
+
 import { Employee, EmployeeSearchProps, Student } from "../../types";
 
 export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
-  // Verifies if user has the correct permissions
-  const {allowed, role} = CheckUser(["Admin"])
-  if(!allowed) return(<div>Redirecting...</div>);
   const[loading, setLoading] = useState(true);
   const [canShow, setCanShow] = useState(false);
   const finishedLoadingAndCanShow = !loading && canShow;

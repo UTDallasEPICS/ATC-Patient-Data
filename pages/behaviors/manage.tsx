@@ -10,7 +10,7 @@ import {
     makeStyles,
 } from "@material-ui/core";
 import { useState, useEffect } from "react";
-import CheckUser from "../../auth0CheckUser";
+
 import { Behavior } from '@prisma/client';
 import Head from "next/head";
 import Link from "next/link";
@@ -23,10 +23,6 @@ const useStyles = makeStyles({
 });
 
 export default function manageBehaviorsPage() {
-    // Verifies if user has the correct permissions
-    const {allowed, role} = CheckUser(["Admin", "BCBA"])
-    if(!allowed) return(<div>Redirecting...</div>);
-
     // fetch the behavior data on the client side
     const [behaviors, setBehaviors] = useState<Behavior[] | null >(null)
     const [loading, setLoading] = useState<boolean>(true);

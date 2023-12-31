@@ -3,17 +3,14 @@ import { Input, InputType } from "../../components/NewEntity/Interfaces";
 import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import CheckUser  from '../../auth0CheckUser';
+
 import { useRouter } from 'next/router';
 import { Patient, Student } from "../../types";
 import { useState, useEffect } from "react";
 
 type StudentWithIdAndImg = Student & { id: string; img: string };
 
-const editStudent = (props: { student: StudentWithIdAndImg }) => { // props has to have an attribute named student of type StudentWithIdAndImg
-    // Verifies if user has the correct permissions
-    const {allowed, role} = CheckUser(["Admin"])
-    if(!allowed) return(<div>Redirecting...</div>);
+const editStudent = (props: { student: StudentWithIdAndImg }) => {
     const [students, setStudents] = useState(null)
     const [studentList, setStudentList] = useState([]);
     // fetch data from client side

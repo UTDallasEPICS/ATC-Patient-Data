@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
-import CheckUser from "../../auth0CheckUser";
+
 import { StudentSearchProps, Student } from "../../types";
 
 // import theme from '../src/theme';
@@ -35,36 +35,34 @@ const theme = createTheme({
 });
 
 export default function studentSearch () { // destructure
-    // Verifies if user has the correct permissions
-    const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician"])
-    if(!allowed) return(<div>Redirecting...</div>);
-const [students, setStudents] = useState(null);
-    useEffect(() => {
-        let temp = fetch('/api/search/user', {
-                     method: "POST",
-                 }).then(temp => temp.json()) // return value is now json
-        .then(body => { setStudents(body.filter()) // what is body??? ask rigre?
-        }); 
-        students?.map((student: any) => {
-            return {
-                ...student,
-                img: "",
-            };
-        }) || []; // If students doesn't exist, then this will return empty array (null). From this point on, we don't need to check if "s" is defined.
-        students?.sort(function (a: Student, b: Student) {
-            const aName = a.firstName + a.lastName;
-            const bName = b.firstName + b.lastName;
-            if (aName < bName) {
-                return -1;
-            }
-            if (aName > bName) {
-                return 1;
-            }
-            return 0;
-        }) || [];
-    }, []); // called when component is mounted
+  const [students, setStudents] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('/api/search/user', {
+        method: "POST",
+      })
+      const data = await response.json()
+      if(data.error) {
+          console.log(data.error)
+          return;
+       }
+      data?.sort(function (a: Student, b: Student) {
+          const aName = a.firstName + a.lastName;
+          const bName = b.firstName + b.lastName;
+          if (aName < bName) {
+              return -1;
+          }
+          if (aName > bName) {
+              return 1;
+          }
+          return 0;
+      })
+      setStudents(data);
+    }
+    fetchData()
+  }, []);
 
-    const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
     <div>
@@ -73,7 +71,7 @@ const [students, setStudents] = useState(null);
         <link rel='icon' href='/atc-logo.png' />
       </Head>
 
-      <Navbar pageTitle='Student Search' role={role}>
+      <Navbar pageTitle='Student Search'/*  role={role} */>
         <div className={styles.searchPage}>
           <FormControl>
             <TextField
@@ -89,7 +87,7 @@ const [students, setStudents] = useState(null);
 
           <div>
             <SearchList
-              students={students}
+              searchResults={students}
               searchTerm={searchTerm}
               destinationPath='/student/profile'
             />
