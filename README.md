@@ -52,9 +52,9 @@ graph TD;
 
 
 ## Getting Started
-Before anything, read last semester's final report in Edusouced, read everything in the [documentation](https://github.com/UTDallasEPICS/ATC-Patient-Management-Backend/tree/main/Documentation), and everything in the [wiki](https://github.com/UTDallasEPICS/ATC-Patient-Management-Frontend/wiki).
-When creating code, please use comments as you write; it helps during and after writing (but don't clutter the code!). The most important comments are the ones that explain design decisions. 
-Before attempting to run the website, please visit [the prerequisites file:](https://github.com/UTDallasEPICS/ATC-Patient-Data/blob/Docu_Cleaning/Documentation/Start%20from%20Scratch.md)
+Before anything, read last semester's final report in Edusouced, read everything in the [documentation](https://github.com/UTDallasEPICS/ATC-Patient-Data/tree/master/Documentation).
+When creating code, please use comments as you write; it helps during and after writing (but don't clutter the code!). The most important comments are the ones that explain design decisions like "why did I use a map() function, why I chose to use this library, etc." 
+Before attempting to run the website, please visit [the prerequisites file:](https://github.com/UTDallasEPICS/ATC-Patient-Data/master/Documentation/Start%20from%20Scratch.md)
 
 
 ## Run Web Application
