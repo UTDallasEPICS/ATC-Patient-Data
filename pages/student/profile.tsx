@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
-import Head from "next/head";
+
 import Avatar from "../../components/Avatar";
 import OtherInfo from "../../components/OtherInfo";
 import styles from "../../styles/StudentProfile.module.css";
@@ -57,14 +56,14 @@ const studentProfile: React.FC = ( ) => {
             setStudentList(studentList);
         }
     }, [students]); 
-    var editStudent: boolean = false;
+  var editStudent: boolean = false;
+  const role = 'Admin' // TODO: load from user info, see issue #48
     if (role == "Admin") editStudent = true;
     var studentAnalytics: boolean = false;
-    if (role == "Admin" || role == "BCBA" || role == "Technician") studentAnalytics = true;
+    if (["Admin","BCBA","Technician"].includes(role)) studentAnalytics = true;
 
     //State handles the notifications for when the archive is clicked
     const [open, setOpen] = useState<boolean>(false);
-    console.log(role)
     const handleClickOpen = (): void => {
         setOpen(true);
     };

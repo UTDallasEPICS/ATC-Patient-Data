@@ -1,7 +1,6 @@
 import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
-import Navbar from "../../components/Navbar";
-import Head from "next/head";
+
 import { GetServerSideProps } from "next";
 
 import { useRouter } from 'next/router';
@@ -147,21 +146,14 @@ const editStudent = (props: { student: StudentWithIdAndImg }) => {
     };
 
     return (
+      <div>
         <div>
-            <Head>
-                <title>Edit Student</title>
-                <link rel="icon" href="/atc-logo.png" />
-            </Head>
-
-            <Navbar pageTitle="Edit Student" role={role}>
-                <div>
-                    <NewEntity
-                        textFields={textInputs}
-                        submitFunction={handleSubmit}
-                    />
-                </div>
-            </Navbar>
+          <NewEntity
+            textFields={textInputs}
+            submitFunction={handleSubmit}
+          />
         </div>
+      </div>
     );
 };
 

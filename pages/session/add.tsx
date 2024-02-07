@@ -198,26 +198,20 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
 
   return (
     <div>
-      <Head>
-        <title>Add Session</title>
-        <link rel="icon" href="/atc-logo.png" />
-      </Head>
-      <Navbar pageTitle="Add Session" role={role} >
-        <Container className={styles.container}>
-          <Behaviors behaviors={programData.behaviors} returnResponses={getResponses} />
-          <Link href={`/student/profile?id=${studentID_}`} >
-            <Button
-                variant="contained"
-                color="inherit"
-                className="primaryButton"
-                style={{ width: "20vh", margin: "auto", marginBottom: "80px" }}
-                onClick={submitSession}
-              >
-                Submit Session
-              </Button>
-          </Link>
-        </Container>
-      </Navbar>
+      <Container className={styles.container}>
+        <Behaviors behaviors={programData.behaviors} returnResponses={getResponses} />
+        <Link href={`/student/profile?id=${studentID_}`} >
+          <Button
+              variant="contained"
+              color="inherit"
+              className="primaryButton"
+              style={{ width: "20vh", margin: "auto", marginBottom: "80px" }}
+              onClick={submitSession}
+            >
+              Submit Session
+            </Button>
+        </Link>
+      </Container>
     </div>
   ); 
 

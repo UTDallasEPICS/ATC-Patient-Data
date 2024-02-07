@@ -1,7 +1,6 @@
 import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
-import Navbar from "../../components/Navbar";
-import Head from "next/head";
+
 
 import { useRouter } from 'next/router';
 import Link from "next/link";
@@ -93,24 +92,17 @@ const newStudent = (): JSX.Element => {
     };
 
     return (
+      <div>
+        <Link href="/student/search">
+          <Button className="primaryButton">Go Back</Button>
+        </Link> 
         <div>
-            <Head>
-                <title>New Student</title>
-                <link rel="icon" href="/atc-logo.png" />
-            </Head>
-
-            <Navbar pageTitle="New Student" role={role}>
-                <Link href="/student/search">
-                    <Button className="primaryButton">Go Back</Button>
-                </Link> 
-                <div>
-                    <NewEntity
-                        textFields={[...textInputs]}
-                        submitFunction={handleSubmit}
-                    />
-                </div>
-            </Navbar>
+          <NewEntity
+            textFields={[...textInputs]}
+            submitFunction={handleSubmit}
+          />
         </div>
+      </div>
     );
 };
 

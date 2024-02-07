@@ -16,18 +16,11 @@ const analytics = ({ patient, reports }: IndexProps) => {
   const [page, setPage] = useState<number>(0);
 
   const handlePageChange = (event: any, newValue: any) => {
-    console.log(newValue);
     setPage(newValue);
   };
 
   return (
     <div>
-      <Head>
-        <title>Analytics</title>
-        <link rel="icon" href="/atc-logo.png" />
-      </Head>
-
-      <Navbar pageTitle="Analytics" role={role} analytics>
         <div>
           <Paper square>
             <Tabs
@@ -48,7 +41,6 @@ const analytics = ({ patient, reports }: IndexProps) => {
         ) : (
           <Reports reports={reports} />
         )}
-      </Navbar>
     </div>
   );
 };
