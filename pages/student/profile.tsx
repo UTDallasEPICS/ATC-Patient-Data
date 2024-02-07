@@ -105,182 +105,174 @@ const studentProfile: React.FC = ( ) => {
     };
 
     return (
-        <div className={styles.container}>
-            <Head>
-                <title>Student Profile</title>
-                <link rel="icon" href="/atc-logo.png" />
-            </Head>
-
-            <Navbar pageTitle="Student Profile" role={role} >
-                <div className={styles.profilePage}>
-                    <span className={styles.picture}>
-                        <Avatar diameter="175px" img={student.img} />
-                    </span>
-                    <h1 className={styles.info}>
-                        {student.firstName} {student.lastName}
-                    </h1>
-                        { studentAnalytics ? 
-                        <div className={styles.bgOther}>
-                            <Link
-                                href={{
-                                    pathname: "/session/add",
-                                    query: { 
-                                        studentID: student.id, 
-                                        firstName: student.firstName,
-                                        lastName: student.lastName,
-                                    },
-                                }}
-                            >
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    className={styles.buttonGroup}
-                                >
-                                    New Session
-                                </Button>
-                            </Link>
-                        </div> : null}
-                    <br />
-                    <Divider variant="middle" />
-                    <p className={styles.label}>Date of Birth:</p>{" "}
-                    <p className={styles.info}>
-                        {" "}
-                        {formatDate(new Date(student.dob))}
-                    </p>
-                    <p className={styles.label}>Parent's Phone Number:</p>{" "}
-                    <p className={styles.info}> {`(${student.parentPhone.slice(0,3)}) ${student.parentPhone.slice(3,6)}-${student.parentPhone.slice(6,10)}`}</p>
-                    <p className={styles.label}>Email: </p>{" "}
-                    <p className={styles.info}> {student.email}</p>
-                    <p className={styles.label}>Parent's email: </p>{" "}
-                    <p className={styles.info}> {student.parentEmail}</p>
-                    <Divider variant="middle" />
-                    <p className={styles.label}>Other Info:</p>
-                    <div className={styles.bg}>
+      <div className={styles.container}>
+        <div className={styles.profilePage}>
+            <span className={styles.picture}>
+                <Avatar diameter="175px" img={student.img} />
+            </span>
+            <h1 className={styles.info}>
+                {student.firstName} {student.lastName}
+            </h1>
+                { studentAnalytics ? 
+                <div className={styles.bgOther}>
+                    <Link
+                        href={{
+                            pathname: "/session/add",
+                            query: { 
+                                studentID: student.id, 
+                                firstName: student.firstName,
+                                lastName: student.lastName,
+                            },
+                        }}
+                    >
                         <Button
                             variant="outlined"
                             color="primary"
-                            onClick={openOtherInfo}
                             className={styles.buttonGroup}
                         >
-                            Other Info
+                            New Session
                         </Button>
-                    </div>
-                    <div className={styles.bg}>
-                        <br />
-                    {
-                        editStudent ? (
-                        <span>
-                            <Link
-                                href={{
-                                    pathname: "/student/edit",
-                                    query: { studentID: student.id },
-                                }}
-                            >
-                                <Button className={styles.buttonGroup1}>
-                                    Edit
-                                </Button>
-                            </Link>
-                            <Link
-                                href={{
-                                    pathname: "/editProgram",
-                                    query: { studentID: student.id },
-                                }}
-                            >
-                                <Button className={styles.buttonGroup2}>
-                                    Edit Program
-                                </Button>
-                            </Link>
-                            <br />
-                            <Button
-                                className={styles.buttonGroup1}
-                                onClick={handleClickOpen}
-                            >
-                                Archive
-                            </Button>
-                        </span>
-                        ) : null
-                    }
-                    {
-                        studentAnalytics ? (
-                        <span>
-                            <Link
-                                href={{
-                                    pathname: "/analytics",
-                                    query: { studentID: student.id },
-                                }}
-                            >
-                                <Button className={styles.buttonGroup2}>
-                                    View Reports
-                                </Button>
-                            </Link>
-                        </span>
-                        ) : null
-                    }
-                    </div>
-                    <Dialog
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            {"Are you sure you want to archive this student?"}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                When archiving a student you will no longer be
-                                able to view any of the records of the student.
-                                To regain access you will have to get access
-                                from an administrator.
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button
-                                onClick={handleClose}
-                                color="primary"
-                                className={styles.buttonGroup}
-                            >
-                                No
-                            </Button>
-                            <Button
-                                onClick={handleArchive}
-                                color="primary"
-                                autoFocus
-                                className={styles.buttonGroup}
-                            >
-                                <Link href="/student/search">Yes</Link>
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                    <Dialog
-                        open={otherInfoOpen}
-                        onClose={closeOtherInfo}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                            {"Other Info:"}
-                        </DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                {student.otherInfo}
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button
-                                onClick={closeOtherInfo}
-                                color="primary"
-                                autoFocus
-                                className={styles.buttonGroup}
-                            >
-                                Close
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
-                </div>{" "}
+                    </Link>
+                </div> : null}
+            <br />
+            <Divider variant="middle" />
+            <p className={styles.label}>Date of Birth:</p>{" "}
+            <p className={styles.info}>
+                {" "}
+                {formatDate(new Date(student.dob))}
+            </p>
+            <p className={styles.label}>Parent's Phone Number:</p>{" "}
+            <p className={styles.info}> {`(${student.parentPhone.slice(0,3)}) ${student.parentPhone.slice(3,6)}-${student.parentPhone.slice(6,10)}`}</p>
+            <p className={styles.label}>Email: </p>{" "}
+            <p className={styles.info}> {student.email}</p>
+            <p className={styles.label}>Parent's email: </p>{" "}
+            <p className={styles.info}> {student.parentEmail}</p>
+            <Divider variant="middle" />
+            <p className={styles.label}>Other Info:</p>
+            <div className={styles.bg}>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={openOtherInfo}
+                    className={styles.buttonGroup}
+                >
+                    Other Info
+                </Button>
+            </div>
+            <div className={styles.bg}>
                 <br />
-            </Navbar>
-        </div>
+            {
+                editStudent ? (
+                <span>
+                    <Link
+                        href={{
+                            pathname: "/student/edit",
+                            query: { studentID: student.id },
+                        }}
+                    >
+                        <Button className={styles.buttonGroup1}>
+                            Edit
+                        </Button>
+                    </Link>
+                    <Link
+                        href={{
+                            pathname: "/editProgram",
+                            query: { studentID: student.id },
+                        }}
+                    >
+                        <Button className={styles.buttonGroup2}>
+                            Edit Program
+                        </Button>
+                    </Link>
+                    <br />
+                    <Button
+                        className={styles.buttonGroup1}
+                        onClick={handleClickOpen}
+                    >
+                        Archive
+                    </Button>
+                </span>
+                ) : null
+            }
+            {
+                studentAnalytics ? (
+                <span>
+                    <Link
+                        href={{
+                            pathname: "/analytics",
+                            query: { studentID: student.id },
+                        }}
+                    >
+                        <Button className={styles.buttonGroup2}>
+                            View Reports
+                        </Button>
+                    </Link>
+                </span>
+                ) : null
+            }
+            </div>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Are you sure you want to archive this student?"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        When archiving a student you will no longer be
+                        able to view any of the records of the student.
+                        To regain access you will have to get access
+                        from an administrator.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={handleClose}
+                        color="primary"
+                        className={styles.buttonGroup}
+                    >
+                        No
+                    </Button>
+                    <Button
+                        onClick={handleArchive}
+                        color="primary"
+                        autoFocus
+                        className={styles.buttonGroup}
+                    >
+                        <Link href="/student/search">Yes</Link>
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={otherInfoOpen}
+                onClose={closeOtherInfo}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Other Info:"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {student.otherInfo}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={closeOtherInfo}
+                        color="primary"
+                        autoFocus
+                        className={styles.buttonGroup}
+                    >
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>{" "}
+      </div>
     );
 };
 

@@ -16,7 +16,7 @@ export default function Home()
     if(role == "Guardian")
         router.push("/student/profile?id=64546bd1018a8713c39974a8")
     else  */
-        //router.push('student/search')
+    //router.push('student/search')
 
     return(null);
 };

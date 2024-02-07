@@ -2,7 +2,6 @@ import styles from "../../styles/SearchList.module.css";
 import Link from "next/link";
 import SearchList from "../../components/SearchList";
 import { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
 import Head from "next/head";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -65,41 +64,32 @@ export default function studentSearch () { // destructure
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
-    <div>
-      <Head>
-        <title>Student Search</title>
-        <link rel='icon' href='/atc-logo.png' />
-      </Head>
+    <div className={styles.searchPage}>
+      <FormControl>
+        <TextField
+          className={styles.searchBox}
+          id='outlined-basic'
+          label='Student Search'
+          variant='outlined'
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+          }}
+        />
+      </FormControl>
 
-      <Navbar pageTitle='Student Search'/*  role={role} */>
-        <div className={styles.searchPage}>
-          <FormControl>
-            <TextField
-              className={styles.searchBox}
-              id='outlined-basic'
-              label='Student Search'
-              variant='outlined'
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-              }}
-            />
-          </FormControl>
+      <div>
+        <SearchList
+          searchResults={students}
+          searchTerm={searchTerm}
+          destinationPath='/student/profile'
+        />
+      </div>
 
-          <div>
-            <SearchList
-              searchResults={students}
-              searchTerm={searchTerm}
-              destinationPath='/student/profile'
-            />
-          </div>
-
-          <div className={styles.buttonWrapper}>
-            <Link href='/student/new'>
-              <Button className='primaryButton'>Add New</Button>
-            </Link>
-          </div>
-        </div>
-      </Navbar>
+      <div className={styles.buttonWrapper}>
+        <Link href='/student/new'>
+          <Button className='primaryButton'>Add New</Button>
+        </Link>
+      </div>
     </div>
   );
 }
