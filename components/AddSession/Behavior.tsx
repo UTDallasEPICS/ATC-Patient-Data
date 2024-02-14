@@ -3,7 +3,7 @@ import styles from "../../styles/AddSession.module.css";
 import Grid from "@material-ui/core/Grid";
 import ProbeInput from "./ProbeInput";
 import DurationInput from "./DurationInput";
-import FrenquencyInput from "./FrequencyInput";
+import FrequencyInput from "./FrequencyInput";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -12,8 +12,8 @@ import Chip from "@material-ui/core/Chip";
 import Divider from "@material-ui/core/Divider";
 import { BehaviorAddSessionProps } from '../../types';
 
-//Displays behaviour info and inputs on page
-//Behaviours taken from a student's unique program in /pages/session/add
+//Displays behavior info and inputs on page
+//Behaviors taken from a student's unique program in /pages/session/add
 
 const Behavior = ({ behaviorCount, data, returnData }: BehaviorAddSessionProps) => {
   //console.log(behaviorCount);
@@ -30,7 +30,7 @@ const Behavior = ({ behaviorCount, data, returnData }: BehaviorAddSessionProps) 
     returnData(behaviorCount || 0, responses)
   }
   
-  //Generates an input field depending on the type of behaviour
+  //Generates an input field depending on the type of behavior
   const generateInput = (entry: string, entryNumber: number)=> {
     entryCounter++;
     switch (datatype) {
@@ -41,7 +41,7 @@ const Behavior = ({ behaviorCount, data, returnData }: BehaviorAddSessionProps) 
       case "duration":
         return <DurationInput title={entry} trialsPerEntry={trialsPerEntry} entryNumber={entryNumber} setResponses={setResponse}/>;
       case "frequency":
-        return <FrenquencyInput title={entry} entryNumber={entryNumber} setResponses={setResponse}/>;
+        return <FrequencyInput title={entry} entryNumber={entryNumber} setResponses={setResponse}/>;
     }
   };
 

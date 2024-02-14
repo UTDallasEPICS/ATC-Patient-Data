@@ -25,7 +25,7 @@ interface GraphsProps {
 
 const Graphs = ( {studentID}: GraphsProps ) => {
   const [domains, setDomains] = useState([]);
-  const [selectedDomain, setSelectedDomain] = useState(null);
+  // const [selectedDomain, setSelectedDomain] = useState(null);
   const [data, setData] = useState([]);
 
   useEffect((): void => {}, []);
@@ -44,7 +44,7 @@ const Graphs = ( {studentID}: GraphsProps ) => {
     // basically, the reports data we have been collecting can be accesed by doing patients.reports (not sure if thats accurate)
     // you could either do that or fetch the reports separately
 
-    // title would be the name of the behavoir, since we have all the reports you would need to iterate through 
+    // title would be the name of the behavior, since we have all the reports you would need to iterate through 
     setData([
       {
         type: "frequency",
