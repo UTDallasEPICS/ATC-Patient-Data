@@ -61,14 +61,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-/*
-
-    ----------------------------------------------------------
-    INSERT CODE that fetches user role from auth0CheckUser.tsx
-    ----------------------------------------------------------
-
-*/
-
 // const role = "BCBA" //for testing navbar
 
 //functions defining js components for each "button"

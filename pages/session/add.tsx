@@ -8,7 +8,7 @@ import Link from "next/link";
 import { GetServerSideProps } from "next";
 import React from "react";
 import { useState, useEffect } from "react";
-import CheckUser  from '../../auth0CheckUser';
+
 
 //Takes behaviour data from a student's unique program and sends it to components/AddSession/behaviors to load onto session page
 
@@ -25,19 +25,16 @@ interface ProgramAsProps
 {
   studentID: string;
   studentName: string;
-  behaviors: Behavior[];
+  behavior: Behavior[];
   responses: string[];
 }
 
-const addSession = ({ studentID_, firstName, lastName, patient, employee, behaviors, program}) => {
-  // Verifies if user has the correct permissions
-  const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician"])
-  if(!allowed) return(<div>Redirecting...</div>);
+const addSession = ({ studentID_, firstName, lastName, patient, employee, behavior, program}) => {
 
-  //Create an array of behaviours
-  const behaviours = program.behaviours;
+  //Create an array of behaviors
+  const behaviors = program.behaviors;
   const [behaviorList] = useState<Behavior[]>(
-    behaviours.map((behavior: Behavior) => ({
+    behaviors.map((behavior: Behavior) => ({
         title: behavior.name,
         description: behavior.description,
         datatype: behavior.datatype,
@@ -108,7 +105,7 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
   {
       studentID: studentID_,
       studentName: firstName + " " + lastName,
-      behaviors: behaviorList,
+      behavior: behaviorList,
       responses: [],
   };
 
@@ -117,33 +114,33 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
   {
       for(var i = 0; i < responses.length; i++)
       {
-          if(programData.behaviors[i].datatype == "duration")
+          if(programData.behavior[i].datatype == "duration")
           {
-              for(var j = 0; j < programData.behaviors[i].entries.length; j++)
+              for(var j = 0; j < programData.behavior[i].entries.length; j++)
               {
                 const newDuration: Duration = {seconds: responses[i][j]};
                 responses[i][j] = newDuration;
               }
           }
-          else if(programData.behaviors[i].datatype == "frequency")
+          else if(programData.behavior[i].datatype == "frequency")
           {
-              for(var j = 0; j < programData.behaviors[i].entries.length; j++)
+              for(var j = 0; j < programData.behavior[i].entries.length; j++)
               {
                 const newFrequency: Frequency = {occurences: responses[i][j]};
                 responses[i][j] = newFrequency;
               }
           }
-          else if(programData.behaviors[i].datatype == "probe")
+          else if(programData.behavior[i].datatype == "probe")
           {
-              for(var j = 0; j < programData.behaviors[i].entries.length; j++)
+              for(var j = 0; j < programData.behavior[i].entries.length; j++)
               {
                   const newProbe: Probe = getProbe(responses[i][j]);
                   responses[i][j] = newProbe;
               }
           }
-          else if(programData.behaviors[i].datatype == "trial")
+          else if(programData.behavior[i].datatype == "trial")
           {
-              for(var j = 0; j < programData.behaviors[i].entries.length; j++)
+              for(var j = 0; j < programData.behavior[i].entries.length; j++)
               {
                   const newTrial: Trial = getTrial(responses[i][j]);
                   responses[i][j] = newTrial;
@@ -201,26 +198,20 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
 
   return (
     <div>
-      <Head>
-        <title>Add Session</title>
-        <link rel="icon" href="/atc-logo.png" />
-      </Head>
-      <Navbar pageTitle="Add Session" role={role} >
-        <Container className={styles.container}>
-          <Behaviors behaviors={programData.behaviors} returnResponses={getResponses} />
-          <Link href={`/student/profile?id=${studentID_}`} >
-            <Button
-                variant="contained"
-                color="inherit"
-                className="primaryButton"
-                style={{ width: "20vh", margin: "auto", marginBottom: "80px" }}
-                onClick={submitSession}
-              >
-                Submit Session
-              </Button>
-          </Link>
-        </Container>
-      </Navbar>
+      <Container className={styles.container}>
+        <Behaviors behaviors={programData.behavior} returnResponses={getResponses} />
+        <Link href={`/student/profile?id=${studentID_}`} >
+          <Button
+              variant="contained"
+              color="inherit"
+              className="primaryButton"
+              style={{ width: "20vh", margin: "auto", marginBottom: "80px" }}
+              onClick={submitSession}
+            >
+              Submit Session
+            </Button>
+        </Link>
+      </Container>
     </div>
   ); 
 
@@ -250,7 +241,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async ({ query }) => {
       lastName: query.lastName,
       patient: patientData['data'],
       employee: employeeData['data'],
-      behaviors: programData['data'][0]["behaviours"],
+      behaviors: programData['data'][0]["behaviors"],
       program: programData['data'][0],
     },
   };

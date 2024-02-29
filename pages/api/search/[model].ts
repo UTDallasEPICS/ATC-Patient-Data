@@ -1,8 +1,14 @@
 import { Behavior, Program, Session, User } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../lib/prisma';
+import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default withApiAuthRequired(async (req: NextApiRequest, res: NextApiResponse) => {
+  const { email } = await getSession(req, res)
+  const user = await prisma.user.findFirst({
+    where: {email}
+  })
+  // TODO: role checking for the user, can pass it into search functions
   switch ( req.method ) {
     case 'GET':
       return await search(req, res);
@@ -13,11 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     default:
       return res.status(405).end();
   }
-}
+})
+
 // TODO: model is actually part of the route params, we dont need to pass in the body. 
 const search = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { model, searchQuery, pageSize = 20, cursor } = req.body;
-
+  const { searchQuery, pageSize = 20, cursor } = req.body;
+  const { model } = req.query
   const searchFields = ["name", "email"];
 
   const whereClause = {

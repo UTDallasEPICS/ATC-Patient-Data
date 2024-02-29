@@ -8,29 +8,19 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Graphs from "../../components/Analytics/Graphs/Graphs";
 import Reports from "../../components/Analytics/Reports/Reports";
-import CheckUser from "../../auth0CheckUser";
+
 import { IndexProps } from "../../types";
 
 const analytics = ({ patient, reports }: IndexProps) => {
-  // Verifies if user has the correct permissions
-  const {allowed, role} = CheckUser(["Admin", "BCBA", "Technician", "Guardian"])
-  if(!allowed) return(<div>Redirecting...</div>);
 
   const [page, setPage] = useState<number>(0);
 
   const handlePageChange = (event: any, newValue: any) => {
-    console.log(newValue);
     setPage(newValue);
   };
 
   return (
     <div>
-      <Head>
-        <title>Analytics</title>
-        <link rel="icon" href="/atc-logo.png" />
-      </Head>
-
-      <Navbar pageTitle="Analytics" role={role} analytics>
         <div>
           <Paper square>
             <Tabs
@@ -51,7 +41,6 @@ const analytics = ({ patient, reports }: IndexProps) => {
         ) : (
           <Reports reports={reports} />
         )}
-      </Navbar>
     </div>
   );
 };

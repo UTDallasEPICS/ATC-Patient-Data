@@ -1,5 +1,16 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+/* As a reminder of how enums work, assuming you have NOT initialized anything, they work like const ints.
+enum typeName {
+SAM
+RYO
+TAZ
+}
+Basically we are saying:
+const int SAM = 0;
+const int RYO = 0;
+const int TAZ = 0;
+*/
 
 generator client {
   provider = "prisma-client-js"
@@ -11,7 +22,7 @@ datasource db {
 }
 
 
-enum Role {
+enum Role { // TODO: BCBA CAN BE CONSIDERED ADMIN. ASK MARILYN REID ABOUT IF ADMIN AND BCBA SHOULD BE THE SAME. IF THEY ARE SAME, REMOVE BCBA AND MAKE CHANGES AROUND IT IF NECESSARY
   Admin
   Technician
   BCBA
