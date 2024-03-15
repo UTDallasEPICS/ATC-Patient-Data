@@ -23,12 +23,12 @@ const newEmployee = () => {
     required: true,
   };
 
-  const birthDateInput: Input = {
+  /*const birthDateInput: Input = {
     attributeName: "birth_date",
     type: InputType.DATE,
     name: "Birth Date",
     required: true,
-  };
+  };*/
 
   const otherInfoInput: Input = {
     attributeName: "other_info",
@@ -60,7 +60,7 @@ const newEmployee = () => {
   const textInputs: Input[] = [
     firstNameInput,
     lastNameInput,
-    birthDateInput,
+    //birthDateInput,
     phoneNumberInput,
     emailInput,
     otherInfoInput,
@@ -82,7 +82,7 @@ const newEmployee = () => {
     const newUser: Employee = {
       firstName,
       lastName,
-      birthday: convertStringToDate(birthday),
+      //birthday: convertStringToDate(birthday),
       phoneNumber,
       email,
       otherInfo,

@@ -77,7 +77,7 @@ const editStudent = (props: { student: StudentWithIdAndImg }) => {
         type: InputType.DATE,
         name: "Birth Date",
         required: true,
-        value: formatDate(student.birthday),
+        value: formatDate(student.dob),
     };
 
     const parentPhoneInput: Input = {

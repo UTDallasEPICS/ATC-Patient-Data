@@ -1,7 +1,7 @@
 import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 
-import { Employee, EmployeeWithIdAndImg} from "../../types";
+import { Employee } from "../../types";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
@@ -35,7 +35,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
         if (employees) {
             const employeeList = employees.map((employee, idx) => ({ // this is acting like a copy constructor, sort of
                 firstName: employee.firstName,
-                dob: convertStringToDate(employee.dob),
+                //dob: convertStringToDate(employee.dob),
                 phoneNumber: employee.phoneNumber,
                 email: employee.email,
                 otherInfo: employee.otherInfo,
@@ -71,13 +71,13 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     value: employee.lastName,
   };
 
-  const birthDateInput: Input = {
+  /*const birthDateInput: Input = {
     attributeName: "birth_date",
     type: InputType.DATE,
     name: "Birth Date",
     required: true,
     value: formatDate(employee.dob),
-  };
+  };*/
 
   const otherInfoInput: Input = {
     attributeName: "other_info",
@@ -102,7 +102,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
   const textInputs: Input[] = [
     firstNameInput,
     lastNameInput,
-    birthDateInput,
+    //birthDateInput,
     phoneNumberInput,
     emailInput,
     otherInfoInput,
@@ -118,7 +118,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
   };
 
   const handleSubmit = async (fields: Input[]) => {
-    const [firstName, lastName, dob, phoneNumber, email, otherInfo] =
+    const [firstName, lastName, phoneNumber, email, otherInfo] =
         fields.map((field) => field.value || "");
 
     try {
@@ -130,7 +130,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
             body: JSON.stringify({
                 firstName,
                 lastName,
-                dob: convertStringToDate(dob),
+                //dob: convertStringToDate(dob),
                 email,
                 phoneNumber,
                 otherInfo,
