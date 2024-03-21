@@ -11,7 +11,7 @@ import { fchmod } from "fs";
 import { GenInfoProps } from "../../types";
 
 const GenInfo = ({
-  globalBehavior,
+  globalBehaviors,
   behaviorId,
   setBehaviorId,
   updateBehavior,
@@ -36,7 +36,7 @@ const GenInfo = ({
           <MenuItem value="" disabled>
             Choose behavior
           </MenuItem>
-          {globalBehavior.map((behavior, idx) => (
+          {globalBehaviors.map((behavior, idx) => (
             <MenuItem key={idx} value={behavior.id}>
               {behavior.name}
             </MenuItem>
