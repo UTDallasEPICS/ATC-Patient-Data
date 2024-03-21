@@ -35,7 +35,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
         if (employees) {
             const employeeList = employees.map((employee, idx) => ({ // this is acting like a copy constructor, sort of
                 firstName: employee.firstName,
-                dob: convertStringToDate(employee.dob),
+                //dob: convertStringToDate(employee.dob),
                 phoneNumber: employee.phoneNumber,
                 email: employee.email,
                 otherInfo: employee.otherInfo,
@@ -51,10 +51,13 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
   const { employee } = props;
   const router = useRouter();
 
+  /*
   const formatDate = (d: any) => {
       d = new Date(d);
       return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   };
+  */
+
   const firstNameInput: Input = {
     attributeName: "first_name",
     name: "First Name",
@@ -71,6 +74,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     value: employee.lastName,
   };
 
+  /*
   const birthDateInput: Input = {
     attributeName: "birth_date",
     type: InputType.DATE,
@@ -78,6 +82,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     required: true,
     value: formatDate(employee.dob),
   };
+  */
 
   const otherInfoInput: Input = {
     attributeName: "other_info",
@@ -102,12 +107,13 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
   const textInputs: Input[] = [
     firstNameInput,
     lastNameInput,
-    birthDateInput,
+    //birthDateInput,
     phoneNumberInput,
     emailInput,
     otherInfoInput,
   ];
 
+  /*
   const convertStringToDate = (date: string) => {
     const data = date.split("-");
     return new Date(
@@ -116,9 +122,10 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
         parseInt(data[2])
     );
   };
+  */
 
   const handleSubmit = async (fields: Input[]) => {
-    const [firstName, lastName, dob, phoneNumber, email, otherInfo] =
+    const [firstName, lastName, phoneNumber, email, otherInfo] =
         fields.map((field) => field.value || "");
 
     try {
@@ -130,7 +137,7 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
             body: JSON.stringify({
                 firstName,
                 lastName,
-                dob: convertStringToDate(dob),
+                //dob: convertStringToDate(dob),
                 email,
                 phoneNumber,
                 otherInfo,

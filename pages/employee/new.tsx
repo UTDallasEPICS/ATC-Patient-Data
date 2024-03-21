@@ -23,12 +23,14 @@ const newEmployee = () => {
     required: true,
   };
 
+  /*
   const birthDateInput: Input = {
     attributeName: "birth_date",
     type: InputType.DATE,
     name: "Birth Date",
     required: true,
   };
+  */
 
   const otherInfoInput: Input = {
     attributeName: "other_info",
@@ -48,6 +50,7 @@ const newEmployee = () => {
     name: "Email address",
   };
 
+  /*
   const convertStringToDate = (date: string) => {
     const data = date.split("-");
     return new Date(
@@ -56,11 +59,12 @@ const newEmployee = () => {
         parseInt(data[2])
     );
   };
+  */
 
   const textInputs: Input[] = [
     firstNameInput,
     lastNameInput,
-    birthDateInput,
+    //birthDateInput,
     phoneNumberInput,
     emailInput,
     otherInfoInput,
@@ -76,13 +80,13 @@ const newEmployee = () => {
 
     );
     */
-    const [firstName, lastName, birthday, phoneNumber, email, otherInfo] =
+    const [firstName, lastName, phoneNumber, email, otherInfo] =
             fields.map((field) => field.value || "");
 
     const newUser: Employee = {
       firstName,
       lastName,
-      birthday: convertStringToDate(birthday),
+      //birthday: convertStringToDate(birthday),
       phoneNumber,
       email,
       otherInfo,
