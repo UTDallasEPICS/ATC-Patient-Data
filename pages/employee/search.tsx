@@ -6,27 +6,16 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 
-import { Employee, EmployeeSearchProps, Student } from "../../types";
+import { Employee, Student } from "../../types";
 
-export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
+export default function EmployeeSearch() {
+    // ... to here
   const[loading, setLoading] = useState(true);
   const [canShow, setCanShow] = useState(false);
   const finishedLoadingAndCanShow = !loading && canShow;
-  const [searchTerm, setSearchTerm] = useState<string>("");
-
-  const Conditional = ({
-    showWhen,
-    children,
-  }: {
-    showWhen: boolean;
-    children: ReactNode;
-  }) => {
-    if (showWhen) return <>{children}</>
-    return <></>;
-  };
-
   const [employees, setEmployees] = useState(null)
   const [employeeList, setEmployeeList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   
   // fetch data from client side
   useEffect(() => {
@@ -46,35 +35,23 @@ export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
       }
   };
   fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (employees) {
-      employees.sort(function (a, b) {
-      const aName = a.firstName + a.lastName;
-      const bName = b.firstName + b.lastName;
-      if (aName < bName) {
-        return -1;
-      }
-      if (aName > bName) {
-        return 1;
-      }
-    return 0;
-    });
+  if (employees) {
+    employees.sort(function (a, b) {
+    const aName = a.firstName + a.lastName;
+    const bName = b.firstName + b.lastName;
+    if (aName < bName) {
+      return -1;
     }
-}, [employees]); // called when employees has to be rerendered
+    if (aName > bName) {
+      return 1;
+    }
+  return 0;
+  });
+  }
+  }, [employees]);
 
-
-
-  const [searchTerm, setSearchTerm] = useState("");
   return (
     <div>
-      {
-        (!loading && canShow) 
-      }
-      <Conditional showWhen={finishedLoadingAndCanShow}>
-        <h1> Welcome</h1>
-      </Conditional>
       <div className={styles.searchPage}>
         <FormControl>
           <TextField

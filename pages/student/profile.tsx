@@ -13,17 +13,17 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
 
-import {StudentProfileProps, Student} from '../../types';
+import {StudentProfile, Student} from '../../types';
 import { GetServerSideProps } from "next";
 
 const studentProfile: React.FC = ( ) => {
-    const [students, setStudents] = useState(null)
-    const [studentList, setStudentList] = useState([]);
+const [students, setStudents] = useState(null)
+const [studentList, setStudentList] = useState([]);
     // fetch data from client side
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/patient/${student.id}`, {
+                const response = await fetch(`/patient/${students.id}`, {
                             method: "get",
                                             });
                 if (response.ok) {
@@ -37,8 +37,6 @@ const studentProfile: React.FC = ( ) => {
             }
         };
         fetchData();
-    }, []);
-    useEffect(() => {
         if (students) {
             const studentList = students.map((student, idx) => ({ // this is acting like a copy constructor, sort of
                 id: student.id,
@@ -55,7 +53,7 @@ const studentProfile: React.FC = ( ) => {
             console.log(studentList);
             setStudentList(studentList);
         }
-    }, [students]); 
+    }, [students]);
   var editStudent: boolean = false;
   const role = 'Admin' // TODO: load from user info, see issue #48
     if (role == "Admin") editStudent = true;
@@ -79,7 +77,7 @@ const studentProfile: React.FC = ( ) => {
         );
     };
     const handleArchive = async (): Promise<void> => {
-        const temp = await fetch(`/patient/${student.id}`, {
+        const temp = await fetch(`/patient/${students.id}`, {
             method: "DELETE",
         });
         const { data } = await temp.json();
@@ -107,10 +105,10 @@ const studentProfile: React.FC = ( ) => {
       <div className={styles.container}>
         <div className={styles.profilePage}>
             <span className={styles.picture}>
-                <Avatar diameter="175px" img={student.img} />
+                <Avatar diameter="175px" img={students.img} />
             </span>
             <h1 className={styles.info}>
-                {student.firstName} {student.lastName}
+                {students.firstName} {students.lastName}
             </h1>
                 { studentAnalytics ? 
                 <div className={styles.bgOther}>
@@ -118,9 +116,9 @@ const studentProfile: React.FC = ( ) => {
                         href={{
                             pathname: "/session/add",
                             query: { 
-                                studentID: student.id, 
-                                firstName: student.firstName,
-                                lastName: student.lastName,
+                                studentID: students.id, 
+                                firstName: students.firstName,
+                                lastName: students.lastName,
                             },
                         }}
                     >
@@ -138,14 +136,14 @@ const studentProfile: React.FC = ( ) => {
             <p className={styles.label}>Date of Birth:</p>{" "}
             <p className={styles.info}>
                 {" "}
-                {formatDate(new Date(student.dob))}
+                {formatDate(new Date(students.dob))}
             </p>
             <p className={styles.label}>Parent's Phone Number:</p>{" "}
-            <p className={styles.info}> {`(${student.parentPhone.slice(0,3)}) ${student.parentPhone.slice(3,6)}-${student.parentPhone.slice(6,10)}`}</p>
+            <p className={styles.info}> {`(${students.parentPhone.slice(0,3)}) ${students.parentPhone.slice(3,6)}-${students.parentPhone.slice(6,10)}`}</p>
             <p className={styles.label}>Email: </p>{" "}
-            <p className={styles.info}> {student.email}</p>
+            <p className={styles.info}> {students.email}</p>
             <p className={styles.label}>Parent's email: </p>{" "}
-            <p className={styles.info}> {student.parentEmail}</p>
+            <p className={styles.info}> {students.parentEmail}</p>
             <Divider variant="middle" />
             <p className={styles.label}>Other Info:</p>
             <div className={styles.bg}>
@@ -166,7 +164,7 @@ const studentProfile: React.FC = ( ) => {
                     <Link
                         href={{
                             pathname: "/student/edit",
-                            query: { studentID: student.id },
+                            query: { studentID: students.id },
                         }}
                     >
                         <Button className={styles.buttonGroup1}>
@@ -176,7 +174,7 @@ const studentProfile: React.FC = ( ) => {
                     <Link
                         href={{
                             pathname: "/editProgram",
-                            query: { studentID: student.id },
+                            query: { studentID: students.id },
                         }}
                     >
                         <Button className={styles.buttonGroup2}>
@@ -199,7 +197,7 @@ const studentProfile: React.FC = ( ) => {
                     <Link
                         href={{
                             pathname: "/analytics",
-                            query: { studentID: student.id },
+                            query: { studentID: students.id },
                         }}
                     >
                         <Button className={styles.buttonGroup2}>
@@ -256,7 +254,7 @@ const studentProfile: React.FC = ( ) => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {student.otherInfo}
+                        {students.otherInfo}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
