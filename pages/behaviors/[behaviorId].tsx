@@ -1,14 +1,13 @@
 import { Button, FormHelperText, Input, InputLabel, MenuItem, Select } from "@material-ui/core";
-import { Behavior } from '@prisma/client';
+import { Behavior, Datatype } from '@prisma/client';
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import { useEffect, useState } from "react";
 
 import Navbar from "../../components/Navbar";
 import { FormControl } from "@mui/material";
-
-function BehaviorPage() {
+async function BehaviorPage() {
 
     const router = useRouter();
     const { behaviorId } = router.query;
@@ -16,34 +15,14 @@ function BehaviorPage() {
 
     useEffect(() => {
       const fetchData = async () => {
-        try {
-          const response = await fetch(`/api/behavior?id=${behaviorId}`, { method: 'PUT' });
-          if (response.ok) {
-              const data: Behavior = await response.json();
-              setBehaviorData(data);
-          } else {
-              console.error('Failed to fetch data:', response.status, response.statusText);
-          }
-        } catch (error) {
-            console.error('Error fetching data:', error);
+        // TODO: if behavior id is zero, then we dont need to do a network request
+        // we can just make an empty behavior (with any sensible defaults)
+        if(behaviorId == "0"){
+          setBehaviorData({ name: "", description: "",datatype: Datatype.TRIAL,  id: null, trialsPerEntry: 0, entries: [], tags: [] });
         }
-      };
-      fetchData();
-    }, [])
-    export default function addBehavior(): JSX.Element {
-      const [behaviorData, setBehaviorData] = useState({
-          behaviorName: "",
-          description: "",
-          datatype: "",
-      });
-      const router = useRouter();
-      const { behaviorId } = router.query;
-      const [behaviorData, setBehaviorData] = useState<Behavior | []>([])
-    }
-      useEffect(() => {
-        const fetchData = async () => {
+        else{
           try {
-            const response = await fetch(`/api/behavior?id=${behaviorId}`, { method: 'GET' });
+            const response = await fetch(`/api/behavior?id=${behaviorId}`, { method: 'PUT' });
             if (response.ok) {
                 const data: Behavior = await response.json();
                 setBehaviorData(data);
@@ -53,18 +32,49 @@ function BehaviorPage() {
           } catch (error) {
               console.error('Error fetching data:', error);
           }
-        };
-        fetchData();
-      }, [])
+        }
+      };
+      fetchData();
+    }, [behaviorId]);
       
   
       const submitForm = async (): Promise<void> => {
           if (
-              behaviorData.behaviorName.length === 0 ||
+              behaviorData.name.length === 0 ||
               behaviorData.description.length === 0
           ) {
               return;
           }
+          // TODO: if behavior id is not zero, then we need to 
+          // make a PUT request to update the behvaior with that id, else
+          // POSt to create new 
+          if(behaviorId != "0"){
+            try {
+              const response = await fetch(`/api/behavior?id=${behaviorId}`, { method: 'PUT' });
+              if (response.ok) {
+                  const data: Behavior = await response.json();
+                  setBehaviorData(data);
+              } else {
+                  console.error('Failed to fetch data:', response.status, response.statusText);
+              }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+          }
+          else{
+            try {
+              const response = await fetch(`/api/behavior?id=${behaviorId}`, { method: 'POST' });
+              if (response.ok) {
+                  const data: Behavior = await response.json();
+                  setBehaviorData(data);
+              } else {
+                  console.error('Failed to fetch data:', response.status, response.statusText);
+              }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+          }
+      }
           await fetch("http://localhost:3000/api/behavior/", {
               method: "POST",
               mode: "cors",
@@ -72,20 +82,23 @@ function BehaviorPage() {
                   "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                  name: behaviorData.behaviorName,
+                  name: behaviorData .name,
                   description: behaviorData.description,
                   datatype: behaviorData.datatype.toUpperCase(),
               }),
           });
   
           setBehaviorData({
-              behaviorName: "",
+              name: "",
               description: "",
-              datatype: "",
+              id: 0,
+              trialsPerEntry: null, 
+              entries:[], 
+              tags:[],
+              datatype: Datatype.TRIAL,
           });
   
           router.push("/behaviors/manage");
-      };
   
       return (
         <><div style={{ padding: "1rem 2rem 1rem 2rem" }}>
@@ -96,10 +109,10 @@ function BehaviorPage() {
             <Input
               id="my-input"
               aria-describedby="my-helper-text"
-              value={behaviorData.behaviorName}
+              value={behaviorData.name}
               onChange={(e) => setBehaviorData({
                 ...behaviorData,
-                behaviorName: e.target.value,
+                name: e.target.value,
               })} />
             <FormHelperText id="my-helper-text">
               Enter the name of your behavior here
@@ -135,9 +148,10 @@ function BehaviorPage() {
               onChange={(e) => {
                 setBehaviorData((prev) => ({
                   ...prev,
-                  datatype: e.target.value as string,
+                  datatype: Object.values(Datatype).find((dt) => dt === e.target.value) ,
                 }));
-              } }
+              }}
+              
             >
               <MenuItem value="" disabled>
                 Choose a behavior type
@@ -173,7 +187,6 @@ function BehaviorPage() {
             </div>
           </div></>
       );
-  }
-
+    }
 
 export default BehaviorPage;
