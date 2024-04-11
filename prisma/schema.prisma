@@ -1,17 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-/* As a reminder of how enums work, assuming you have NOT initialized anything, they work like const ints.
-enum typeName {
-SAM
-RYO
-TAZ
-}
-Basically we are saying:
-const int SAM = 0;
-const int RYO = 0;
-const int TAZ = 0;
-*/
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -52,7 +38,6 @@ model User {
   last_name       String
   email           String?          @unique
   phone_number    String?
-  birthday        DateTime
   EmployeeProfile EmployeeProfile?
   StudentProfile  StudentProfile?
   Dependents      StudentProfile[] @relation("dependents")
@@ -72,6 +57,7 @@ model StudentProfile {
   Guardians         User[]           @relation("dependents") //guardian relation many to many link to User table instead
   id                Int              @id @default(autoincrement())
   User              User             @relation(fields: [id], references: [id])
+  birthday          DateTime
   Sessions          Session[]
   Program           Program[]
   EmployeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])
