@@ -106,4 +106,4 @@ const newStudent = (): JSX.Element => {
     );
 };
 
-export default newStudent;
+export default newStudent; 

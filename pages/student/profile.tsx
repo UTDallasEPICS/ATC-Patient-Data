@@ -275,4 +275,4 @@ const studentProfile: React.FC = ( ) => {
     );
 };
 
-export default studentProfile;
+export default studentProfile; 

@@ -1,4 +1,4 @@
-{
+ s{
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/test/index.tsx"
-, "auth0CheckUser.ts", "pages/add-user-test.js", "pages/employee/test.jsx", "pages/student/profile.js"  ],
+, "auth0CheckUser.ts", "pages/add-user-test.js", "pages/employee/test.jsx", "pages/student/profile.js", "pages/new-user.js"  ],
   "exclude": [
     "node_modules"
   ]
