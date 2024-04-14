@@ -45,7 +45,7 @@ export default function studentSearch () { // destructure
           console.log(data.error)
           return;
        }
-      data?.sort(function (a: Student, b: Student) {
+      data?.results.sort(function (a: Student, b: Student) {
           const aName = a.firstName + a.lastName;
           const bName = b.firstName + b.lastName;
           if (aName < bName) {
