@@ -28,8 +28,6 @@ const editStudent = (props: { student: StudentWithIdAndImg }) => {
             }
         };
         fetchData();
-    }, []); // called when component is mounted
-    useEffect(() => {
         if (students) {
             const studentList = students.map((student, idx) => ({ // this is acting like a copy constructor, sort of
                 firstName: student.firstName,
@@ -46,8 +44,7 @@ const editStudent = (props: { student: StudentWithIdAndImg }) => {
             console.log(studentList)
             setStudentList(studentList);
         }
-    }, [students]); // called when editing a student
-    
+    }, [students]);
     const { student } = props;
     const router = useRouter();
 
