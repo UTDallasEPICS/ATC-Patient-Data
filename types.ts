@@ -69,9 +69,9 @@ export interface Employee{
     lastName: string;
     phoneNumber?: string;
     patients?: string[];
-    birthday?: Date;
+    //birthday?: Date;
     id?: string,
-    dob?: string,
+    //dob?: string,
     phone?: string,
     email?:string,
     otherInfo?: string,

@@ -136,10 +136,12 @@ const employeeProfile = ({students, employee, currentStudent}: EmployeeProfilePr
     setListOpen(false);
   };
 
+  /*
   const formatDate = (d: Date) => {
     return d.toLocaleDateString('en-us', { year:"numeric", month:"short", day: 'numeric'})
     //return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   };
+  */
 
   const handleArchive = async() => {
     const response = await fetch(`/employee/${employee._id}`, {
@@ -296,10 +298,8 @@ const employeeProfile = ({students, employee, currentStudent}: EmployeeProfilePr
       </div>
       <br />
       <Divider variant="middle" />
-      <p className={styles.label}>Date of Birth:</p>{" "}
       <p className={styles.info}>
                       {" "}
-                      {formatDate(new Date(employee.birthday))}
                   </p>
       <p className={styles.label}>Phone Number:</p>{" "}
       <p className={styles.info}> {`(${employee.phoneNumber.slice(0,3)}) ${employee.phoneNumber.slice(3,6)}-${employee.phoneNumber.slice(6,10)}`}</p>
