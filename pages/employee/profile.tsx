@@ -16,6 +16,38 @@ import { EmployeeProfileProps, Employee, Student } from "../../types";
 import { GetServerSideProps } from "next";
 
 const employeeProfile = ({students, employee, currentStudent}: EmployeeProfileProps) => {
+  const [employees, setEmployees] = useState(null)
+  const [employeeList, setEmployeeList] = useState([]);
+  // fetch data from client side
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await fetch(`/api/employee`, { method: 'GET' });
+            if (response.ok) {
+                const data = await response.json();
+                setEmployees(data);
+                const employeeList = data.map((employee, idx) => ({
+                    firstName: employee.firstName,
+                    dob: convertStringToDate(employee.dob),
+                    phoneNumber: employee.phoneNumber,
+                    email: employee.email,
+                    otherInfo: employee.otherInfo,
+                    id: idx + 1,
+                    _id: employee.id,
+                }));
+                console.log(employeeList);
+                setEmployeeList(employeeList);
+            } else {
+                console.error('Failed to fetch data:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    fetchData();
+}, [employees]);
+
   // prevents current students from being null, which causes HELLA erorros
   currentStudent = (currentStudent[0] == null) ? [] : currentStudent
 
@@ -450,4 +482,13 @@ export const getServerSideProps: GetServerSideProps <{ students: any[]; employee
       currentStudent: currentStudents,
     }
   };
+};
+
+const convertStringToDate = (date: string) => {
+  const data = date.split("-");
+  return new Date(
+      parseInt(data[0]),
+      parseInt(data[1]) - 1,
+      parseInt(data[2])
+  );
 };

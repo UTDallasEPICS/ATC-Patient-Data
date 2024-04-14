@@ -8,7 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 
-import { StudentSearchProps, Student } from "../../types";
+import { Student } from "../../types";
 
 // import theme from '../src/theme';
 

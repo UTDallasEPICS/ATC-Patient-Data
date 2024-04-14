@@ -30,6 +30,25 @@ interface ProgramAsProps
 }
 
 const addSession = ({ studentID_, firstName, lastName, patient, employee, behavior, program}) => {
+  const [session, setSession] = useState(null)
+    const [employeeList, setSession] = useState([]);
+    // fetch data from client side
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/api/session`, { method: 'GET' });
+                if (response.ok) {
+                    const data = await response.json();
+                    setSession(data);
+                } else {
+                    console.error('Failed to fetch data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
   //Create an array of behaviors
   const behaviors = program.behaviors;
@@ -245,6 +264,14 @@ export const getServerSideProps: GetServerSideProps<{}> = async ({ query }) => {
       program: programData['data'][0],
     },
   };
+};
+const convertStringToDate = (date: string) => {
+  const data = date.split("-");
+  return new Date(
+      parseInt(data[0]),
+      parseInt(data[1]) - 1,
+      parseInt(data[2])
+  );
 };
 
 export default addSession;
