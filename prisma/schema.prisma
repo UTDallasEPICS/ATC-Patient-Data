@@ -48,7 +48,8 @@ model User {
 model EmployeeProfile {
   role     Role             @default(Technician)
   id       Int              @id @default(autoincrement())
-  User     User             @relation(fields: [id], references: [id])
+  user_id  Int              @unique
+  User     User             @relation(fields: [user_id], references: [id])
   Students StudentProfile[]
   Sessions Session[]
 }
@@ -58,6 +59,8 @@ model StudentProfile {
   id                Int              @id @default(autoincrement())
   User              User             @relation(fields: [id], references: [id])
   birthday          DateTime
+  user_id           Int              @unique
+  User              User             @relation(fields: [user_id], references: [id])
   Sessions          Session[]
   Program           Program[]
   EmployeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])

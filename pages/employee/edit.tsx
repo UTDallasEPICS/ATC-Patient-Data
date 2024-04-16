@@ -1,7 +1,9 @@
 import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 
+
 import { Employee } from "../../types";
+import { Employee} from "../../types";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
@@ -46,15 +48,46 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
             setEmployeeList(employeeList);
         }
     }, [employees]);
+      const fetchData = async () => {
+          try {
+              const response = await fetch(`/api/employee`, { method: 'GET' });
+              if (response.ok) {
+                  const data = await response.json();
+                  setEmployees(data);
+              } else {
+                  console.error('Failed to fetch data:', response.status, response.statusText);
+              }
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      };
+      if (employees) {
+        const employeeList = employees.map((employee, idx) => ({ // this is acting like a copy constructor, sort of
+            firstName: employee.firstName,
+            dob: convertStringToDate(employee.dob),
+            phoneNumber: employee.phoneNumber,
+            email: employee.email,
+            otherInfo: employee.otherInfo,
+            id: idx + 1,
+            _id: employee.id,
+        }));
+        console.log(employeeList)
+        setEmployeeList(employeeList);
+    }
+  }, [employees]);
+ 
     // ... to here
 
   const { employee } = props;
   const router = useRouter();
 
+  /*
   const formatDate = (d: any) => {
       d = new Date(d);
       return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   };
+  */
+
   const firstNameInput: Input = {
     attributeName: "first_name",
     name: "First Name",
@@ -70,14 +103,6 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     required: true,
     value: employee.lastName,
   };
-
-  /*const birthDateInput: Input = {
-    attributeName: "birth_date",
-    type: InputType.DATE,
-    name: "Birth Date",
-    required: true,
-    value: formatDate(employee.dob),
-  };*/
 
   const otherInfoInput: Input = {
     attributeName: "other_info",
@@ -108,14 +133,6 @@ const editEmployee = (props: { employee: EmployeeWithIdAndImg }) => {
     otherInfoInput,
   ];
 
-  const convertStringToDate = (date: string) => {
-    const data = date.split("-");
-    return new Date(
-        parseInt(data[0]),
-        parseInt(data[1]) - 1,
-        parseInt(data[2])
-    );
-  };
 
   const handleSubmit = async (fields: Input[]) => {
     const [firstName, lastName, phoneNumber, email, otherInfo] =
