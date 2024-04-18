@@ -56,15 +56,6 @@ const newEmployee = () => {
     required: true,
   };
 
-  /*
-  const birthDateInput: Input = {
-    attributeName: "birth_date",
-    type: InputType.DATE,
-    name: "Birth Date",
-    required: true,
-  };
-  */
-
   const otherInfoInput: Input = {
     attributeName: "other_info",
     type: InputType.MUTILINE_TEXT,
@@ -83,17 +74,6 @@ const newEmployee = () => {
     name: "Email address",
   };
 
-  /*
-  const convertStringToDate = (date: string) => {
-    const data = date.split("-");
-    return new Date(
-        parseInt(data[0]),
-        parseInt(data[1]) - 1,
-        parseInt(data[2])
-    );
-  };
-  */
-
   const textInputs: Input[] = [
     firstNameInput,
     lastNameInput,
@@ -104,15 +84,7 @@ const newEmployee = () => {
   ];
 
   const handleSubmit = async (fields: Input[]) => {
-    /*
-    console.log(
-      "handleSubmit: " +
-        fields.map((field) => {
-          return field.name + ": " + field.value;
-        })
-
-    );
-    */
+ 
     const [firstName, lastName, phoneNumber, email, otherInfo] =
             fields.map((field) => field.value || "");
 
