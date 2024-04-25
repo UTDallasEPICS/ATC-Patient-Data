@@ -6,14 +6,13 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 
-import { EmployeeSearchProps } from "../../types";
+import { Employee, Student } from "../../types";
 
 export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
-  const [loading, setLoading] = useState(true);
+  const[loading, setLoading] = useState(true);
   const [canShow, setCanShow] = useState(false);
   const finishedLoadingAndCanShow = !loading && canShow;
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [employeeList, setEmployeeList] = useState([]);
 
   const Conditional = ({
     showWhen,
@@ -22,10 +21,13 @@ export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
     showWhen: boolean;
     children: ReactNode;
   }) => {
-    if (showWhen) return <>{children}</>;
+    if (showWhen) return <>{children}</>
     return <></>;
   };
 
+  const [employees, setEmployees] = useState(null)
+  const [employeeList, setEmployeeList] = useState([]);
+  
   // fetch data from client side
   useEffect(() => {
     const fetchData = async () => {
@@ -42,28 +44,34 @@ export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-    };
-    fetchData();
+  };
+  fetchData();
   }, []);
 
   useEffect(() => {
     if (employees) {
       employees.sort(function (a, b) {
-        const aName = a.firstName + a.lastName;
-        const bName = b.firstName + b.lastName;
-        if (aName < bName) {
-          return -1;
-        }
-        if (aName > bName) {
-          return 1;
-        }
-        return 0;
-      });
+      const aName = a.firstName + a.lastName;
+      const bName = b.firstName + b.lastName;
+      if (aName < bName) {
+        return -1;
+      }
+      if (aName > bName) {
+        return 1;
+      }
+    return 0;
+    });
     }
-  }, [employees]); // called when employees has to be rerendered
+}, [employees]); // called when employees has to be rerendered
 
+
+
+  const [searchTerm, setSearchTerm] = useState("");
   return (
     <div>
+      {
+        (!loading && canShow) 
+      }
       <Conditional showWhen={finishedLoadingAndCanShow}>
         <h1> Welcome</h1>
       </Conditional>
