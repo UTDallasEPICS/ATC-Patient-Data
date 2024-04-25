@@ -13,7 +13,28 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
 
 import { EmployeeProfileProps, Employee, Student } from "../../types";
-import { GetServerSideProps } from "next";
+//import { GetServerSideProps } from "next";
+useEffect(() => {
+  const fetchData = async () => {
+    if(behaviorId == "0"){
+      setEmployeeData({ name: "", description: "",datatype: Datatype.TRIAL,  id: null, trialsPerEntry: 0, entries: [], tags: [] });
+    }
+    else{
+      try{
+        const response = await fetch(`/employee/${Employee._id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setEmployeeData(data);
+        } else {
+            console.error('Failed to fetch data:', response.status, response.statusText);
+        }
+      } catch (error) { 
+        console.error('Error fetching data:', error);
+      }
+    }
+  };
+  fetchData();
+}, []);
 
 const employeeProfile = ({students, employee, currentStudent}: EmployeeProfileProps) => {
   // prevents current students from being null, which causes HELLA erorros

@@ -14,7 +14,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
 
 import {StudentProfileProps, Student} from '../../types';
-import { GetServerSideProps } from "next";
 
 const studentProfile: React.FC = ( ) => {
     const [students, setStudents] = useState(null)

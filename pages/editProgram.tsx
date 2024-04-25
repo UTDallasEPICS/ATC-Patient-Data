@@ -10,7 +10,7 @@ const editProgram = () => {
   );
 };
 
-export const getServerSideProps = async ({ query }): Promise<{ props: { studentID: EditProgramProps; program: EditProgramProps } }> => {
+/* export const getServerSideProps = async ({ query }): Promise<{ props: { studentID: EditProgramProps; program: EditProgramProps } }> => {
   const temp = await fetch(
     `/patient/program/${query.studentID}`
   );
@@ -21,6 +21,6 @@ export const getServerSideProps = async ({ query }): Promise<{ props: { studentI
       program: data[0],
     },
   };
-};
+}; */
 
 export default editProgram;
