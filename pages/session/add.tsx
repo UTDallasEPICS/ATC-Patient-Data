@@ -6,6 +6,8 @@ import { Behaviors } from "../../components/AddSession/Behaviors";
 import Head from "next/head";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
+import { useRouter } from 'next/router';
+
 import React from "react";
 import { useState, useEffect } from "react";
 
@@ -236,14 +238,35 @@ const addSession = ({ studentID_, firstName, lastName, patient, employee, behavi
 
 
 };
+const router = useRouter();
+const {studentId} = router.query
+const [patientData, setPatientData] = useState<Behavior | null>(null)
 
-export const getServerSideProps: GetServerSideProps<{}> = async ({ query }) => {
-  const patientRes = await fetch(
-    `/patient/${query.studentID}`
-  );
-  const patientData = await patientRes.json(); 
+    useEffect(() => {
+      const fetchData = async () => {
+        // TODO: if behavior id is zero, then we dont need to do a network request
+        // we can just make an empty behavior (with any sensible defaults)
+        if(studentId == "0"){
+          setPatientData(null);
+        }
+        else{
+          try {
+            const response = await fetch(`/api/behavior?id=${studentId}`, { method: 'PUT' });
+            if (response.ok) {
+                const data: Behavior = await response.json();
+                setPatientData(data);
+            } else {
+                console.error('Failed to fetch data:', response.status, response.statusText);
+            }
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+        }
+      };
+      fetchData();
+    }, [studentId]);
 
-  const employeeRes = await fetch(
+   const employeeRes = await fetch(
     `/employee/64518555b5b62f1086e74d80`
   );
   const employeeData = await employeeRes.json();

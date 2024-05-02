@@ -13,8 +13,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Link from "next/link";
 
-import {StudentProfile, Student} from '../../types';
-import { GetServerSideProps } from "next";
+import {StudentProfileProps, Student} from '../../types';
 
 const studentProfile: React.FC = ( ) => {
 const [students, setStudents] = useState(null)

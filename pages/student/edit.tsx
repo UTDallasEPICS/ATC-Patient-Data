@@ -1,8 +1,6 @@
 import NewEntity from "../../components/NewEntity/NewEntity";
 import { Input, InputType } from "../../components/NewEntity/Interfaces";
 
-import { GetServerSideProps } from "next";
-
 import { useRouter } from 'next/router';
 import { Patient, Student } from "../../types";
 import { useState, useEffect } from "react";
