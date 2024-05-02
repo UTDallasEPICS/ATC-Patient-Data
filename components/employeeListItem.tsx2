@@ -1,0 +1,38 @@
+import React from 'react';
+import PropTypes from "prop-types";
+import Avatar from "./Avatar";
+import styles from "../styles/SearchList.module.css";
+import Link from "next/link";
+import ListItem from "@material-ui/core/ListItem";
+import { SearchListProps, StudentListItemProps, Employee} from '../types';
+
+const EmployeeListItem = ({ employee, destinationPath}: {employee:Employee, destinationPath:string}) => {
+  return (
+    <Link href={{ pathname: destinationPath, query: { id: id } }}>
+      <ListItem button key={id}>
+        <div className={styles.level}>
+          <div className={styles.levelItem}>
+            <Avatar img={img} />
+          </div>
+          <div className={styles.levelItem} style={{ paddingLeft: "10px" }}>
+            <p>
+              {employee.User.first_name} {employee.User.last_name}
+            </p>
+          </div>
+        </div>
+      </ListItem>
+    </Link>
+  );
+};
+
+EmployeeListItem.defaultProps = {
+  img: "/default-avatar.jpg",
+};
+
+EmployeeListItem.propTypes = {
+  firstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+};
+
+export default EmployeeListItem;
