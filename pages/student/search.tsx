@@ -61,6 +61,7 @@ export default function studentSearch () { // destructure
     fetchData()
   }, []);
 
+
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   return (
@@ -92,4 +93,4 @@ export default function studentSearch () { // destructure
       </div>
     </div>
   );
-}
+} 

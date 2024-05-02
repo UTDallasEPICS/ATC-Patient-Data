@@ -273,4 +273,4 @@ const [studentList, setStudentList] = useState([]);
     );
 };
 
-export default studentProfile;
+export default studentProfile; 
