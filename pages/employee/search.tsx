@@ -6,67 +6,52 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 
-import { EmployeeSearchProps } from "../../types";
+import { Employee, Student } from "../../types";
 
-export default function EmployeeSearch({ employees }: EmployeeSearchProps) {
-  const [loading, setLoading] = useState(true);
+export default function EmployeeSearch() {
+    // ... to here
+  const[loading, setLoading] = useState(true);
   const [canShow, setCanShow] = useState(false);
   const finishedLoadingAndCanShow = !loading && canShow;
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [employees, setEmployees] = useState(null)
   const [employeeList, setEmployeeList] = useState([]);
-
-  const Conditional = ({
-    showWhen,
-    children,
-  }: {
-    showWhen: boolean;
-    children: ReactNode;
-  }) => {
-    if (showWhen) return <>{children}</>;
-    return <></>;
-  };
-
+  const [searchTerm, setSearchTerm] = useState("");
+  
   // fetch data from client side
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/search/user', {
-          method: "POST",
+          const response = await fetch('/api/search/user', {
+            method: "POST",
         });
-        if (response.ok) {
-          const data = await response.json();
-          setEmployees(data);
-        } else {
-          console.error('Failed to fetch data:', response.status, response.statusText);
-        }
+          if (response.ok) {
+              const data = await response.json();
+              setEmployees(data);
+          } else {
+              console.error('Failed to fetch data:', response.status, response.statusText);
+          }
       } catch (error) {
-        console.error('Error fetching data:', error);
+          console.error('Error fetching data:', error);
       }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (employees) {
-      employees.sort(function (a, b) {
-        const aName = a.firstName + a.lastName;
-        const bName = b.firstName + b.lastName;
-        if (aName < bName) {
-          return -1;
-        }
-        if (aName > bName) {
-          return 1;
-        }
-        return 0;
-      });
+  };
+  fetchData();
+  if (employees) {
+    employees.sort(function (a, b) {
+    const aName = a.firstName + a.lastName;
+    const bName = b.firstName + b.lastName;
+    if (aName < bName) {
+      return -1;
     }
-  }, [employees]); // called when employees has to be rerendered
+    if (aName > bName) {
+      return 1;
+    }
+  return 0;
+  });
+  }
+  }, [employees]);
 
   return (
     <div>
-      <Conditional showWhen={finishedLoadingAndCanShow}>
-        <h1> Welcome</h1>
-      </Conditional>
       <div className={styles.searchPage}>
         <FormControl>
           <TextField

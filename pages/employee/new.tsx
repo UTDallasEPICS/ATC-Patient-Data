@@ -6,8 +6,41 @@ import Button from "@material-ui/core/Button";
 import { useRouter } from "next/router";
 
 import { Employee } from "../../types";
+import { useEffect, useState } from "react";
 
 const newEmployee = () => {
+  const [employees, setEmployees] = useState(null)
+  const [employeeList, setEmployeeList] = useState([]);
+  // fetch data from client side
+  useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const response = await fetch(`/api/employee`, { method: 'GET' });
+              if (response.ok) {
+                  const data = await response.json();
+                  setEmployees(data);
+              } else {
+                  console.error('Failed to fetch data:', response.status, response.statusText);
+              }
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      };
+      fetchData();
+      if (employees) {
+        const employeeList = employees.map((employee, idx) => ({ // this is acting like a copy constructor, sort of
+            firstName: employee.firstName,
+            dob: convertStringToDate(employee.dob),
+            phoneNumber: employee.phoneNumber,
+            email: employee.email,
+            otherInfo: employee.otherInfo,
+            id: idx + 1,
+            _id: employee.id,
+        }));
+        console.log(employeeList)
+        setEmployeeList(employeeList);
+    }
+  }, [employees]);
   const router = useRouter();
   const firstNameInput: Input = {
     attributeName: "first_name",
@@ -20,13 +53,6 @@ const newEmployee = () => {
     attributeName: "last_name",
     name: "Last Name",
     type: InputType.TEXT,
-    required: true,
-  };
-
-  const birthDateInput: Input = {
-    attributeName: "birth_date",
-    type: InputType.DATE,
-    name: "Birth Date",
     required: true,
   };
 
@@ -48,41 +74,24 @@ const newEmployee = () => {
     name: "Email address",
   };
 
-  const convertStringToDate = (date: string) => {
-    const data = date.split("-");
-    return new Date(
-        parseInt(data[0]),
-        parseInt(data[1]) - 1,
-        parseInt(data[2])
-    );
-  };
-
   const textInputs: Input[] = [
     firstNameInput,
     lastNameInput,
-    birthDateInput,
+    //birthDateInput,
     phoneNumberInput,
     emailInput,
     otherInfoInput,
   ];
 
   const handleSubmit = async (fields: Input[]) => {
-    /*
-    console.log(
-      "handleSubmit: " +
-        fields.map((field) => {
-          return field.name + ": " + field.value;
-        })
-
-    );
-    */
-    const [firstName, lastName, birthday, phoneNumber, email, otherInfo] =
+ 
+    const [firstName, lastName, phoneNumber, email, otherInfo] =
             fields.map((field) => field.value || "");
 
     const newUser: Employee = {
       firstName,
       lastName,
-      birthday: convertStringToDate(birthday),
+      //birthday: convertStringToDate(birthday),
       phoneNumber,
       email,
       otherInfo,

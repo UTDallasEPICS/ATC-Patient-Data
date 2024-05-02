@@ -39,7 +39,7 @@ const NewEntity = (props: {
         switch (input.type) {
             case InputType.TEXT:
             case InputType.DATE:
-            case InputType.MULTILINE_TEXT:
+            case InputType.MUTILINE_TEXT:
                 return (
                     <TextField
                         key={input.attributeName}
