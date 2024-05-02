@@ -7,8 +7,44 @@ import Link from "next/link";
 import Button from "@material-ui/core/Button";
 import { Patient } from "../../types";
 import { Student } from "../../interfaces/Student";
+import { useEffect, useState } from "react";
 
 const newStudent = (): JSX.Element => {
+    const [students, setStudents] = useState(null)
+    const [studentList, setStudentList] = useState([]);
+    // fetch data from client side
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/api/student`, { method: 'GET' });
+                if (response.ok) {
+                    const data = await response.json();
+                    setStudents(data);
+                } else {
+                    console.error('Failed to fetch data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+        if (students) {
+            const studentList = students.map((student, idx) => ({ // this is acting like a copy constructor, sort of
+                firstName: student.firstName,
+                lastName: student.lastName,
+                img: student.img,
+                dob: convertStringToDate(student.dob),
+                parentPhone: student.parentPhone,
+                email: student.email,
+                parentEmail: student.parentEmail,
+                otherInfo: student.otherInfo,
+                id: idx + 1,
+                _id: student.id,
+            }));
+            console.log(studentList)
+            setStudentList(studentList);
+        }
+    }, [students]); // called when component is mounted
     const router = useRouter();
     const firstNameInput: Input = {
         attributeName: "first_name",
@@ -106,4 +142,4 @@ const newStudent = (): JSX.Element => {
     );
 };
 
-export default newStudent;
+export default newStudent; 

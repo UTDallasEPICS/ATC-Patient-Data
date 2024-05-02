@@ -37,6 +37,38 @@ useEffect(() => {
 }, []);
 
 const employeeProfile = ({students, employee, currentStudent}: EmployeeProfileProps) => {
+  const [employees, setEmployees] = useState(null)
+  const [employeeList, setEmployeeList] = useState([]);
+  // fetch data from client side
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await fetch(`/api/employee`, { method: 'GET' });
+            if (response.ok) {
+                const data = await response.json();
+                setEmployees(data);
+                const employeeList = data.map((employee, idx) => ({
+                    firstName: employee.firstName,
+                    dob: convertStringToDate(employee.dob),
+                    phoneNumber: employee.phoneNumber,
+                    email: employee.email,
+                    otherInfo: employee.otherInfo,
+                    id: idx + 1,
+                    _id: employee.id,
+                }));
+                console.log(employeeList);
+                setEmployeeList(employeeList);
+            } else {
+                console.error('Failed to fetch data:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    fetchData();
+}, [employees]);
+
   // prevents current students from being null, which causes HELLA erorros
   currentStudent = (currentStudent[0] == null) ? [] : currentStudent
 
@@ -125,10 +157,12 @@ const employeeProfile = ({students, employee, currentStudent}: EmployeeProfilePr
     setListOpen(false);
   };
 
+  /*
   const formatDate = (d: Date) => {
     return d.toLocaleDateString('en-us', { year:"numeric", month:"short", day: 'numeric'})
     //return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
   };
+  */
 
   const handleArchive = async() => {
     const response = await fetch(`/employee/${employee._id}`, {
@@ -285,10 +319,8 @@ const employeeProfile = ({students, employee, currentStudent}: EmployeeProfilePr
       </div>
       <br />
       <Divider variant="middle" />
-      <p className={styles.label}>Date of Birth:</p>{" "}
       <p className={styles.info}>
                       {" "}
-                      {formatDate(new Date(employee.birthday))}
                   </p>
       <p className={styles.label}>Phone Number:</p>{" "}
       <p className={styles.info}> {`(${employee.phoneNumber.slice(0,3)}) ${employee.phoneNumber.slice(3,6)}-${employee.phoneNumber.slice(6,10)}`}</p>
@@ -471,4 +503,13 @@ export const getServerSideProps: GetServerSideProps <{ students: any[]; employee
       currentStudent: currentStudents,
     }
   };
+};
+
+const convertStringToDate = (date: string) => {
+  const data = date.split("-");
+  return new Date(
+      parseInt(data[0]),
+      parseInt(data[1]) - 1,
+      parseInt(data[2])
+  );
 };

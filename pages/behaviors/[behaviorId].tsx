@@ -11,7 +11,7 @@ async function BehaviorPage() {
 
     const router = useRouter();
     const { behaviorId } = router.query;
-    //
+
     const [behaviorData, setBehaviorData] = useState<Behavior | null>(null)
 
     useEffect(() => {

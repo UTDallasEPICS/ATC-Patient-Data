@@ -2,25 +2,22 @@ import { useState, useEffect } from "react";
 import Avatar from "../Avatar";
 import { useForm } from "react-hook-form";
 import TextField from "@material-ui/core/TextField";
-import { Input, InputType } from "./Interfaces";
 import Button from "@material-ui/core/Button";
-import { TextRotationAngleupTwoTone } from "@material-ui/icons";
-// import DateInput from "./DateInput"
-// import TextInput from "./TextInput"
+import { Input, InputType } from "./Interfaces";
+import styles from "../../styles/NewEntity.module.css";
 
-export const NewEntity = (props: {
+
+const NewEntity = (props: {
+    entityType: string;
     textFields: Input[];
     submitFunction: (fields: Input[]) => Promise<void>;
 }) => {
-    const styles = require("../../styles/NewEntity.module.css");
-
     const [imgPreview, setImagePreview] = useState("/default-avatar.jpg");
     const [textInputs, setTextInputs] = useState([]);
 
     useEffect(() => {
-        // Update the document title using the browser API
         setTextInputs(props.textFields);
-    }, []);
+    }, [props.textFields]);
 
     const { register, handleSubmit } = useForm();
 
@@ -41,50 +38,15 @@ export const NewEntity = (props: {
     const getComponent = (input: Input) => {
         switch (input.type) {
             case InputType.TEXT:
-                return (
-                    <TextField
-                        key={input.attributeName}
-                        id="outlined-basic"
-                        label={input.name || input.attributeName}
-                        variant="outlined"
-                        className={styles.inputField}
-                        onChange={(e) => {
-                            updateInput(input.attributeName, e.target.value);
-                        }}
-                        required={input.required}
-                        defaultValue={input.value || ""}
-                    />
-                );
-
             case InputType.DATE:
-                return (
-                    <TextField
-                        id={input.attributeName}
-                        label={input.name || input.attributeName}
-                        key={input.attributeName}
-                        type="date"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        className={styles.inputField}
-                        onChange={(e) =>
-                            updateInput(input.attributeName, e.target.value)
-                        }
-                        required={input.required}
-                        defaultValue={input.value || ""}
-                    />
-                );
-
             case InputType.MUTILINE_TEXT:
                 return (
                     <TextField
+                        key={input.attributeName}
                         id={input.attributeName}
                         label={input.name || input.attributeName}
-                        key={input.attributeName}
-                        placeholder={input.name}
-                        className={styles.inputField}
-                        multiline
                         variant="outlined"
+                        className={styles.inputField}
                         onChange={(e) =>
                             updateInput(input.attributeName, e.target.value)
                         }
@@ -101,41 +63,30 @@ export const NewEntity = (props: {
                 if (oldInput.attributeName === attributeName) {
                     oldInput.value = newValue;
                 }
-
                 return oldInput;
             })
         );
     };
 
     return (
-        <form className={styles.inputs} onSubmit={handleSubmit(onSubmit)}>
-            <div className={styles.parent}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
                 <Avatar diameter="175px" img={imgPreview} />
-
-                <div className={styles.child}>
-                    <label
-                        htmlFor="image_upload"
-                        className={styles.imageInputLabel}
-                    >
-                        <strong>Upload Picture (Optional)</strong>
-                    </label>
-                    <input
-                        id="image_upload"
-                        name="image_upload"
-                        ref={register}
-                        type="file"
-                        accept="image/*"
-                        className={styles.imageInput}
-                        onChange={updateImageDisplay}
-                    />
-                </div>
+                <label htmlFor="image_upload">
+                    <strong>Upload Picture (Optional)</strong>
+                </label>
+                <input
+                    id="image_upload"
+                    name="image_upload"
+                    ref={register}
+                    type="file"
+                    accept="image/*"
+                    onChange={updateImageDisplay}
+                />
             </div>
-
-            <div className={styles.textInputs}>
-                {textInputs.map((input: Input) => {
-                    return getComponent(input);
-                })}
-            </div>
+            {textInputs.map((input: Input) => {
+                return getComponent(input);
+            })}
             <Button variant="contained" color="primary" type="submit">
                 Submit
             </Button>
@@ -146,14 +97,9 @@ export const NewEntity = (props: {
 const imageFileTypes = [
     "image/apng",
     "image/bmp",
-    // "image/gif",
     "image/jpeg",
     "image/pjpeg",
     "image/png",
-    // "image/svg+xml",
-    // "image/tiff",
-    // "image/webp",
-    // "image/x-icon"
 ];
 
 const validFileType = (file) => {
