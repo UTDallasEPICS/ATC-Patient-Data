@@ -8,7 +8,7 @@
 * When Docker is installed, you will also need PostgreSQL installed as well.
 
 # How to Install and Setup **PostgreSQL**
-  
+
 * NOTE: All commands should be run on Git Bash because your computer may reject manual scripting on powershell (there is a way to turn this off, but at the time of writing this, it is unknown).
 * run `docker-compose up`
 * run `npx prisma migrate reset`
