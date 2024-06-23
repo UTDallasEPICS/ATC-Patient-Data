@@ -4,37 +4,44 @@ import StudentListItem from "./searchListItem";
 import styles from "../styles/SearchList.module.css";
 import { Student, SearchListProps } from "../types";
 
-const SearchList = ({ students, searchTerm, destinationPath }: SearchListProps) => {
-    return (
-        <div
-            className={styles.studentList}
-            style={
-                 students?.length > 7 ? { overflowY: "scroll", maxHeight: "60vh" } : {}
-            }
-        >
-            { students?.filter((student) => {
-                    if (searchTerm == "") {
-                        return student;
-                    } else if (
-                        (student.firstName + " " + student.lastName)
-                            .toLowerCase()
-                            .includes(searchTerm.toLowerCase())
-                    ) {
-                        return student;
-                    }
-                })
-                .map((student) => (
-                    <StudentListItem
-                        key={student.id}
-                        firstName={student.firstName}
-                        lastName={student.lastName}
-                        id={student.id}
-                        img={student.img}
-                        destinationPath={destinationPath}
-                    />
-                ))}
-        </div>
-    );
+const SearchList = ({
+  searchResults,
+  searchTerm,
+  destinationPath,
+}: SearchListProps) => {
+  return (
+    <div
+      className={styles.studentList}
+      style={
+        searchResults?.length > 7
+          ? { overflowY: "scroll", maxHeight: "60vh" }
+          : {}
+      }
+    >
+      {searchResults
+        ?.filter((student) => {
+          if (searchTerm == "") {
+            return student;
+          } else if (
+            (student.firstName + " " + student.lastName)
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          ) {
+            return student;
+          }
+        })
+        .map((student) => (
+          <StudentListItem
+            key={student.id}
+            firstName={student.User.firstName}
+            lastName={student.lastName}
+            id={student.id}
+            img={student.img}
+            destinationPath={destinationPath}
+          />
+        ))}
+    </div>
+  );
 };
 
 SearchList.propTypes = {

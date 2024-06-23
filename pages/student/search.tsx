@@ -33,34 +33,34 @@ const theme = createTheme({
   },
 });
 
-export default function studentSearch () { // destructure
+export default function studentSearch() {
+  // destructure
   const [students, setStudents] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch('/api/search/user', {
+      const response = await fetch("/api/search/user", {
         method: "POST",
-      })
-      const data = await response.json()
-      if(data.error) {
-          console.log(data.error)
-          return;
-       }
+      });
+      const data = await response.json();
+      if (data.error) {
+        console.log(data.error);
+        return;
+      }
       data?.results.sort(function (a: Student, b: Student) {
-          const aName = a.firstName + a.lastName;
-          const bName = b.firstName + b.lastName;
-          if (aName < bName) {
-              return -1;
-          }
-          if (aName > bName) {
-              return 1;
-          }
-          return 0;
-      })
-      setStudents(data);
-    }
-    fetchData()
+        const aName = a.firstName + a.lastName;
+        const bName = b.firstName + b.lastName;
+        if (aName < bName) {
+          return -1;
+        }
+        if (aName > bName) {
+          return 1;
+        }
+        return 0;
+      });
+      setStudents(data.results);
+    };
+    fetchData();
   }, []);
-
 
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -69,9 +69,9 @@ export default function studentSearch () { // destructure
       <FormControl>
         <TextField
           className={styles.searchBox}
-          id='outlined-basic'
-          label='Student Search'
-          variant='outlined'
+          id="outlined-basic"
+          label="Student Search"
+          variant="outlined"
           onChange={(e) => {
             setSearchTerm(e.target.value);
           }}
@@ -82,15 +82,15 @@ export default function studentSearch () { // destructure
         <SearchList
           searchResults={students}
           searchTerm={searchTerm}
-          destinationPath='/student/profile'
+          destinationPath="/student/profile"
         />
       </div>
 
       <div className={styles.buttonWrapper}>
-        <Link href='/student/new'>
-          <Button className='primaryButton'>Add New</Button>
+        <Link href="/student/new">
+          <Button className="primaryButton">Add New</Button>
         </Link>
       </div>
     </div>
   );
-} 
+}

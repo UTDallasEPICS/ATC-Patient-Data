@@ -1,4 +1,4 @@
-mimport {
+import {
     Button,
     Dialog, DialogActions,
     DialogContent, DialogContentText,

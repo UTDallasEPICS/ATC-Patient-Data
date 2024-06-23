@@ -7,14 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-enum Role { // TODO: BCBA CAN BE CONSIDERED ADMIN. ASK MARILYN REID ABOUT IF ADMIN AND BCBA SHOULD BE THE SAME. IF THEY ARE SAME, REMOVE BCBA AND MAKE CHANGES AROUND IT IF NECESSARY
+enum Role {
   Admin
   Technician
   BCBA
 }
 
-// siwitched to the below to match up with the behavior types listed in 
+// siwitched to the below to match up with the behavior types listed in
 // behavior/add.tsx line 124-127
 enum Datatype {
   TRIAL
@@ -23,7 +22,7 @@ enum Datatype {
   FREQUENCY
 }
 
-// previously used 
+// previously used
 // enum Datatype {
 //   BOOLEAN
 //   COUNT
@@ -41,7 +40,7 @@ model User {
   EmployeeProfile EmployeeProfile?
   StudentProfile  StudentProfile?
   Dependents      StudentProfile[] @relation("dependents")
-  Sessions        Session[] 
+  Sessions        Session[]
   image           Image?
 }
 
@@ -57,7 +56,7 @@ model EmployeeProfile {
 model StudentProfile {
   Guardians         User[]           @relation("dependents") //guardian relation many to many link to User table instead
   id                Int              @id @default(autoincrement())
-  User              User             @relation(fields: [id], references: [id])
+  // User              User             @relation(fields: [id], references: [id])
   birthday          DateTime
   user_id           Int              @unique
   User              User             @relation(fields: [user_id], references: [id])
@@ -96,11 +95,10 @@ model Program {
   behaviors Json           @default("[]")
 }
 
-
 // image model to hold user profile pictures
-model Image{
-  id        Int          @id @default(autoincrement())
-  Image     String 
-  userId    Int          @unique
-  user      User         @relation(fields: [userId], references: [id]) 
+model Image {
+  id     Int    @id @default(autoincrement())
+  Image  String
+  userId Int    @unique
+  user   User   @relation(fields: [userId], references: [id])
 }
