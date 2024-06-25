@@ -7,10 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// types of employees
 enum Role {
   ADMIN
   TECH
   BCBA
+}
+
+// types of behavior data
+enum BehaviorType {
+  TRIAL           // BOOLEAN
+  PROBE           // COUNT
+  DURATION        // BOOLEAN_ARRAY
+  FREQUENCY       // COUNT_ARRAY
 }
 
 model User {
@@ -29,7 +38,7 @@ model EmployeeProfile {
   role       Role             @default(TECH)
   Students   StudentProfile[]
   User       User             @relation(fields: [employeeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  Session    Session?
+  Sessions    Session[]
 }
 
 model StudentProfile {
@@ -39,16 +48,16 @@ model StudentProfile {
   Behaviors       Behavior[]
   User            User            @relation(fields: [studentId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   EmployeeProfile EmployeeProfile @relation(fields: [employeeId], references: [employeeId], onDelete: Restrict, onUpdate: Cascade)
-  Session         Session?
+  Sessions         Session[]
 }
 
 model Behavior {
   behaviorId      Int              @id @default(autoincrement())
-  title           String //meant to be technical jargon which will be easy to query in a search bar for end-user
+  title           String    //meant to be technical jargon which will be easy to query in a search bar for end-user
   desc            String
-  dataType        String
+  dataType        BehaviorType
   studentId       Int
-  behaviorTempId  Int
+  behaviorTempId  Int?
   Student         StudentProfile   @relation(fields: [studentId], references: [studentId])
   BehaviorTempRel BehaviorTemplate @relation(fields: [behaviorTempId], references: [behaviorTempId])
   archive         Boolean          @default(false)
