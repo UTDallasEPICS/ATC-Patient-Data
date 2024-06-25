@@ -7,3 +7,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  TECH
+  BCBA
+}
+
+model User {
+  id              Int              @id @default(autoincrement())
+  email           String           @unique
+  firstName       String
+  lastName        String
+  phoneNumber     String?
+  EmployeeProfile EmployeeProfile?
+  StudentProfile  StudentProfile?
+}
+
+model EmployeeProfile {
+  userId   Int              @id
+  role     Role             @default(TECH)
+  Students StudentProfile[]
+  Sessions Session[]
+  User     User             @relation(fields: [userId], references: [id])
+}
+
+model StudentProfile {
+  // id                Int              @id @default(autoincrement())
+  user_id           Int             @unique
+  User              User            @relation(fields: [id], references: [id])
+  // employeeProfileId Int?
+  employeeProfileId Int
+  // EmployeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])
+  EmployeeProfile   EmployeeProfile @relation(fields: [employeeProfileId], references: [id])
+  // User              User             @relation(fields: [user_id], references: [id])
+  birthday          DateTime
+  Sessions          Session[]
+}
+
+model Student {
+  Behaviors Behavior[]
+}
+
+model Behavior {
+  desc     String
+  Student  Student
+  Template Template?
+}
+
+model BehaviorTemplate {
+  dataType      String
+  description   String
+  questionTitle String
+}
+
+model Session {
+  Data     BehaviorData[]
+  Student  Student
+  created  DateTime
+  note     String
+  Employee Employee
+}
+
+model BehaviorData {
+  Session   Session
+  Behaviour Behavior
+  data      String // decode at load time based on Behaviour.dataType
+}
