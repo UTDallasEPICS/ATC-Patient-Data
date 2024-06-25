@@ -14,62 +14,72 @@ enum Role {
 }
 
 model User {
-  id              Int              @id @default(autoincrement())
+  userId          Int              @id @default(autoincrement())
   email           String           @unique
   firstName       String
   lastName        String
   phoneNumber     String?
   EmployeeProfile EmployeeProfile?
   StudentProfile  StudentProfile?
+  archive         Boolean          @default(false)
 }
 
 model EmployeeProfile {
-  userId   Int              @id
-  role     Role             @default(TECH)
-  Students StudentProfile[]
-  Sessions Session[]
-  User     User             @relation(fields: [userId], references: [id])
+  employeeId Int              @id
+  role       Role             @default(TECH)
+  Students   StudentProfile[]
+  User       User             @relation(fields: [employeeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  Session    Session?
 }
 
 model StudentProfile {
-  // id                Int              @id @default(autoincrement())
-  user_id           Int             @unique
-  User              User            @relation(fields: [id], references: [id])
-  // employeeProfileId Int?
-  employeeProfileId Int
-  // EmployeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])
-  EmployeeProfile   EmployeeProfile @relation(fields: [employeeProfileId], references: [id])
-  // User              User             @relation(fields: [user_id], references: [id])
-  birthday          DateTime
-  Sessions          Session[]
-}
-
-model Student {
-  Behaviors Behavior[]
+  studentId       Int             @id
+  employeeId      Int             @unique
+  birthday        DateTime
+  Behaviors       Behavior[]
+  User            User            @relation(fields: [studentId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  EmployeeProfile EmployeeProfile @relation(fields: [employeeId], references: [employeeId], onDelete: Restrict, onUpdate: Cascade)
+  Session         Session?
 }
 
 model Behavior {
-  desc     String
-  Student  Student
-  Template Template?
+  behaviorId      Int              @id @default(autoincrement())
+  title           String //meant to be technical jargon which will be easy to query in a search bar for end-user
+  desc            String
+  dataType        String
+  studentId       Int
+  behaviorTempId  Int
+  Student         StudentProfile   @relation(fields: [studentId], references: [studentId])
+  BehaviorTempRel BehaviorTemplate @relation(fields: [behaviorTempId], references: [behaviorTempId])
+  archive         Boolean          @default(false)
+  BehaviorData    BehaviorData[]
 }
 
 model BehaviorTemplate {
-  dataType      String
-  description   String
-  questionTitle String
+  behaviorTempId Int        @id @default(autoincrement())
+  title          String
+  desc           String
+  dataType       String
+  archive        Boolean    @default(false)
+  Behavior       Behavior[]
 }
 
 model Session {
-  Data     BehaviorData[]
-  Student  Student
-  created  DateTime
-  note     String
-  Employee Employee
+  sessionId  Int             @id @default(autoincrement())
+  Data       BehaviorData[]
+  studentId  Int             @unique
+  employeeId Int             @unique
+  createdAt  DateTime
+  note       String
+  Student    StudentProfile  @relation(fields: [studentId], references: [studentId], onUpdate: Cascade)
+  Employee   EmployeeProfile @relation(fields: [employeeId], references: [employeeId], onUpdate: Cascade) //what are we doing onDelete?
 }
 
 model BehaviorData {
-  Session   Session
-  Behaviour Behavior
-  data      String // decode at load time based on Behaviour.dataType
+  bdataId    Int      @id @default(autoincrement())
+  Session    Session  @relation(fields: [sessionId], references: [sessionId])
+  Behaviour  Behavior @relation(fields: [behaviorId], references: [behaviorId])
+  data       String // decode at load time based on Behaviour.dataType
+  sessionId  Int
+  behaviorId Int
 }
