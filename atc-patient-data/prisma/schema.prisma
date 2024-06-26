@@ -16,15 +16,15 @@ enum Role {
 
 // types of behavior data
 enum BehaviorType {
-  TRIAL // BOOLEAN YES OR NO
-  COUNT // COUNT HOW MANY OF ONE THING
-  TRIALARRAY // BOOLEAN_ARRAY | A LIST OF YES OR NOS
-  COUNTARRAY // COUNT_ARRAY how many trials
+  TRIAL       // BOOLEAN YES OR NO
+  COUNT       // COUNT HOW MANY OF ONE THING
+  TRIAL_ARRAY // BOOLEAN_ARRAY | A LIST OF YES OR NOS
+  COUNT_ARRAY // COUNT_ARRAY how many trials
   MEASUREMENT //Measurement type
 }
 
 model User {
-  userId          Int              @id @default(autoincrement())
+  id          Int              @id @default(autoincrement())
   email           String           @unique
   firstName       String
   lastName        String
@@ -35,10 +35,11 @@ model User {
 }
 
 model EmployeeProfile {
-  employeeId Int              @id
+  id         Int              @id @default(autoincrement())
+  userId     Int              @unique
   role       Role             @default(TECH)
   Students   StudentProfile[]
-  User       User             @relation(fields: [employeeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  User       User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Sessions   Session[]
 }
 
@@ -46,28 +47,28 @@ model StudentProfile {
   id               Int             @id @default(autoincrement())
   userId           Int             @unique
   employeeId       Int
-  birthday         DateTime
+  dob              DateTime
   Behaviors        Behavior[]
-  User             User            @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  AssignedEmployee EmployeeProfile @relation(fields: [employeeId], references: [employeeId], onDelete: Restrict, onUpdate: Cascade)
+  User             User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  AssignedEmployee EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   Sessions         Session[]
 }
 
 model Behavior {
-  behaviorId      Int               @id @default(autoincrement())
+  id      Int               @id @default(autoincrement())
   title           String //meant to be technical jargon which will be easy to query in a search bar for end-user
   desc            String
   dataType        BehaviorType
   studentId       Int
-  Student         StudentProfile    @relation(fields: [studentId], references: [studentId])
+  Student         StudentProfile    @relation(fields: [studentId], references: [id])
   behaviorTempId  Int?
-  BehaviorTempRel BehaviorTemplate? @relation(fields: [behaviorTempId], references: [behaviorTempId])
+  BehaviorTempRel BehaviorTemplate? @relation(fields: [behaviorTempId], references: [id])
   BehaviorData    BehaviorData[]
   archive         Boolean           @default(false)
 }
 
 model BehaviorTemplate {
-  behaviorTempId Int        @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   title          String
   desc           String
   dataType       String
@@ -76,20 +77,20 @@ model BehaviorTemplate {
 }
 
 model Session {
-  sessionId  Int             @id @default(autoincrement())
+  id         Int             @id @default(autoincrement())
   Data       BehaviorData[]
   studentId  Int             @unique
   employeeId Int             @unique
   createdAt  DateTime
   note       String
-  Student    StudentProfile  @relation(fields: [studentId], references: [studentId], onUpdate: Cascade)
-  Employee   EmployeeProfile @relation(fields: [employeeId], references: [employeeId], onUpdate: Cascade) //what are we doing onDelete?
+  Student    StudentProfile  @relation(fields: [studentId], references: [id], onUpdate: Cascade)
+  Employee   EmployeeProfile @relation(fields: [employeeId], references: [id], onUpdate: Cascade) //what are we doing onDelete?
 }
 
 model BehaviorData {
   bdataId    Int      @id @default(autoincrement())
-  Session    Session  @relation(fields: [sessionId], references: [sessionId])
-  Behavior   Behavior @relation(fields: [behaviorId], references: [behaviorId])
+  Session    Session  @relation(fields: [sessionId], references: [id])
+  Behavior   Behavior @relation(fields: [behaviorId], references: [id])
   data       String // decode at load time based on Behaviour.dataType
   sessionId  Int
   behaviorId Int
