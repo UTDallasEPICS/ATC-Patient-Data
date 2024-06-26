@@ -16,10 +16,11 @@ enum Role {
 
 // types of behavior data
 enum BehaviorType {
-  TRIAL           // BOOLEAN
-  PROBE           // COUNT
-  DURATION        // BOOLEAN_ARRAY
-  FREQUENCY       // COUNT_ARRAY
+  TRIAL // BOOLEAN YES OR NO
+  COUNT // COUNT HOW MANY OF ONE THING
+  TRIALARRAY // BOOLEAN_ARRAY | A LIST OF YES OR NOS
+  COUNTARRAY // COUNT_ARRAY how many trials
+  MEASUREMENT //Measurement type
 }
 
 model User {
@@ -38,30 +39,31 @@ model EmployeeProfile {
   role       Role             @default(TECH)
   Students   StudentProfile[]
   User       User             @relation(fields: [employeeId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  Sessions    Session[]
+  Sessions   Session[]
 }
 
 model StudentProfile {
-  studentId       Int             @id
-  employeeId      Int             @unique
-  birthday        DateTime
-  Behaviors       Behavior[]
-  User            User            @relation(fields: [studentId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  EmployeeProfile EmployeeProfile @relation(fields: [employeeId], references: [employeeId], onDelete: Restrict, onUpdate: Cascade)
+  id               Int             @id @default(autoincrement())
+  userId           Int             @unique
+  employeeId       Int
+  birthday         DateTime
+  Behaviors        Behavior[]
+  User             User            @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  AssignedEmployee EmployeeProfile @relation(fields: [employeeId], references: [employeeId], onDelete: Restrict, onUpdate: Cascade)
   Sessions         Session[]
 }
 
 model Behavior {
-  behaviorId      Int              @id @default(autoincrement())
-  title           String    //meant to be technical jargon which will be easy to query in a search bar for end-user
+  behaviorId      Int               @id @default(autoincrement())
+  title           String //meant to be technical jargon which will be easy to query in a search bar for end-user
   desc            String
   dataType        BehaviorType
   studentId       Int
+  Student         StudentProfile    @relation(fields: [studentId], references: [studentId])
   behaviorTempId  Int?
-  Student         StudentProfile   @relation(fields: [studentId], references: [studentId])
-  BehaviorTempRel BehaviorTemplate @relation(fields: [behaviorTempId], references: [behaviorTempId])
-  archive         Boolean          @default(false)
+  BehaviorTempRel BehaviorTemplate? @relation(fields: [behaviorTempId], references: [behaviorTempId])
   BehaviorData    BehaviorData[]
+  archive         Boolean           @default(false)
 }
 
 model BehaviorTemplate {
@@ -87,7 +89,7 @@ model Session {
 model BehaviorData {
   bdataId    Int      @id @default(autoincrement())
   Session    Session  @relation(fields: [sessionId], references: [sessionId])
-  Behaviour  Behavior @relation(fields: [behaviorId], references: [behaviorId])
+  Behavior   Behavior @relation(fields: [behaviorId], references: [behaviorId])
   data       String // decode at load time based on Behaviour.dataType
   sessionId  Int
   behaviorId Int
