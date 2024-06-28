@@ -16,15 +16,15 @@ enum Role {
 
 // types of behavior data
 enum BehaviorType {
-  TRIAL       // BOOLEAN YES OR NO
-  COUNT       // COUNT HOW MANY OF ONE THING
-  TRIAL_ARRAY // BOOLEAN_ARRAY | A LIST OF YES OR NOS
-  COUNT_ARRAY // COUNT_ARRAY how many trials
-  MEASUREMENT //Measurement type
+  TRIAL // Single YES OR NO
+  COUNT // Single count of how many things
+  TRIAL_ARRAY // Array of yes or nos
+  COUNT_ARRAY // Array of counts of how many trials
+  MEASUREMENT // Static measurements: height, weight, etc.
 }
 
 model User {
-  id          Int              @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   email           String           @unique
   firstName       String
   lastName        String
@@ -35,45 +35,45 @@ model User {
 }
 
 model EmployeeProfile {
-  id         Int              @id @default(autoincrement())
-  userId     Int              @unique
-  role       Role             @default(TECH)
-  Students   StudentProfile[]
-  User       User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Sessions   Session[]
+  id       Int              @id @default(autoincrement())
+  role     Role             @default(TECH)
+  userId   Int              @unique
+  User     User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Students StudentProfile[]
+  Sessions Session[]
 }
 
 model StudentProfile {
-  id               Int             @id @default(autoincrement())
-  userId           Int             @unique
-  employeeId       Int
-  dob              DateTime
-  Behaviors        Behavior[]
-  User             User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  AssignedEmployee EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  Sessions         Session[]
+  id                 Int             @id @default(autoincrement())
+  dob                DateTime
+  userId             Int             @unique
+  User               User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedEmployeeId Int
+  AssignedEmployee   EmployeeProfile @relation(fields: [assignedEmployeeId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  Behaviors          Behavior[]
+  Sessions           Session[]
 }
 
 model Behavior {
-  id      Int               @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   title           String //meant to be technical jargon which will be easy to query in a search bar for end-user
   desc            String
-  dataType        BehaviorType
+  type            BehaviorType
   studentId       Int
   Student         StudentProfile    @relation(fields: [studentId], references: [id])
+  BehaviorData    BehaviorData[]
   behaviorTempId  Int?
   BehaviorTempRel BehaviorTemplate? @relation(fields: [behaviorTempId], references: [id])
-  BehaviorData    BehaviorData[]
   archive         Boolean           @default(false)
 }
 
 model BehaviorTemplate {
-  id             Int        @id @default(autoincrement())
-  title          String
-  desc           String
-  dataType       String
-  archive        Boolean    @default(false)
-  Behavior       Behavior[]
+  id       Int          @id @default(autoincrement())
+  title    String
+  desc     String
+  type     BehaviorType
+  archive  Boolean      @default(false)
+  Behavior Behavior[]
 }
 
 model Session {
@@ -88,10 +88,10 @@ model Session {
 }
 
 model BehaviorData {
-  bdataId    Int      @id @default(autoincrement())
-  Session    Session  @relation(fields: [sessionId], references: [id])
-  Behavior   Behavior @relation(fields: [behaviorId], references: [id])
+  id         Int      @id @default(autoincrement())
   data       String // decode at load time based on Behaviour.dataType
-  sessionId  Int
   behaviorId Int
+  Behavior   Behavior @relation(fields: [behaviorId], references: [id])
+  sessionId  Int
+  Session    Session  @relation(fields: [sessionId], references: [id])
 }
