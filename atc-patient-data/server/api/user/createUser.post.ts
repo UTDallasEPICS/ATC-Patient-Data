@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
           data: {
             dob,
             userId: newUser.id,
-            assignedEmployeeId: parseInt(assignedEmployeeId),
+            assignedEmployeeId: Number(assignedEmployeeId),
           },
         });
         return newStudent;
