@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
     )
   ) {
     await sendRedirect(event, loginRedirectUrl());
+    console.log("after redirect");
   } else {
     // theoretically logged in
     console.log("inside of else");
