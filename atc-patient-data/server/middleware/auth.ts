@@ -1,12 +1,12 @@
 import { loginRedirectUrl, logoutRedirectUrl } from "../api/auth/auth0";
 import { PrismaClient } from "@prisma/client";
-const client = new PrismaClient();
+const prismaClient = new PrismaClient();
 import jwt from "jsonwebtoken";
 import fs from "fs";
 const runtime = useRuntimeConfig();
 
 export default defineEventHandler(async (event) => {
-  event.context.client = client;
+  event.context.prisma = prismaClient;
   const token = getCookie(event, "token") || "";
   // not logged in but trying to
   if (!token && !event.node.req.url?.includes("/api/auth/callback")) {
