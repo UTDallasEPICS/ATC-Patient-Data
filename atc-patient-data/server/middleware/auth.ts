@@ -1,36 +1,28 @@
-import { loginRedirectUrl, logoutRedirectUrl } from "../auth/auth0";
+import { loginRedirectUrl, logoutRedirectUrl } from "../api/auth/auth0";
+import { PrismaClient } from "@prisma/client";
+const client = new PrismaClient();
 import jwt from "jsonwebtoken";
 import fs from "fs";
 const runtime = useRuntimeConfig();
-import { PrismaClient } from "@prisma/client";
-const client = new PrismaClient();
+
 export default defineEventHandler(async (event) => {
   event.context.client = client;
   const token = getCookie(event, "token") || "";
   // not logged in but trying to
-  if (
-    !token &&
-    !(
-      (
-        event.node.req.url?.includes("/api/callback") ||
-        event.node.req.url?.includes("/Page/") ||
-        event.node.req.url?.includes("/api/page")
-      )
-      // event.node.req.url?.includes("/")
-    )
-  ) {
+  if (!token && !event.node.req.url?.includes("/api/auth/callback")) {
     await sendRedirect(event, loginRedirectUrl());
-    console.log("after redirect");
+    // console.log("after redirect", Date.now().toString());
   } else {
     // theoretically logged in
-    console.log("inside of else");
+    // console.log("inside of else", Date.now().toString());
     if (token) {
-      console.log("token", token);
+      // console.log("token", token);
       try {
         const claims = jwt.verify(
           token,
           fs.readFileSync(process.cwd() + "/cert-dev.pem")
         );
+        // console.log("claims", claims);
         event.context.claims = claims;
         // event.context.user = await event.context.client.user.findFirst({
         //   where: { email: claims.email },
