@@ -151,7 +151,7 @@ export default defineEventHandler(async (event) => {
         console.error(e);
       }
     } else {
-      console.log("token not found");
+      // console.log("token not found");
     }
   }
 });

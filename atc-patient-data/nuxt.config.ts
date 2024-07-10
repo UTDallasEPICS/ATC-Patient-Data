@@ -17,5 +17,9 @@ export default defineNuxtConfig({
     STRIPE_SECRET: "",
     AWS_S3_BUCKET_NAME: "",
     EMAIL_SOURCE_ADDRESS: "",
+    public: {
+      BASEURL: "",
+      ISSUER: "",
+    },
   },
 });
