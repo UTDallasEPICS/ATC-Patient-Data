@@ -57,6 +57,9 @@ export default defineEventHandler(async (event) => {
     include: {
       StudentProfile: true,
     },
+    orderBy: {
+      id: 'asc'
+    },
   });
 
   if (!user) {
