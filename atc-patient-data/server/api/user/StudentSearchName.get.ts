@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
   else if (!studentFirst) {
     // get the student with the search last name, if they are assigned to the employee
     whereClause = {
-      lastName: String(studentLast),
+      lastName: { startsWith:String(studentLast), mode: 'insensitive',},
       StudentProfile: { assignedEmployeeId: Number(employeeId) },  // use current employee's id to restrict results to students they should have access to
       archive: false,
     }; 
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
   else if (!studentLast) {
     // get the student with the search first name, if they are assigned to the employee
     whereClause = {
-      firstName: String(studentFirst),
+      firstName: { startsWith: String(studentFirst), mode: 'insensitive',},
       StudentProfile: { assignedEmployeeId: Number(employeeId) },  // use current employee's id to restrict results to students they should have access to
       archive: false,
     }; 
@@ -45,8 +45,8 @@ export default defineEventHandler(async (event) => {
   else{
     // get the student with the search first+last name, if they are assigned to the employee
     whereClause = {
-      firstName: String(studentFirst),
-      lastName: String(studentLast),
+      firstName: { startsWith: String(studentFirst), mode: 'insensitive',},
+      lastName: { startsWith: String(studentLast), mode: 'insensitive',},
       StudentProfile: { assignedEmployeeId: Number(employeeId) },  // use current employee's id to restrict results to students they should have access to
       archive: false,
     }; 

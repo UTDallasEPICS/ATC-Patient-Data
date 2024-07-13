@@ -1,24 +1,29 @@
 <script setup>
 
-const employeeId = 1;
+const employeeId = ref(2);
 const employeeRole = 'Admin'; // update to get if the users is admin - TESTING - TESTING - TESTING
 
-const studentId = null;
-const studentFirst = '';
-const studentLast = '';
+const searchArchive = ref(false);
 
-const { data: allUsers } = await useFetch('/api/user/StudentSearchAll?employeeId=1'); // update to be the to have correct query parameters - TESTING - TESTING - TESTING
+const studentId = ref('');
+const studentFirst = ref('');
+const studentLast = ref('');
+
+const { data: idUser } = await useFetch('/api/user/StudentSearchId', { query: { studentId: studentId, employeeId: employeeId }});
+const { data: nameUsers } = await useFetch('/api/user/StudentSearchName', { query: { studentFirst: studentFirst, studentLast: studentLast, employeeId: employeeId }});
+const { data: allUsers } = await useFetch('/api/user/StudentSearchAll', { query: { employeeId: employeeId }}); // update to be the to have correct query parameters - TESTING - TESTING - TESTING
+
+function searchArchiveClick() { 
+  if (this.searchArchive==false) { this.searchArchive = true }
+  else { this.searchArchive = false }
+}
 
 function createStudentClick() {
     window.location.href = "http://localhost:3000/students"; // update to go to create student - TESTING - TESTING - TESTING
 }
 
 function viewStudentClick(id) {
-    window.location.href = "http://localhost:3000/students"; // update to go to selected student - TESTING - TESTING - TESTING
-}
-
-function onSubmit(){
-
+    window.location.href = "http://localhost:3000/students?" + id; // update to go to selected student - TESTING - TESTING - TESTING
 }
 
 </script>
@@ -26,6 +31,17 @@ function onSubmit(){
 
 
 <template>
+  <div>
+    <button
+    title="Search Archived?"
+    @click="searchArchiveClick()"
+    >
+      <div v-if="searchArchive==false"> Search Archived? </div>
+      <div v-else> Don't Search Archived? </div>
+      
+    </button>
+  </div>
+
     <!-- create user student button -->
     <div v-if="employeeRole=='Admin'">
       <button
@@ -39,46 +55,63 @@ function onSubmit(){
     <!-- search by id -->
     <div v-if="studentFirst=='' && studentLast==''">
       <!-- form -->
-      <form class="search-form" @submit.prevent="onSubmit">
+      <form class="search-form">
         <h3>Search Students by ID</h3>
 
-        <label for="id">ID</label>
-        <input id="id" v-model.trim="studentId">
+        <input v-model.trim="studentId" placeholder="ID">
 
-        <button type="submit" title="Search">
+        <!-- <button title="Search">
           Search
-        </button>
+        </button> -->
       </form>
 
       <!-- StudentSearchId api -->
 
       <!-- display result (button) -->
+      <div class="search-results" v-if="studentId!==''">
+              <button
+                title="Select Student"
+                @click="viewStudentClick(idUser.id)"
+              >
+                {{ idUser.id }} {{ idUser.firstName }} {{ idUser.lastName }} {{ idUser.StudentProfile.dob }} <!-- {{ user.StudentProfile.Sessions }} display num essions? -->
+              </button>
+      </div>
     </div>
   
     <!-- search by name -->
-    <div v-if="studentId==null">
+    <div v-if="studentId==''">
       <!-- form --> 
-      <form class="search-form" @submit.prevent="onSubmit">
+      <form class="search-form">
         <h3>Search Students by Name</h3>
 
-        <label for="first-name">First Name</label>
-        <input id="first-name" v-model.trim="studentFirst">
+        <input v-model.trim="studentFirst" placeholder="First Name">
 
-        <label for="last-name">First Name</label>
-        <input id="last-name" v-model.trim="studentLast">
+        <input v-model.trim="studentLast" placeholder="Last Name">
 
-        <button type="submit" title="Search">
+        <!-- <button title="Search">
           Search
-        </button>
+        </button> -->
       </form>
 
       <!-- StudentSearchName api -->
 
       <!-- display result (button) -->
+      <div class="search-results" v-if="studentFirst!=='' || studentLast!==''">
+        <ul>
+            <li v-for="user in nameUsers" :key="user.id">
+              <button
+                title="Select Student"
+                @click="viewStudentClick(user.id)"
+              >
+                {{ user.id }} {{ user.firstName }} {{ user.lastName }} {{ user.StudentProfile.dob }}  <!-- {{ user.StudentProfile.Sessions }} display num essions? -->
+              </button>
+            </li>
+        </ul>
+      </div>
     </div>
   
     <!-- display all users -->
-    <div v-if="studentId==null && studentFirst=='' && studentLast==''">
+    <div v-if="studentId=='' && studentFirst=='' && studentLast==''">
       <h3>All Students</h3>
       <!-- StudentSearchAll api -->
       <!-- display result (button) -->
