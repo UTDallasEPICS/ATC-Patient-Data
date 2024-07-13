@@ -1,6 +1,6 @@
 <script setup>
 
-const employeeId = ref(2);
+const employeeId = ref(3);
 const employeeRole = 'Admin'; // update to get if the users is admin - TESTING - TESTING - TESTING
 
 const searchArchive = ref(false);
@@ -9,9 +9,21 @@ const studentId = ref('');
 const studentFirst = ref('');
 const studentLast = ref('');
 
-const { data: idUser } = await useFetch('/api/user/StudentSearchId', { query: { studentId: studentId, employeeId: employeeId }});
-const { data: nameUsers } = await useFetch('/api/user/StudentSearchName', { query: { studentFirst: studentFirst, studentLast: studentLast, employeeId: employeeId }});
-const { data: allUsers } = await useFetch('/api/user/StudentSearchAll', { query: { employeeId: employeeId }}); // update to be the to have correct query parameters - TESTING - TESTING - TESTING
+const { data: idUser } = await useFetch('/api/user/StudentSearchId', { 
+query: { 
+  studentId: studentId, employeeId: employeeId,
+  employeeRole: employeeRole, searchArchive: searchArchive,
+}});
+const { data: nameUsers } = await useFetch('/api/user/StudentSearchName', { 
+query: { 
+  studentFirst: studentFirst, studentLast: studentLast, employeeId: employeeId,
+  employeeRole: employeeRole, searchArchive: searchArchive,
+}});
+const { data: allUsers } = await useFetch('/api/user/StudentSearchAll', { 
+query: { 
+  employeeId: employeeId, 
+  employeeRole: employeeRole, searchArchive: searchArchive,
+}}); 
 
 function searchArchiveClick() { 
   if (this.searchArchive==false) { this.searchArchive = true }
@@ -73,7 +85,7 @@ function viewStudentClick(id) {
                 title="Select Student"
                 @click="viewStudentClick(idUser.id)"
               >
-                {{ idUser.id }} {{ idUser.firstName }} {{ idUser.lastName }} {{ idUser.StudentProfile.dob }} <!-- {{ user.StudentProfile.Sessions }} display num essions? -->
+                {{ idUser.id }} {{ idUser.firstName }} {{ idUser.lastName }} <!-- {{ user.StudentProfile.Sessions }} display num essions? -->
               </button>
       </div>
     </div>
@@ -103,7 +115,7 @@ function viewStudentClick(id) {
                 title="Select Student"
                 @click="viewStudentClick(user.id)"
               >
-                {{ user.id }} {{ user.firstName }} {{ user.lastName }} {{ user.StudentProfile.dob }}  <!-- {{ user.StudentProfile.Sessions }} display num essions? -->
+                {{ user.id }} {{ user.firstName }} {{ user.lastName }}  <!-- {{ user.StudentProfile.Sessions }} display num essions? -->
               </button>
             </li>
         </ul>
@@ -122,7 +134,7 @@ function viewStudentClick(id) {
                 title="Select Student"
                 @click="viewStudentClick(user.id)"
               >
-                {{ user.id }} {{ user.firstName }} {{ user.lastName }} {{ user.StudentProfile.dob }} <!-- {{ user.StudentProfile.Sessions }} display num essions? -->
+                {{ user.id }} {{ user.firstName }} {{ user.lastName }}  <!-- {{ user.StudentProfile.Sessions }} display num essions? -->
               </button>
             </li>
         </ul>

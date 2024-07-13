@@ -6,6 +6,7 @@ import type {
   User,
   StudentProfile,
 } from "@prisma/client";
+import { bool } from "prop-types";
 
 interface userWithProfiles extends User {
   StudentProfile: StudentProfile | null;
@@ -14,15 +15,26 @@ interface userWithProfiles extends User {
 export default defineEventHandler(async (event) => {
   const { 
     employeeId, // get the employeeId of currently signed in user
+    employeeRole,
+    searchArchive,
   } = getQuery(event);
 
-  // search for user.id
-  const whereClause = {
-    // restrict with current employee's id
-    StudentProfile: { assignedEmployeeId: Number(employeeId) },
-    archive: false,
-  }; 
-  
+  let whereClause;
+
+  if(String(employeeRole) == 'Admin') {
+    whereClause = {
+      NOT: { StudentProfile: null },
+      archive: JSON.parse(String(searchArchive)),
+    }; 
+  }
+  else{
+    // search for user.id
+    whereClause = {
+      StudentProfile: { assignedEmployeeId: Number(employeeId) },
+      archive: JSON.parse(String(searchArchive)),
+    }; 
+  }
+
   const user = await prisma.user.findMany({
     where: whereClause,
     include: {

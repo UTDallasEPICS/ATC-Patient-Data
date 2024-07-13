@@ -16,6 +16,8 @@ export default defineEventHandler(async (event) => {
     studentFirst,
     studentLast,
     employeeId, // get the employeeId of currently signed in user
+    employeeRole,
+    searchArchive,
   } = getQuery(event);
 
   let whereClause;
@@ -26,31 +28,62 @@ export default defineEventHandler(async (event) => {
       message: 'Error, no name data',
     };
   }
-  else if (!studentFirst) {
-    // get the student with the search last name, if they are assigned to the employee
-    whereClause = {
-      lastName: { startsWith:String(studentLast), mode: 'insensitive',},
-      StudentProfile: { assignedEmployeeId: Number(employeeId) },  // use current employee's id to restrict results to students they should have access to
-      archive: false,
-    }; 
+
+  if(String(employeeRole) == 'Admin') {
+    if (!studentFirst) {
+      // get the student with the search last name
+      whereClause = {
+        lastName: { startsWith:String(studentLast), mode: 'insensitive',},
+        NOT: { StudentProfile: null },
+        archive: JSON.parse(String(searchArchive)),
+      }; 
+    }
+    else if (!studentLast) {
+      // get the student with the search first name
+      whereClause = {
+        firstName: { startsWith: String(studentFirst), mode: 'insensitive',},
+        NOT: { StudentProfile: null },
+        archive: JSON.parse(String(searchArchive)),
+      }; 
+    }
+    else{
+      // get the student with the search first+last name
+      whereClause = {
+        firstName: { startsWith: String(studentFirst), mode: 'insensitive',},
+        lastName: { startsWith: String(studentLast), mode: 'insensitive',},
+        NOT: { StudentProfile: null },
+        archive: JSON.parse(String(searchArchive)),
+      }; 
+    }
   }
-  else if (!studentLast) {
-    // get the student with the search first name, if they are assigned to the employee
-    whereClause = {
-      firstName: { startsWith: String(studentFirst), mode: 'insensitive',},
-      StudentProfile: { assignedEmployeeId: Number(employeeId) },  // use current employee's id to restrict results to students they should have access to
-      archive: false,
-    }; 
+  else{ 
+    if (!studentFirst) {
+      // get the student with the search last name, if they are assigned to the employee
+      whereClause = {
+        lastName: { startsWith:String(studentLast), mode: 'insensitive',},
+        StudentProfile: { assignedEmployeeId: Number(employeeId) },  // use current employee's id to restrict results to students they should have access to
+        archive: JSON.parse(String(searchArchive)),
+      }; 
+    }
+    else if (!studentLast) {
+      // get the student with the search first name, if they are assigned to the employee
+      whereClause = {
+        firstName: { startsWith: String(studentFirst), mode: 'insensitive',},
+        StudentProfile: { assignedEmployeeId: Number(employeeId) },  // use current employee's id to restrict results to students they should have access to
+        archive: JSON.parse(String(searchArchive)),
+      }; 
+    }
+    else{
+      // get the student with the search first+last name, if they are assigned to the employee
+      whereClause = {
+        firstName: { startsWith: String(studentFirst), mode: 'insensitive',},
+        lastName: { startsWith: String(studentLast), mode: 'insensitive',},
+        StudentProfile: { assignedEmployeeId: Number(employeeId) },  // use current employee's id to restrict results to students they should have access to
+        archive: JSON.parse(String(searchArchive)),
+      }; 
+    }
   }
-  else{
-    // get the student with the search first+last name, if they are assigned to the employee
-    whereClause = {
-      firstName: { startsWith: String(studentFirst), mode: 'insensitive',},
-      lastName: { startsWith: String(studentLast), mode: 'insensitive',},
-      StudentProfile: { assignedEmployeeId: Number(employeeId) },  // use current employee's id to restrict results to students they should have access to
-      archive: false,
-    }; 
-  }
+  
   
   const user = await prisma.user.findMany({
     where: whereClause,
