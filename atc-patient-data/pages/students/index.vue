@@ -1,6 +1,6 @@
 <script setup>
 
-const employeeId = ref(3);
+const employeeId = ref(3); // probably doesn't need to be a ref, should just get assigned when user hits page
 const employeeRole = 'Admin'; // update to get if the users is admin - TESTING - TESTING - TESTING
 
 const searchArchive = ref(false);
@@ -31,11 +31,11 @@ function searchArchiveClick() {
 }
 
 function createStudentClick() {
-    window.location.href = "http://localhost:3000/students"; // update to go to create student - TESTING - TESTING - TESTING
+    window.location.href = "http://localhost:3000/students/create"; // update to go to create student - TESTING - TESTING - TESTING
 }
 
 function viewStudentClick(id) {
-    window.location.href = "http://localhost:3000/students?" + id; // update to go to selected student - TESTING - TESTING - TESTING
+    window.location.href = "http://localhost:3000/students/profile?" + id; // update to go to selected student - TESTING - TESTING - TESTING
 }
 
 </script>
