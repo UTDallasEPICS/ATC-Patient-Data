@@ -8,6 +8,22 @@ import {
 } from "@headlessui/vue";
 import { ref } from "vue";
 
+const employeeNames = ref({});
+const selectedEmployee = ref({});
+const queryEmployee = ref("");
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+
+const filteredPeople = computed(() =>
+  queryEmployee.value === ""
+    ? employeeNames
+    : employeeNames.filter((employee) =>
+        employee.name
+          .toLowerCase()
+          .replace(/\s+/g, "")
+          .includes(query.value.toLowerCase().replace(/\s+/g, ""))
+      )
+);
+
 const props = defineProps({
   isOpen: Boolean,
   userType: String,
@@ -19,98 +35,21 @@ const localIsOpen = ref(props.isOpen); //need b/c error: v-model cannot be used 
 watchEffect(() => {
   localIsOpen.value = props.isOpen;
 });
+
+const sentenceCaseUserType = computed(() => {
+  if (!props.userType) return "";
+  return props.userType.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+});
+
+async function getEmployeeNames() {
+  const res = await useFetch("/api/user/get/employeeNames");
+  employeeNames.value = res.data._rawValue;
+  selectedEmployee.value = employeeNames.value[0];
+}
+getEmployeeNames();
 </script>
 
 <template>
-  <!-- <TransitionRoot :show="localIsOpen" as="template">
-    <Dialog v-model="localIsOpen" as="template">
-      <TransitionChild :show="localIsOpen" as="template">
-        <DialogPanel>
-          <DialogTitle>Create User</DialogTitle>
-          <div class="p-4">
-            <form>
-              <div class="mb-4">
-                <label
-                  for="name"
-                  class="block text-sm font-medium text-gray-700"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                />
-              </div>
-              <div class="mb-4">
-                <label
-                  for="email"
-                  class="block text-sm font-medium text-gray-700"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                />
-              </div>
-              <div class="mb-4">
-                <label
-                  for="password"
-                  class="block text-sm font-medium text-gray-700"
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                />
-              </div>
-              <div class="mb-4">
-                <label
-                  for="role"
-                  class="block text-sm font-medium text-gray-700"
-                >
-                  Role
-                </label>
-                <select
-                  id="role"
-                  name="role"
-                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                >
-                  <option value="STUDENT">Student</option>
-                  <option value="TEACHER">Teacher</option>
-                  <option value="ADMIN">Admin</option>
-                </select>
-              </div>
-              <div class="flex justify-end">
-                <button
-                  type="submit"
-                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  @click="closeModal"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  @click="closeModal"
-                >
-                  Create
-                </button>
-              </div>
-            </form>
-          </div>
-        </DialogPanel>
-      </TransitionChild>
-    </Dialog>
-  </TransitionRoot> -->
-
   <TransitionRoot appear :show="localIsOpen" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
@@ -145,13 +84,125 @@ watchEffect(() => {
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
               >
-                Payment successful
+                Create {{ sentenceCaseUserType }}
               </DialogTitle>
-              <div class="mt-2">
-                <p class="text-sm text-gray-500">
-                  Your payment has been successfully submitted. We’ve sent you
-                  an email with all of the details of your order.
-                </p>
+
+              <div class="flex flex-col m-3">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
+                />
+              </div>
+
+              <div class="flex flex-col m-3">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
+                />
+              </div>
+
+              <div class="flex flex-col m-3">
+                <label>Email</label>
+                <input
+                  type="email"
+                  class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
+                />
+              </div>
+
+              <div class="flex flex-col m-3">
+                <label>Phone Number</label>
+                <input
+                  type="number"
+                  class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+              </div>
+
+              <div class="flex flex-col m-3">
+                <label>Date of Birth</label>
+                <input
+                  type="date"
+                  class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
+                />
+              </div>
+
+              <div class="flex flex-col m-3">
+                <label>Assigned Employee</label>
+                <!-- <Combobox v-model="selectedEmployee">
+                  <div class="relative mt-1">
+                    <div
+                      class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
+                    >
+                      <ComboboxInput
+                        class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+                        :displayValue="(employee) => employee.name"
+                        @change="query = $event.target.value"
+                      />
+                      <ComboboxButton
+                        class="absolute inset-y-0 right-0 flex items-center pr-2"
+                      >
+                        <ChevronUpDownIcon
+                          class="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </ComboboxButton>
+                    </div>
+                    <TransitionRoot
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                      @after-leave="query = ''"
+                    >
+                      <ComboboxOptions
+                        class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+                      >
+                        <div
+                          v-if="filteredPeople.length === 0 && query !== ''"
+                          class="relative cursor-default select-none px-4 py-2 text-gray-700"
+                        >
+                          Nothing found.
+                        </div>
+
+                        <ComboboxOption
+                          v-for="person in filteredPeople"
+                          as="template"
+                          :key="person.id"
+                          :value="person"
+                          v-slot="{ selectedEmployee, active }"
+                        >
+                          <li
+                            class="relative cursor-default select-none py-2 pl-10 pr-4"
+                            :class="{
+                              'bg-teal-600 text-white': active,
+                              'text-gray-900': !active,
+                            }"
+                          >
+                            <span
+                              class="block truncate"
+                              :class="{
+                                'font-medium': selectedEmployee,
+                                'font-normal': !selectedEmployee,
+                              }"
+                            >
+                              {{ person.name }}
+                            </span>
+                            <span
+                              v-if="selected"
+                              class="absolute inset-y-0 left-0 flex items-center pl-3"
+                              :class="{
+                                'text-white': active,
+                                'text-teal-600': !active,
+                              }"
+                            >
+                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          </li>
+                        </ComboboxOption>
+                      </ComboboxOptions>
+                    </TransitionRoot>
+                  </div>
+                </Combobox> -->
               </div>
 
               <div class="mt-4">
