@@ -6,6 +6,7 @@ import fs from "fs";
 const runtime = useRuntimeConfig();
 
 export default defineEventHandler(async (event) => {
+  console.log("middleware accessed");
   event.context.prisma = prismaClient;
   const token = getCookie(event, "token") || "";
   if (!token && !event.node.req.url?.includes("/api/auth/callback")) {
