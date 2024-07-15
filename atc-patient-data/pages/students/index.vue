@@ -7,6 +7,7 @@ import { PlusCircleIcon } from "@heroicons/vue/24/outline";
 // const searchArchive = ref(false);
 const students = ref([]);
 const searchTerm = ref("");
+const searchArchived = ref(false);
 
 // const studentId = ref("");
 // const studentFirst = ref("");
@@ -41,6 +42,7 @@ async function getEmployees() {
   const { data } = await useFetch("/api/user/get/employees", {
     query: {
       searchTerm: searchTerm,
+      searchArchived: searchArchived,
     },
   });
   students.value = data._rawValue.body;
@@ -66,6 +68,11 @@ async function getEmployees() {
 watch(searchTerm, () => {
   getEmployees();
 });
+
+watch(searchArchived, () => {
+  getEmployees();
+  console.log("searchArchived", searchArchived.value);
+});
 getEmployees();
 </script>
 
@@ -84,7 +91,7 @@ getEmployees();
         placeholder="Search"
       />
       <label class="inline-flex items-center cursor-pointer">
-        <input type="checkbox" value="" class="sr-only peer" />
+        <input type="checkbox" v-model="searchArchived" class="sr-only peer" />
         <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
           >Search Archived</span
         >

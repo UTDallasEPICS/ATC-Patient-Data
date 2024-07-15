@@ -1,10 +1,10 @@
 export default defineEventHandler(async (event) => {
   // console.log("event", event);
-  const { searchTerm } = getQuery(event);
+  const { searchTerm, searchArchived } = getQuery(event);
   console.log("searchTerm", searchTerm);
   const res = await event.context.prisma.user.findMany({
     where: {
-      archive: false,
+      archive: searchArchived === "true" ? true : false,
       StudentProfile: {
         isNot: null,
       },
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  console.log(res)
+  console.log(res);
 
   return {
     statusCode: 200,
