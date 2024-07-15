@@ -9,20 +9,6 @@ import {
 import { ref } from "vue";
 
 const employeeNames = ref({});
-const selectedEmployee = ref({});
-const queryEmployee = ref("");
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
-
-const filteredPeople = computed(() =>
-  queryEmployee.value === ""
-    ? employeeNames
-    : employeeNames.filter((employee) =>
-        employee.name
-          .toLowerCase()
-          .replace(/\s+/g, "")
-          .includes(query.value.toLowerCase().replace(/\s+/g, ""))
-      )
-);
 
 const props = defineProps({
   isOpen: Boolean,
@@ -129,80 +115,6 @@ getEmployeeNames();
 
               <div class="flex flex-col m-3">
                 <label>Assigned Employee</label>
-                <!-- <Combobox v-model="selectedEmployee">
-                  <div class="relative mt-1">
-                    <div
-                      class="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm"
-                    >
-                      <ComboboxInput
-                        class="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-                        :displayValue="(employee) => employee.name"
-                        @change="query = $event.target.value"
-                      />
-                      <ComboboxButton
-                        class="absolute inset-y-0 right-0 flex items-center pr-2"
-                      >
-                        <ChevronUpDownIcon
-                          class="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </ComboboxButton>
-                    </div>
-                    <TransitionRoot
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                      @after-leave="query = ''"
-                    >
-                      <ComboboxOptions
-                        class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
-                      >
-                        <div
-                          v-if="filteredPeople.length === 0 && query !== ''"
-                          class="relative cursor-default select-none px-4 py-2 text-gray-700"
-                        >
-                          Nothing found.
-                        </div>
-
-                        <ComboboxOption
-                          v-for="person in filteredPeople"
-                          as="template"
-                          :key="person.id"
-                          :value="person"
-                          v-slot="{ selectedEmployee, active }"
-                        >
-                          <li
-                            class="relative cursor-default select-none py-2 pl-10 pr-4"
-                            :class="{
-                              'bg-teal-600 text-white': active,
-                              'text-gray-900': !active,
-                            }"
-                          >
-                            <span
-                              class="block truncate"
-                              :class="{
-                                'font-medium': selectedEmployee,
-                                'font-normal': !selectedEmployee,
-                              }"
-                            >
-                              {{ person.name }}
-                            </span>
-                            <span
-                              v-if="selected"
-                              class="absolute inset-y-0 left-0 flex items-center pl-3"
-                              :class="{
-                                'text-white': active,
-                                'text-teal-600': !active,
-                              }"
-                            >
-                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                            </span>
-                          </li>
-                        </ComboboxOption>
-                      </ComboboxOptions>
-                    </TransitionRoot>
-                  </div>
-                </Combobox> -->
               </div>
 
               <div class="mt-4">
@@ -211,7 +123,7 @@ getEmployeeNames();
                   class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                   @click="closeModal"
                 >
-                  Got it, thanks!
+                  Submit
                 </button>
               </div>
             </DialogPanel>
