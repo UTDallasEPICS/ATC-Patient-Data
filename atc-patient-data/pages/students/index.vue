@@ -5,6 +5,16 @@ const students = ref([]);
 const searchTerm = ref("");
 const searchArchived = ref(false);
 const loading = ref(false);
+const createUserModalOpen = ref(false);
+
+function openModal() {
+  console.log("openModal");
+  createUserModalOpen.value = true;
+}
+
+function closeModal() {
+  createUserModalOpen.value = false;
+}
 
 async function getEmployees() {
   loading.value = true;
@@ -29,11 +39,16 @@ getEmployees();
 <template>
   <div class="md:flex flex-col md:items-center m-10">
     <div class="flex md:w-1/2">
-      <button title="Create Student">
+      <button v-on:click="openModal" title="Create Student">
         <div class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100">
           <PlusCircleIcon class="h-6 w-6" />
         </div>
       </button>
+      <CreateUser
+        :isOpen="createUserModalOpen"
+        :userType="'STUDENT'"
+        :closeModal="closeModal"
+      />
       <input
         v-model="searchTerm"
         class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700"

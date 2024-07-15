@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@auth0/auth0-vue": "^2.3.3",
+    "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.4",
     "@prisma/client": "^5.15.1",
     "@types/jsonwebtoken": "^9.0.6",
