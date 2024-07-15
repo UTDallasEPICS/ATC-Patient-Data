@@ -1,19 +1,14 @@
 <script setup>
 
+
 const employeeId = ref(3); // probably doesn't need to be a ref, should just get assigned when user hits page
 const employeeRole = 'Admin'; // update to get if the users is admin - TESTING - TESTING - TESTING
 
 const searchArchive = ref(false);
 
-const studentId = ref('');
 const studentFirst = ref('');
 const studentLast = ref('');
 
-const { data: idUser } = await useFetch('/api/user/StudentSearchId', { 
-query: { 
-  studentId: studentId, employeeId: employeeId,
-  employeeRole: employeeRole, searchArchive: searchArchive,
-}});
 const { data: nameUsers } = await useFetch('/api/user/StudentSearchName', { 
 query: { 
   studentFirst: studentFirst, studentLast: studentLast, employeeId: employeeId,
@@ -34,8 +29,11 @@ function createStudentClick() {
     window.location.href = "http://localhost:3000/students/create"; // update to go to create student - TESTING - TESTING - TESTING
 }
 
+const router = useRouter();
+
 function viewStudentClick(id) {
-    window.location.href = "http://localhost:3000/students/profile?" + id; // update to go to selected student - TESTING - TESTING - TESTING
+    //window.location.href = "http://localhost:3000/students/profile?id=" + id; // update to go to selected student - TESTING - TESTING - TESTING
+    router.push({ path: '/students/profile', query: { id: id } });
 }
 
 </script>
@@ -64,34 +62,8 @@ function viewStudentClick(id) {
       </button>
     </div>
   
-    <!-- search by id -->
-    <div v-if="studentFirst=='' && studentLast==''">
-      <!-- form -->
-      <form class="search-form">
-        <h3>Search Students by ID</h3>
-
-        <input v-model.trim="studentId" placeholder="ID">
-
-        <!-- <button title="Search">
-          Search
-        </button> -->
-      </form>
-
-      <!-- StudentSearchId api -->
-
-      <!-- display result (button) -->
-      <div class="search-results" v-if="studentId!==''">
-              <button
-                title="Select Student"
-                @click="viewStudentClick(idUser.id)"
-              >
-                {{ idUser.id }} {{ idUser.firstName }} {{ idUser.lastName }} <!-- {{ user.StudentProfile.Sessions }} display num essions? -->
-              </button>
-      </div>
-    </div>
-  
     <!-- search by name -->
-    <div v-if="studentId==''">
+    <div>
       <!-- form --> 
       <form class="search-form">
         <h3>Search Students by Name</h3>
@@ -123,7 +95,7 @@ function viewStudentClick(id) {
     </div>
   
     <!-- display all users -->
-    <div v-if="studentId=='' && studentFirst=='' && studentLast==''">
+    <div v-if="studentFirst=='' && studentLast==''">
       <h3>All Students</h3>
       <!-- StudentSearchAll api -->
       <!-- display result (button) -->
