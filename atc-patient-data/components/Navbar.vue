@@ -1,42 +1,31 @@
-<script setup>
-// import { logoutRedirectUrl } from '../server/api/auth/auth0';
-import { UserGroupIcon } from "@heroicons/vue/24/outline";
+<script setup lang="ts">
 import { AcademicCapIcon } from "@heroicons/vue/24/outline";
 import { UserIcon } from "@heroicons/vue/24/outline";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/vue/24/outline";
 
-// import { VTooltip } from "v-tooltip";
-// import Vue from "vue";
+const config = useRuntimeConfig();
 
-// Vue.use(VTooltip);
+console.log("process.env.NUXT_BASEURL", config.public.BASEURL);
 async function logout() {
-  const token = useCookie("token").value;
-  // const logoutUrl = logoutRedirectUrl(token);
   try {
-    await fetch("http://localhost:3000/api/auth/logout", {
+    await $fetch(`${config.public.BASEURL}/api/auth/logout`, {
       mode: "no-cors",
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      // body: JSON.stringify({ token }),
     });
   } catch (error) {
     console.error("Error logging out:", error);
   }
-  window.location.href = "http://localhost:3000/";
-  // console.log("token", token);
-  // console.log("logoutUrl", logoutUrl);
+  window.location.href = `${config.public.BASEURL}`;
 }
 
 function studentsClick() {
-  window.location.href = "http://localhost:3000/students";
+  window.location.href = `${config.public.BASEURL}/students`;
 }
 function employeesClick() {
-  window.location.href = "http://localhost:3000/employees";
-}
-function usersClick() {
-  window.location.href = "http://localhost:3000/users";
+  window.location.href = `${config.public.BASEURL}/employees`;
 }
 </script>
 
@@ -60,13 +49,6 @@ function usersClick() {
           @click="employeesClick"
         >
           <UserIcon class="h-6 w-6" />
-        </button>
-        <button
-          class="text-white px-3 py-2 hover:bg-gray-700 m-4 rounded"
-          title="User Management"
-          @click="usersClick"
-        >
-          <UserGroupIcon class="h-6 w-6" />
         </button>
       </div>
       <div class="flex justify-end w-full">

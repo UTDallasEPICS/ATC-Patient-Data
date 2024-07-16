@@ -10,11 +10,10 @@ const props = defineProps({
 const router = useRouter();
 
 function viewUser(id) {
-  if (props.userType == 'STUDENT') {
-    router.push({ path: 'students/profile', query: { id: id }});
-  }
-  else {
-    router.push({ path: 'employees/profile', query: { id: id }});
+  if (props.userType == "STUDENT") {
+    router.push({ path: "students/profile", query: { id: id } });
+  } else {
+    router.push({ path: "employees/profile", query: { id: id } });
   }
 }
 </script>
@@ -42,12 +41,17 @@ function viewUser(id) {
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="user in users" :key="user.id" class="hover:bg-gray-100 hover:cursor-pointer" v-on:click="viewUser(user.id)">
-                    <td class="px-6 py-4 whitespace-nowrap border">
-                      <div class="text-sm text-gray-900">
-                        {{ user.firstName }} {{ user.lastName }} {{ user.email }}
-                      </div>
-                    </td>
+                <tr
+                  v-for="user in users"
+                  :key="user.id"
+                  class="hover:bg-gray-100 hover:cursor-pointer"
+                  v-on:click="viewUser(user.id)"
+                >
+                  <td class="px-6 py-4 whitespace-nowrap border">
+                    <div class="text-sm text-gray-900">
+                      {{ user.firstName }} {{ user.lastName }}
+                    </div>
+                  </td>
                   <td
                     v-if="userType && userType === 'STUDENT'"
                     class="px-6 py-4 whitespace-nowrap border"
@@ -63,7 +67,7 @@ function viewUser(id) {
                   </td>
                 </tr>
                 <tr v-if="!users.length && userType === 'EMPLOYEE'">
-                  <td colspan="3" class="px-6 py-4 whitespace-nowrap border">
+                  <td colspan="1" class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">No employee found</div>
                   </td>
                 </tr>
