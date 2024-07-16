@@ -14,7 +14,7 @@ function openModal() {
 
 function closeModal() {
   createUserModalOpen.value = false;
-  getEmployees();
+  getStudents();
   console.log("modal closed");
 }
 
