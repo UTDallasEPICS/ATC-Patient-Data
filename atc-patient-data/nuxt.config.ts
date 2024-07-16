@@ -2,12 +2,14 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
+
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
+
   runtimeConfig: {
     AUTH0_CLIENTID: "",
     AUTH0_SECRET: "",
@@ -22,4 +24,6 @@ export default defineNuxtConfig({
       ISSUER: "",
     },
   },
+
+  modules: ["nuxt-svgo"]
 });
