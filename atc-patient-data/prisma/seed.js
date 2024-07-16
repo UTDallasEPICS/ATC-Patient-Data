@@ -43,7 +43,7 @@ async function main() {
     data: {
       userId: student2.id,
       dob: new Date("1999-01-01"),
-      assignedEmployeeId: admin1.id,
+      assignedEmployeeId: admin1Profile.id,
     },
   });
 
@@ -58,7 +58,7 @@ async function main() {
     data: {
       userId: student3.id,
       dob: new Date("1999-01-01"),
-      assignedEmployeeId: admin1.id,
+      assignedEmployeeId: admin1Profile.id,
     },
   });
 }
