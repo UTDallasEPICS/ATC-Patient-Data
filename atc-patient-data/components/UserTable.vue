@@ -2,6 +2,17 @@
 import BlockShuffle from "../../assets/blocks-shuffle-3.svg";
 
 const props = defineProps({ users: Array, userType: String, loading: Boolean });
+
+const router = useRouter();
+
+function viewUser(id) {
+  if (props.userType == 'STUDENT') {
+    router.push({ path: 'students/profile', query: { id: id }});
+  }
+  else {
+    router.push({ path: 'employees/profile', query: { id: id }});
+  }
+}
 </script>
 
 <template>
@@ -19,6 +30,7 @@ const props = defineProps({ users: Array, userType: String, loading: Boolean });
                     Name
                   </th>
                   <th
+                    v-if="userType === 'STUDENT'"
                     class="px-6 py-3 text-center text-xs font-medium uppercase border"
                   >
                     Assigned Employee
@@ -26,12 +38,12 @@ const props = defineProps({ users: Array, userType: String, loading: Boolean });
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="user in users" :key="user.id">
-                  <td class="px-6 py-4 whitespace-nowrap border">
-                    <div class="text-sm text-gray-900">
-                      {{ user.firstName }} {{ user.lastName }}
-                    </div>
-                  </td>
+                <tr v-for="user in users" :key="user.id" class="hover:bg-gray-100 hover:cursor-pointer" v-on:click="viewUser(user.id)">
+                    <td class="px-6 py-4 whitespace-nowrap border">
+                      <div class="text-sm text-gray-900">
+                        {{ user.firstName }} {{ user.lastName }} {{ user.email }}
+                      </div>
+                    </td>
                   <td
                     v-if="userType === 'STUDENT'"
                     class="px-6 py-4 whitespace-nowrap border"

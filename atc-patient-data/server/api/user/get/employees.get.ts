@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const res = await event.context.prisma.user.findMany({
     where: {
       archive: searchArchived === "true" ? true : false,
-      StudentProfile: {
+      EmployeeProfile: {
         isNot: null,
       },
       OR: [
