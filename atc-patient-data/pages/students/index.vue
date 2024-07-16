@@ -39,6 +39,7 @@ getStudents();
 </script>
 
 <template>
+  <div class="m-3 font-thin text-4xl">Students</div>
   <div class="md:flex flex-col md:items-center m-10">
     <div class="flex md:w-1/2">
       <button v-on:click="openModal" title="Create Student">
