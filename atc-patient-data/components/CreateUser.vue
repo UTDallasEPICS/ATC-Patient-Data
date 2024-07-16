@@ -46,7 +46,7 @@ watch(formData, () => {
   console.log("formData", formData);
 });
 
-async function emitClose() {
+async function emitSubmit() {
   try {
     await $fetch("/api/user/create/student", {
       method: "POST",
@@ -63,6 +63,16 @@ async function emitClose() {
     console.error("error in creating a student", error);
     alert("Error in creating a student");
   }
+}
+
+function emitClose() {
+  formData.firstName = "";
+  formData.lastName = "";
+  formData.email = "";
+  formData.phoneNumber = "";
+  formData.dateOfBirth = "";
+  formData.assignedEmployee = (data.value && data.value[0]) || null;
+  emit("closeModal");
 }
 </script>
 
@@ -216,7 +226,7 @@ async function emitClose() {
                 <button
                   type="button"
                   class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                  @click="emitClose"
+                  @click="emitSubmit"
                 >
                   Submit
                 </button>
