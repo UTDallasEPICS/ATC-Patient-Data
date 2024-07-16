@@ -9,7 +9,6 @@ export default defineEventHandler(async (event) => {
       },
     },
     select: {
-      // userId: true,
       id: true,
       firstName: true,
       lastName: true,
