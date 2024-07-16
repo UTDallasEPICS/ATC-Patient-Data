@@ -14,13 +14,13 @@ function openModal() {
 
 function closeModal() {
   createUserModalOpen.value = false;
-  getEmployees();
+  getStudents();
   console.log("modal closed");
 }
 
-async function getEmployees() {
+async function getStudents() {
   loading.value = true;
-  const { data } = await useFetch("/api/user/get/employees", {
+  const { data } = await useFetch("/api/user/get/students", {
     query: {
       searchTerm: searchTerm,
       searchArchived: searchArchived,
@@ -32,10 +32,10 @@ async function getEmployees() {
 }
 
 watch([searchTerm, searchArchived], () => {
-  getEmployees();
+  getStudents();
 });
 
-getEmployees();
+getStudents();
 </script>
 
 <template>
