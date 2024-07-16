@@ -87,6 +87,9 @@ export default defineEventHandler(async (event) => {
   
   const user = await prisma.user.findMany({
     where: whereClause,
+    include: {
+      StudentProfile: true,
+    },
     orderBy: {
       id: 'asc'
     },
