@@ -16,38 +16,40 @@ const props = defineProps({
   isOpen: Boolean,
   userType: String,
 });
-// const localIsOpen = ref(props.isOpen); //need b/c error: v-model cannot be used on a prop, because local prop bindings are not writable.
-
-// const employeeNames = ref([]);
-const selected = ref({});
+const emit = defineEmits(["closeModal"]);
 
 const sentenceCaseUserType = computed(() => {
   if (!props.userType) return "";
   return props.userType.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 });
 
-// async function getEmployeeNames() {
-//   const res = await useFetch("/api/user/get/employeeNames");
-//   employeeNames.value = res.data._rawValue.map((name) => ({
-//     id: name.id,
-//     name: name.name,
-//   }));
-//   selectedEmployee.value = employeeNames.value[0];
-// }
-// getEmployeeNames();
-
 const { data: names } = useFetch("/api/user/get/employeeNames");
-const emit = defineEmits(["closeModal"]);
+console.log("names outside", names);
 
-function emitClose() {
-  emit("closeModal");
-}
+const selected = ref<{ id: number; name: string }>({ id: 0, name: "" });
+// watch(names, () => {
+//   if () {
+//     selected.value = names.value[0];
+//   }
+// });
 
+const formData = reactive({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  dateOfBirth: "",
+  assignedEmployee: "",
+});
+
+watch(formData, () => {
+  console.log("formData", formData);
+});
 </script>
 
 <template>
   <TransitionRoot appear :show="isOpen" as="template">
-    <Dialog as="div" @close="emitClose" class="relative z-10">
+    <Dialog as="div" @close="emit('closeModal')" class="relative z-10">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -59,8 +61,7 @@ function emitClose() {
       >
         <div class="fixed inset-0 bg-black/25" />
       </TransitionChild>
-
-      <div class="fixed inset-0 overflow-y-auto">
+      <div class="fixed inset-0 overflow-auto">
         <div
           class="flex min-h-full items-center justify-center p-4 text-center"
         >
@@ -74,7 +75,7 @@ function emitClose() {
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              class="w-full max-w-md transform overflow-auto rounded bg-white p-6 text-left transition-all"
             >
               <DialogTitle
                 as="h3"
@@ -86,6 +87,7 @@ function emitClose() {
               <div class="flex flex-col m-3">
                 <label>First Name</label>
                 <input
+                  v-model="formData.firstName"
                   type="text"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
@@ -94,6 +96,7 @@ function emitClose() {
               <div class="flex flex-col m-3">
                 <label>Last Name</label>
                 <input
+                  v-model="formData.lastName"
                   type="text"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
@@ -102,6 +105,7 @@ function emitClose() {
               <div class="flex flex-col m-3">
                 <label>Email</label>
                 <input
+                  v-model="formData.email"
                   type="email"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
@@ -110,6 +114,7 @@ function emitClose() {
               <div class="flex flex-col m-3">
                 <label>Phone Number</label>
                 <input
+                  v-model="formData.phoneNumber"
                   type="number"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
@@ -118,6 +123,7 @@ function emitClose() {
               <div class="flex flex-col m-3">
                 <label>Date of Birth</label>
                 <input
+                  v-model="formData.dateOfBirth"
                   type="date"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
@@ -125,13 +131,13 @@ function emitClose() {
 
               <div class="flex flex-col m-3">
                 <label>Assigned Employee</label>
-                <Listbox v-model="selectedEmployee">
-                  <div class="relative mt-1">
+                <Listbox v-model="selected">
+                  <div class="relative">
                     <ListboxButton
-                      class="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm"
+                      class="outline-none relative w-full cursor-pointer rounded p-1 text-left border hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                     >
                       <span class="block truncate">{{
-                        selectedEmployee.name
+                        selected && selected.name
                       }}</span>
                       <span
                         class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -142,18 +148,18 @@ function emitClose() {
                         />
                       </span>
                     </ListboxButton>
-
+                    <!-- <Teleport to="body"> -->
                     <transition
                       leave-active-class="transition duration-100 ease-in"
                       leave-from-class="opacity-100"
                       leave-to-class="opacity-0"
                     >
                       <ListboxOptions
-                        class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+                        class="absolute z-10 p-1 w-full overflow-auto rounded bg-gray-300"
                       >
                         <ListboxOption
                           v-slot="{ active, selected }"
-                          v-for="person in filteredPeople"
+                          v-for="person in names"
                           :key="person.id"
                           :value="person"
                           as="template"
@@ -183,6 +189,7 @@ function emitClose() {
                         </ListboxOption>
                       </ListboxOptions>
                     </transition>
+                    <!-- </Teleport> -->
                   </div>
                 </Listbox>
               </div>
@@ -202,6 +209,4 @@ function emitClose() {
       </div>
     </Dialog>
   </TransitionRoot>
-
-
 </template>
