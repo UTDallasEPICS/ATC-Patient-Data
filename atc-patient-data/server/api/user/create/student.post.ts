@@ -23,10 +23,20 @@ export default defineEventHandler(async (event) => {
 
       const convertedDateOfBirth = new Date(dateOfBirth);
 
+      const employeeProfileId =
+        await event.context.prisma.employeeProfile.findFirst({
+          where: {
+            userId: Number(assignedEmployee.id),
+          },
+          select: {
+            id: true,
+          },
+        });
+
       const studentProfile = await p.studentProfile.create({
         data: {
           dob: convertedDateOfBirth,
-          assignedEmployeeId: assignedEmployee.id,
+          assignedEmployeeId: employeeProfileId.id,
           userId: newUser.id,
         },
       });

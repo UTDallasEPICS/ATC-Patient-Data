@@ -46,15 +46,23 @@ watch(formData, () => {
   console.log("formData", formData);
 });
 
-function emitClose() {
-  
-  formData.firstName = "";
-  formData.lastName = "";
-  formData.email = "";
-  formData.phoneNumber = "";
-  formData.dateOfBirth = "";
-  formData.assignedEmployee = (data.value && data.value[0]) || null;
-  emit("closeModal");
+async function emitClose() {
+  try {
+    await $fetch("/api/user/create/student", {
+      method: "POST",
+      body: formData,
+    });
+    formData.firstName = "";
+    formData.lastName = "";
+    formData.email = "";
+    formData.phoneNumber = "";
+    formData.dateOfBirth = "";
+    formData.assignedEmployee = (data.value && data.value[0]) || null;
+    emit("closeModal");
+  } catch (error) {
+    console.error("error in creating a student", error);
+    alert("Error in creating a student");
+  }
 }
 </script>
 
