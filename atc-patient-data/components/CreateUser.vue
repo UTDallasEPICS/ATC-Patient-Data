@@ -23,15 +23,8 @@ const sentenceCaseUserType = computed(() => {
   return props.userType.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 });
 
-const { data: names } = useFetch("/api/user/get/employeeNames");
-console.log("names outside", names);
-
-const selected = ref<{ id: number; name: string }>({ id: 0, name: "" });
-// watch(names, () => {
-//   if () {
-//     selected.value = names.value[0];
-//   }
-// });
+const { data } = await useFetch("/api/user/get/employeeNames");
+const names = ref(data.value);
 
 const formData = reactive({
   firstName: "",
@@ -39,17 +32,35 @@ const formData = reactive({
   email: "",
   phoneNumber: "",
   dateOfBirth: "",
-  assignedEmployee: "",
-});
+  assignedEmployee: (data.value && data.value[0]) || null,
+}) as {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  dateOfBirth: ""; //need to be stored as Date object
+  assignedEmployee: { id: number; name: string } | null;
+};
 
 watch(formData, () => {
   console.log("formData", formData);
 });
+
+function emitClose() {
+  
+  formData.firstName = "";
+  formData.lastName = "";
+  formData.email = "";
+  formData.phoneNumber = "";
+  formData.dateOfBirth = "";
+  formData.assignedEmployee = (data.value && data.value[0]) || null;
+  emit("closeModal");
+}
 </script>
 
 <template>
   <TransitionRoot appear :show="isOpen" as="template">
-    <Dialog as="div" @close="emit('closeModal')" class="relative z-10">
+    <Dialog as="div" @close="emitClose" class="relative z-10">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -61,7 +72,7 @@ watch(formData, () => {
       >
         <div class="fixed inset-0 bg-black/25" />
       </TransitionChild>
-      <div class="fixed inset-0 overflow-auto">
+      <div class="fixed inset-0">
         <div
           class="flex min-h-full items-center justify-center p-4 text-center"
         >
@@ -75,7 +86,7 @@ watch(formData, () => {
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-md transform overflow-auto rounded bg-white p-6 text-left transition-all"
+              class="w-full max-w-md transform rounded bg-white p-6 text-left transition-all"
             >
               <DialogTitle
                 as="h3"
@@ -131,13 +142,14 @@ watch(formData, () => {
 
               <div class="flex flex-col m-3">
                 <label>Assigned Employee</label>
-                <Listbox v-model="selected">
+                <Listbox v-model="formData.assignedEmployee">
                   <div class="relative">
                     <ListboxButton
                       class="outline-none relative w-full cursor-pointer rounded p-1 text-left border hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                     >
                       <span class="block truncate">{{
-                        selected && selected.name
+                        formData.assignedEmployee &&
+                        formData.assignedEmployee.name
                       }}</span>
                       <span
                         class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -148,14 +160,13 @@ watch(formData, () => {
                         />
                       </span>
                     </ListboxButton>
-                    <!-- <Teleport to="body"> -->
                     <transition
                       leave-active-class="transition duration-100 ease-in"
                       leave-from-class="opacity-100"
                       leave-to-class="opacity-0"
                     >
                       <ListboxOptions
-                        class="absolute z-10 p-1 w-full overflow-auto rounded bg-gray-300"
+                        class="absolute p-1 w-full overflow-auto rounded bg-gray-100"
                       >
                         <ListboxOption
                           v-slot="{ active, selected }"
@@ -169,7 +180,7 @@ watch(formData, () => {
                               active
                                 ? 'bg-blue-100 text-blue-900'
                                 : 'text-gray-900',
-                              'relative cursor-default select-none py-2 pl-10 pr-4',
+                              'relative cursor-pointer select-none py-2 pl-10 pr-4',
                             ]"
                           >
                             <span
@@ -189,16 +200,15 @@ watch(formData, () => {
                         </ListboxOption>
                       </ListboxOptions>
                     </transition>
-                    <!-- </Teleport> -->
                   </div>
                 </Listbox>
               </div>
 
-              <div class="mt-4">
+              <div class="flex w-full p-3 justify-center">
                 <button
                   type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="closeModal"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                  @click="emitClose"
                 >
                   Submit
                 </button>

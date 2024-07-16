@@ -1,7 +1,11 @@
 <script setup>
 import BlockShuffle from "../../assets/blocks-shuffle-3.svg";
 
-const props = defineProps({ users: Array, userType: String, loading: Boolean });
+const props = defineProps({
+  users: Array,
+  userType: String,
+  loading: Boolean,
+});
 </script>
 
 <template>
@@ -33,7 +37,7 @@ const props = defineProps({ users: Array, userType: String, loading: Boolean });
                     </div>
                   </td>
                   <td
-                    v-if="userType === 'STUDENT'"
+                    v-if="userType && userType === 'STUDENT'"
                     class="px-6 py-4 whitespace-nowrap border"
                   >
                     <div class="text-sm">
@@ -41,12 +45,12 @@ const props = defineProps({ users: Array, userType: String, loading: Boolean });
                     </div>
                   </td>
                 </tr>
-                <tr v-if="(!users || !users.length) && userType === 'STUDENT'">
+                <tr v-if="!users.length && userType === 'STUDENT'">
                   <td colspan="2" class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">No students found</div>
                   </td>
                 </tr>
-                <tr v-if="(!users || !users.length) && userType === 'EMPLOYEE'">
+                <tr v-if="!users.length && userType === 'EMPLOYEE'">
                   <td colspan="3" class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">No employee found</div>
                   </td>

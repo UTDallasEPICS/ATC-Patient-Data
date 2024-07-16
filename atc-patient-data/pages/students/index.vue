@@ -26,7 +26,7 @@ async function getEmployees() {
     },
   });
   students.value = data._rawValue.body;
-  console.log("students.value", students.value);
+  // console.log("students.value", students.value);
   loading.value = false;
 }
 
