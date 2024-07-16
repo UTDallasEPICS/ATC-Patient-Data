@@ -8,12 +8,13 @@ const loading = ref(false);
 const createUserModalOpen = ref(false);
 
 function openModal() {
-  console.log("openModal");
   createUserModalOpen.value = true;
+  console.log("modal opened");
 }
 
 function closeModal() {
   createUserModalOpen.value = false;
+  console.log("modal closed");
 }
 
 async function getEmployees() {
@@ -47,7 +48,7 @@ getEmployees();
       <CreateUser
         :isOpen="createUserModalOpen"
         :userType="'STUDENT'"
-        :closeModal="closeModal"
+        @close-modal="closeModal"
       />
       <input
         v-model="searchTerm"

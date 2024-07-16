@@ -8,6 +8,12 @@ export default defineEventHandler(async (event) => {
         isNot: null,
       },
     },
+    select: {
+      // userId: true,
+      id: true,
+      firstName: true,
+      lastName: true,
+    },
   });
   console.log(employees);
   return employees.map((employee) => ({

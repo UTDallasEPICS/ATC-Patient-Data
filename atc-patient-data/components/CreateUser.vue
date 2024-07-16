@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {
   TransitionRoot,
   TransitionChild,
@@ -10,45 +10,44 @@ import {
   ListboxOptions,
   ListboxOption,
 } from "@headlessui/vue";
-import { ref, computed } from "vue";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
 const props = defineProps({
   isOpen: Boolean,
   userType: String,
-  closeModal: Function,
 });
-const localIsOpen = ref(props.isOpen); //need b/c error: v-model cannot be used on a prop, because local prop bindings are not writable.
+// const localIsOpen = ref(props.isOpen); //need b/c error: v-model cannot be used on a prop, because local prop bindings are not writable.
 
-const employeeNames = ref([]);
-const selectedEmployee = ref({});
-const filteredPeople = computed(() =>
-  query.value === ""
-    ? employeeNames.value
-    : employeeNames.value.filter((person) => {
-        return person.name.toLowerCase().includes(query.value.toLowerCase());
-      })
-);
+// const employeeNames = ref([]);
+const selected = ref({});
 
 const sentenceCaseUserType = computed(() => {
   if (!props.userType) return "";
   return props.userType.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 });
 
-async function getEmployeeNames() {
-  const res = await useFetch("/api/user/get/employeeNames");
-  employeeNames.value = res.data._rawValue.map((name) => ({
-    id: name.id,
-    name: name.name,
-  }));
-  selectedEmployee.value = employeeNames.value[0];
+// async function getEmployeeNames() {
+//   const res = await useFetch("/api/user/get/employeeNames");
+//   employeeNames.value = res.data._rawValue.map((name) => ({
+//     id: name.id,
+//     name: name.name,
+//   }));
+//   selectedEmployee.value = employeeNames.value[0];
+// }
+// getEmployeeNames();
+
+const { data: names } = useFetch("/api/user/get/employeeNames");
+const emit = defineEmits(["closeModal"]);
+
+function emitClose() {
+  emit("closeModal");
 }
-getEmployeeNames();
+
 </script>
 
 <template>
-  <TransitionRoot appear :show="localIsOpen" as="template">
-    <Dialog as="div" @close="closeModal" class="relative z-10">
+  <TransitionRoot appear :show="isOpen" as="template">
+    <Dialog as="div" @close="emitClose" class="relative z-10">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -203,4 +202,6 @@ getEmployeeNames();
       </div>
     </Dialog>
   </TransitionRoot>
+
+
 </template>
