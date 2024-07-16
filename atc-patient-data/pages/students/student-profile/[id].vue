@@ -1,10 +1,8 @@
-<script setup>
-
+<script setup lang="ts">
+const route = useRoute();
+console.log("route", route.params.id);
 </script>
 
-
-
 <template>
-<h3>Student Profile Page</h3>
+  <div>Profile of student {{ route.params.id }}</div>
 </template>
-  
