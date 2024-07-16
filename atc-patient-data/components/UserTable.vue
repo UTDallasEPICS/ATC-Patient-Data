@@ -9,11 +9,11 @@ const props = defineProps({
 
 const router = useRouter();
 
-function viewUser(id) {
+async function viewUser(id) {
   if (props.userType == "STUDENT") {
-    router.push({ path: "students/profile", query: { id: id } });
+    await navigateTo({ path: `/students/student-profile/${id}` });
   } else {
-    router.push({ path: "employees/profile", query: { id: id } });
+    await navigateTo({ path: `/employees/employee-profile/${id}` });
   }
 }
 </script>
