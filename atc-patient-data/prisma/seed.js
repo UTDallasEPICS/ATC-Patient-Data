@@ -17,6 +17,21 @@ async function main() {
     },
   });
 
+  const admin3 = await prisma.user.create({
+    data: {
+      email: "hishita.shah@gmail.com",
+      firstName: "hishita",
+      lastName: "shah",
+      phoneNumber: "123456789",
+    },
+  });
+  const admin3Profile = await prisma.employeeProfile.create({
+    data: {
+      userId: admin3.id,
+      role: "ADMIN",
+    },
+  });
+
   const student1 = await prisma.user.create({
     data: {
       email: "student1@gmail.com",
