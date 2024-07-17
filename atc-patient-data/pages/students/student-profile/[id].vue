@@ -13,10 +13,17 @@ console.log("route", route.params.id);
 
 */
 
-const toggle = ref(false);
+const openSession = ref(false);
+const openProgram = ref(false);
 
-function togg() {
-  toggle.value = !toggle.value;
+function toggleOpenSession() {
+  openSession.value = true;
+  openProgram.value = false;
+}
+
+function toggleOpenProgram() {
+  openSession.value = false;
+  openProgram.value = true;
 }
 </script>
 
@@ -24,16 +31,16 @@ function togg() {
   <!-- <div>Profile of student {{ route.params.id }}</div> -->
   <button
     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    @click="togg"
+    @click="toggleOpenSession"
   >
     Sessions
   </button>
   <button
     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    @click="togg"
+    @click="toggleOpenProgram"
   >
     Program
   </button>
-  <Session v-if="!toggle" />
-  <Program v-if="toggle" />
+  <Session v-if="openSession" />
+  <Program v-if="openProgram" />
 </template>
