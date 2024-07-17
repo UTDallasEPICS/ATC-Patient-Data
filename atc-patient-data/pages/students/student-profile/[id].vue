@@ -12,8 +12,27 @@ console.log("route", route.params.id);
         i. api for getting student's behaviors
 
 */
+const toggle = ref(false);
+
+function togg() {
+  toggle.value = !toggle.value;
+}
 </script>
 
 <template>
-  <div>Profile of student {{ route.params.id }}</div>
+  <!-- <div>Profile of student {{ route.params.id }}</div> -->
+  <button
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    @click="togg"
+  >
+    Sessions
+  </button>
+  <button
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    @click="togg"
+  >
+    Program
+  </button>
+  <Session v-if="!toggle" />
+  <Program v-if="toggle" />
 </template>
