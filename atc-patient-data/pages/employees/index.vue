@@ -5,8 +5,20 @@ const employees = ref([]);
 const searchTerm = ref("");
 const searchArchived = ref(false);
 const loading = ref(false);
+const createUserModalOpen = ref(false);
 
-async function getStudents() {
+function openModal() {
+  createUserModalOpen.value = true;
+  console.log("modal opened");
+}
+
+function closeModal() {
+  createUserModalOpen.value = false;
+  getEmployees();
+  console.log("modal closed");
+}
+
+async function getEmployees() {
   loading.value = true;
   const { data } = await useFetch("/api/user/get/employees", {
     query: {
@@ -20,21 +32,26 @@ async function getStudents() {
 }
 
 watch([searchTerm, searchArchived], () => {
-  getStudents();
+  getEmployees();
 });
 
-getStudents();
+getEmployees();
 </script>
 
 <template>
   <div class="m-3 font-thin text-4xl">Employees</div>
   <div class="md:flex flex-col md:items-center m-10">
     <div class="flex md:w-1/2">
-      <button title="Create Employee">
+      <button v-on:click="openModal" title="Create Employee">
         <div class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100">
           <PlusCircleIcon class="h-6 w-6" />
         </div>
       </button>
+      <CreateUser
+        :isOpen="createUserModalOpen"
+        :userType="'EMPLOYEE'"
+        @close-modal="closeModal"
+      />
       <input
         v-model="searchTerm"
         class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700"
