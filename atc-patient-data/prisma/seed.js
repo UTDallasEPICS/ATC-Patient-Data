@@ -30,38 +30,22 @@ async function main() {
       userId: admin4.id,
       role: "ADMIN",
     },
-  })
+  });
 
-  const admin4 = await prisma.user.create({
+  const admin2 = await prisma.user.create({
     data: {
-      email: "emoryjgrubbs@gmail.com",
-      firstName: "Emory",
-      lastName: "Grubbs",
-      phoneNumber: "1231231234",
+      email: "ahsuna.bajracharya@gmail.com",
+      firstName: "Anusha",
+      lastName: "Bajracharya",
+      phoneNumber: "1234567890",
     },
   });
-  const admin4Profile = await prisma.employeeProfile.create({
+  const admin2Profile = await prisma.employeeProfile.create({
     data: {
-      userId: admin4.id,
+      userId: admin2.id,
       role: "ADMIN",
     },
-  })
-
-  async function main() {
-    const admin1 = await prisma.user.create({
-      data: {
-        email: "ahsuna.bajracharya@gmail.com",
-        firstName: "Anusha",
-        lastName: "Bajracharya",
-        phoneNumber: "1234567890",
-      },
-    });
-    const admin2Profile = await prisma.employeeProfile.create({
-      data: {
-        userId: admin2.id,
-        role: "ADMIN",
-      },
-    });
+  });
   const student1 = await prisma.user.create({
     data: {
       email: "student1@gmail.com",
