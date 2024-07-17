@@ -17,6 +17,21 @@ async function main() {
     },
   });
 
+  const admin5 = await prisma.user.create({
+    data: {
+      email: "axc210010@utdallas.edu",
+      firstName: "Adrian",
+      lastName: "Cortes",
+      phoneNumber: "1234567890",
+    },
+  });
+  const admin5Profile = await prisma.employeeProfile.create({
+    data: {
+      userId: admin5.id,
+      role: "ADMIN",
+    },
+  });
+
   const student1 = await prisma.user.create({
     data: {
       email: "student1@gmail.com",
