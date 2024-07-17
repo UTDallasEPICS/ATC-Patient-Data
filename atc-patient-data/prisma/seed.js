@@ -17,6 +17,35 @@ async function main() {
     },
   });
 
+  const admin2 = await prisma.user.create({
+    data: {
+      email: "ahsuna.bajracharya@gmail.com",
+      firstName: "Anusha",
+      lastName: "Bajracharya",
+      phoneNumber: "1234567890",
+    },
+  });
+  const admin2Profile = await prisma.employeeProfile.create({
+    data: {
+      userId: admin2.id,
+      role: "ADMIN",
+    },
+  });
+  const admin3 = await prisma.user.create({
+    data: {
+      email: "hishita.shah@gmail.com",
+      firstName: "hishita",
+      lastName: "shah",
+      phoneNumber: "123456789",
+    },
+  });
+  const admin3Profile = await prisma.employeeProfile.create({
+    data: {
+      userId: admin3.id,
+      role: "ADMIN",
+    },
+  });
+
   const admin4 = await prisma.user.create({
     data: {
       email: "emoryjgrubbs@gmail.com",
@@ -30,19 +59,19 @@ async function main() {
       userId: admin4.id,
       role: "ADMIN",
     },
-  })
+  });
 
-  const admin3 = await prisma.user.create({
+  const admin5 = await prisma.user.create({
     data: {
-      email: "hishita.shah@gmail.com",
-      firstName: "hishita",
-      lastName: "shah",
-      phoneNumber: "123456789",
+      email: "axc210010@utdallas.edu",
+      firstName: "Adrian",
+      lastName: "Cortes",
+      phoneNumber: "0123456789",
     },
   });
-  const admin3Profile = await prisma.employeeProfile.create({
+  const admin5Profile = await prisma.employeeProfile.create({
     data: {
-      userId: admin3.id,
+      userId: admin5.id,
       role: "ADMIN",
     },
   });
