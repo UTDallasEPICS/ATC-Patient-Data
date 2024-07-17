@@ -53,7 +53,7 @@ getStudents();
         @close-modal="closeModal"
       />
       <input
-        v-model="searchTerm"
+        v-model.trim="searchTerm"
         class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700"
         placeholder="Search"
       />

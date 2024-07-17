@@ -33,6 +33,11 @@ async function viewUser(id) {
                     Name
                   </th>
                   <th
+                    class="px-6 py-3 text-center text-xs font-medium uppercase border w-2/3"
+                  >
+                    Email
+                  </th>
+                  <th
                     v-if="userType === 'STUDENT'"
                     class="px-6 py-3 text-center text-xs font-medium uppercase border"
                   >
@@ -50,6 +55,11 @@ async function viewUser(id) {
                   <td class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">
                       {{ user.firstName }} {{ user.lastName }}
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap border">
+                    <div class="text-sm text-gray-900">
+                      {{ user.email }}
                     </div>
                   </td>
                   <td
