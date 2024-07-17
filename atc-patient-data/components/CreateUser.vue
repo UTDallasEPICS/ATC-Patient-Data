@@ -25,7 +25,7 @@ const sentenceCaseUserType = computed(() => {
 
 const { data } = await useFetch("/api/user/get/employeeNames");
 const names = ref(data.value);
-const employeeTypes = { 1:"ADMIN", 2:"TECH", 3:"BCBA" };
+const employeeTypes = { 1:"ADMIN", 2:"BCBA", 3:"TECH" };
 
 const formData = reactive({
   firstName: "",
