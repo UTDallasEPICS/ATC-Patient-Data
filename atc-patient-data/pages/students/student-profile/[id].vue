@@ -12,7 +12,6 @@ console.log("route", route.params.id);
         i. api for getting student's behaviors
 
 */
-
 </script>
 
 <template>
