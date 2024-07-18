@@ -34,8 +34,8 @@ async function main() {
   const admin3 = await prisma.user.create({
     data: {
       email: "hishita.shah@gmail.com",
-      firstName: "hishita",
-      lastName: "shah",
+      firstName: "Hishita",
+      lastName: "Shah",
       phoneNumber: "123456789",
     },
   });
