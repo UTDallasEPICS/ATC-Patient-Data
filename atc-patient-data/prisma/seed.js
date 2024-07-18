@@ -83,7 +83,7 @@ async function main() {
       lastName: "dent",
     },
   });
-  await prisma.studentProfile.create({
+  const student1Profile = await prisma.studentProfile.create({
     data: {
       userId: student1.id,
       dob: new Date("1999-01-01"),
@@ -98,7 +98,7 @@ async function main() {
       lastName: "dent",
     },
   });
-  await prisma.studentProfile.create({
+  const student2Profile = await prisma.studentProfile.create({
     data: {
       userId: student2.id,
       dob: new Date("1999-01-01"),
@@ -113,11 +113,92 @@ async function main() {
       lastName: "dent",
     },
   });
-  await prisma.studentProfile.create({
+  const student3Profile = await prisma.studentProfile.create({
     data: {
       userId: student3.id,
       dob: new Date("1999-01-01"),
       assignedEmployeeId: admin1Profile.id,
+    },
+  });
+
+  const behavior1 = await prisma.behavior.create({
+    data: {
+      title: "Behavior 1",
+      desc: "Behavior 1 Description",
+      studentId: student1Profile.id,
+      type: "TRIAL",
+    },
+  });
+
+  const behavior2 = await prisma.behavior.create({
+    data: {
+      title: "Behavior 2",
+      desc: "Behavior 2 Description",
+      studentId: student1Profile.id,
+      type: "TRIAL",
+    },
+  });
+
+  const behavior3 = await prisma.behavior.create({
+    data: {
+      title: "Behavior 3",
+      desc: "Behavior 3 Description",
+      studentId: student1Profile.id,
+      type: "TRIAL",
+    },
+  });
+
+  const behavior4 = await prisma.behavior.create({
+    data: {
+      title: "Behavior 4",
+      desc: "Behavior 4 Description",
+      studentId: student2Profile.id,
+      type: "TRIAL",
+    },
+  });
+
+  const behavior5 = await prisma.behavior.create({
+    data: {
+      title: "Behavior 5",
+      desc: "Behavior 5 Description",
+      studentId: student2Profile.id,
+      type: "TRIAL",
+    },
+  });
+
+  const behavior6 = await prisma.behavior.create({
+    data: {
+      title: "Behavior 6",
+      desc: "Behavior 6 Description",
+      studentId: student2Profile.id,
+      type: "TRIAL",
+    },
+  });
+
+  const behavior7 = await prisma.behavior.create({
+    data: {
+      title: "Behavior 7",
+      desc: "Behavior 7 Description",
+      studentId: student3Profile.id,
+      type: "TRIAL",
+    },
+  });
+
+  const behavior8 = await prisma.behavior.create({
+    data: {
+      title: "Behavior 8",
+      desc: "Behavior 8 Description",
+      studentId: student3Profile.id,
+      type: "TRIAL",
+    },
+  });
+
+  const behavior9 = await prisma.behavior.create({
+    data: {
+      title: "Behavior 9",
+      desc: "Behavior 9 Description",
+      studentId: student3Profile.id,
+      type: "TRIAL",
     },
   });
 }
