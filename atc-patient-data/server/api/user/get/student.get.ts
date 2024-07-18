@@ -36,8 +36,27 @@ export default defineEventHandler(async (event) => {
   };
 
   const user = await prisma.user.findUnique({
-    where: whereClause,
-    include: includeClause,
+    where: {
+      id: Number(id),
+      NOT: { StudentProfile: null }, // use current employee's id to restrict results to students they should have access to
+    },
+    include: {
+      StudentProfile: {
+        include: {
+          AssignedEmployee: {
+            include: {
+              User: true,
+            },
+          },
+          Behaviors: true,
+          Sessions: {
+            include: {
+              Data: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   if (!user) {

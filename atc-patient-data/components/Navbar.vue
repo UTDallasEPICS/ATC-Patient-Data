@@ -5,7 +5,6 @@ import { ArrowLeftStartOnRectangleIcon } from "@heroicons/vue/24/outline";
 
 const config = useRuntimeConfig();
 
-console.log("process.env.NUXT_BASEURL", config.public.BASEURL);
 async function logout() {
   try {
     await $fetch(`${config.public.BASEURL}/api/auth/logout`, {

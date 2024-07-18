@@ -72,12 +72,12 @@ async function viewUser(id) {
                   </td>
                 </tr>
                 <tr v-if="!users.length && userType === 'STUDENT'">
-                  <td colspan="2" class="px-6 py-4 whitespace-nowrap border">
+                  <td colspan="3" class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">No students found</div>
                   </td>
                 </tr>
                 <tr v-if="!users.length && userType === 'EMPLOYEE'">
-                  <td colspan="1" class="px-6 py-4 whitespace-nowrap border">
+                  <td colspan="2" class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">No employee found</div>
                   </td>
                 </tr>

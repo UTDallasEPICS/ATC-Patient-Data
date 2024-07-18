@@ -1,7 +1,13 @@
 <script setup lang="ts">
-const route = useRoute();
-console.log("route", route.params.id);
+import type {
+  User,
+  StudentProfile,
+  EmployeeProfile,
+  Behavior,
+  Session,
+} from "@prisma/client";
 
+const route = useRoute();
 /*
   Import two compoents (create two files inside of components folder)
     1. sessions
@@ -13,58 +19,56 @@ console.log("route", route.params.id);
 
 */
 
-const user = useFetch(`/api/user/get/student/${route.params.id}`);
+const student = await useFetch(`/api/user/get/student`, {
+  query: { id: route.params.id },
+});
 
-const openSession = ref(true);
-const openProgram = ref(false);
+let currentTab = ref("sessions");
 
-function toggleOpenSession() {
-  openSession.value = true;
-  openProgram.value = false;
+function switchTab(tabName: string) {
+  currentTab.value = tabName;
 }
 
-function toggleOpenProgram() {
-  openSession.value = false;
-  openProgram.value = true;
-}
+watch(currentTab, (newVal) => {
+  console.log(newVal);
+});
 </script>
 
 <template>
-  <!-- <div>Profile of student {{ route.params.id }}</div> -->
   <div class="flex flex-col h-[calc(100vh-5rem)] p-2">
+    <div>
+      <div class="text-2xl font-bold mb-3">
+        {{ student.data.value && student.data.value.firstName }}
+        {{ student.data.value && student.data.value.lastName }}
+      </div>
+    </div>
     <div class="flex space-x-1 border border-black rounded-t-lg bg-gray-300">
       <button
-        class="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-t-lg"
-        @click="toggleOpenSession"
-        v-if="openSession"
+        :class="currentTab === 'sessions' ? 'bg-blue-900' : 'bg-blue-500'"
+        class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-t-lg"
+        @click="switchTab('sessions')"
       >
         Sessions
       </button>
       <button
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-t-lg"
-        @click="toggleOpenSession"
-        v-if="!openSession"
-      >
-        Sessions
-      </button>
-      <button
-        class="bg-blue-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-t-lg"
-        @click="toggleOpenProgram"
-        v-if="openProgram"
+        :class="currentTab === 'program' ? 'bg-blue-900' : 'bg-blue-500'"
+        class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-t-lg"
+        @click="switchTab('program')"
       >
         Program
       </button>
       <button
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-t-lg"
-        @click="toggleOpenProgram"
-        v-if="!openProgram"
+        :class="currentTab === 'userInfo' ? 'bg-blue-900' : 'bg-blue-500'"
+        class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-t-lg"
+        @click="switchTab('userInfo')"
       >
-        Program
+        Student Info
       </button>
     </div>
-    <div class="h-full border border-black rounded-b-lg">
-      <Session v-if="openSession" />
-      <Program v-if="openProgram" />
+    <div class="h-full border border-black rounded-b-lg overflow-auto">
+      <Session v-if="currentTab === 'sessions'" />
+      <Program v-if="currentTab === 'program'" />
+      <UserInfo v-if="currentTab === 'userInfo'" :user="student" :userType="'STUDENT'"/>
     </div>
   </div>
 </template>

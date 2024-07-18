@@ -59,7 +59,7 @@ getStudents();
       />
       <label class="inline-flex items-center cursor-pointer">
         <input type="checkbox" v-model="searchArchived" class="sr-only peer" />
-        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 hidden md:block"
           >Search Archived</span
         >
         <div
