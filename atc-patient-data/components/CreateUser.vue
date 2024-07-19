@@ -42,26 +42,86 @@ const formData = reactive({
   assignedEmployee: { id: number; name: string } | null;
 };
 
+const formErrors = reactive({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  dateOfBirth: "",
+});
+
 watch(formData, () => {
   console.log("formData", formData);
 });
 
+function validateName(name: string) {
+  const namePattern = /^[A-Za-z\s]+$/;
+  return namePattern.test(name);
+}
+
+function validateEmail(email: string) {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailPattern.test(email);
+}
+
+function validatePhoneNumber(phoneNumber: string) {
+  // Assuming phone number should only contain digits and be at least 10 digits long
+  const phonePattern = /^\d{10,}$/;
+  return phonePattern.test(phoneNumber);
+}
+
+function validateForm() {
+  formErrors.firstName = formData.firstName.trim()
+    ? validateName(formData.firstName.trim())
+      ? ""
+      : "First name can only contain letters and spaces."
+    : "First name is required.";
+
+  formErrors.lastName = formData.lastName.trim()
+    ? validateName(formData.lastName.trim())
+      ? ""
+      : "Last name can only contain letters and spaces."
+    : "Last name is required.";
+
+  formErrors.email = formData.email.trim()
+    ? validateEmail(formData.email.trim())
+      ? ""
+      : "Invalid email address."
+    : "Email is required.";
+
+  formErrors.phoneNumber = formData.phoneNumber.trim()
+    ? validatePhoneNumber(formData.phoneNumber.trim())
+      ? ""
+      : "Phone number must be at least 10 digits."
+    : "Phone number is required.";
+
+  formErrors.dateOfBirth = formData.dateOfBirth.trim()
+    ? ""
+    : "Date of birth is required.";
+
+  return !formErrors.firstName && !formErrors.lastName && !formErrors.email && !formErrors.phoneNumber && !formErrors.dateOfBirth;
+}
+
 async function emitSubmit() {
-  try {
-    await $fetch("/api/user/create/student", {
-      method: "POST",
-      body: formData,
-    });
-    formData.firstName = "";
-    formData.lastName = "";
-    formData.email = "";
-    formData.phoneNumber = "";
-    formData.dateOfBirth = "";
-    formData.assignedEmployee = (data.value && data.value[0]) || null;
-    emit("closeModal");
-  } catch (error) {
-    console.error("error in creating a student", error);
-    alert("Error in creating a student");
+  if (validateForm()) {
+    try {
+      await $fetch("/api/user/create/student", {
+        method: "POST",
+        body: formData,
+      });
+      formData.firstName = "";
+      formData.lastName = "";
+      formData.email = "";
+      formData.phoneNumber = "";
+      formData.dateOfBirth = "";
+      formData.assignedEmployee = (data.value && data.value[0]) || null;
+      emit("closeModal");
+    } catch (error) {
+      console.error("Error in creating a student", error);
+      alert("Error in creating a student");
+    }
+  } else {
+    alert("Please fix the errors in the form.");
   }
 }
 
@@ -116,46 +176,51 @@ function emitClose() {
               <div class="flex flex-col m-3">
                 <label>First Name</label>
                 <input
-                  v-model="formData.firstName"
+                  v-model.trim="formData.firstName"
                   type="text"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
+                <span v-if="formErrors.firstName" class="text-red-500 text-sm">{{ formErrors.firstName }}</span>
               </div>
 
               <div class="flex flex-col m-3">
                 <label>Last Name</label>
                 <input
-                  v-model="formData.lastName"
+                  v-model.trim="formData.lastName"
                   type="text"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
+                <span v-if="formErrors.lastName" class="text-red-500 text-sm">{{ formErrors.lastName }}</span>
               </div>
 
               <div class="flex flex-col m-3">
                 <label>Email</label>
                 <input
-                  v-model="formData.email"
+                  v-model.trim="formData.email"
                   type="email"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
+                <span v-if="formErrors.email" class="text-red-500 text-sm">{{ formErrors.email }}</span>
               </div>
 
               <div class="flex flex-col m-3">
                 <label>Phone Number</label>
                 <input
-                  v-model="formData.phoneNumber"
+                  v-model.trim="formData.phoneNumber"
                   type="number"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
+                <span v-if="formErrors.phoneNumber" class="text-red-500 text-sm">{{ formErrors.phoneNumber }}</span>
               </div>
 
               <div class="flex flex-col m-3">
                 <label>Date of Birth</label>
                 <input
-                  v-model="formData.dateOfBirth"
+                  v-model.trim="formData.dateOfBirth"
                   type="date"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
+                <span v-if="formErrors.dateOfBirth" class="text-red-500 text-sm">{{ formErrors.dateOfBirth }}</span>
               </div>
 
               <div class="flex flex-col m-3">
