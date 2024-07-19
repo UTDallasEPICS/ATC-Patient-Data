@@ -59,6 +59,7 @@ model Behavior {
   title           String //meant to be technical jargon which will be easy to query in a search bar for end-user
   desc            String
   type            BehaviorType
+  arrayCount      Int?
   studentId       Int
   Student         StudentProfile    @relation(fields: [studentId], references: [id])
   BehaviorData    BehaviorData[]
