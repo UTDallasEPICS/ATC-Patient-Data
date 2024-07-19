@@ -1,30 +1,19 @@
 <script setup>
+// Define props
 const props = defineProps(["user"]);
-import { XMarkIcon } from "@heroicons/vue/20/solid";
+
+// Import icons and assets
+import { XMarkIcon, PlusCircleIcon } from "@heroicons/vue/24/outline";
 import BlockShuffle from "../../assets/blocks-shuffle-3.svg";
-console.log("props.user", props.user);
+
+// Initialize state
 const clickedRowId = ref(0);
 const loadingBehavior = ref(false);
 let selectedBehavior = reactive({ value: {} });
-
-function handleRowClicked(id) {
-  clickedRowId.value = id;
-  loadingBehavior.value = true;
-  selectedBehavior.value = behaviors.data.value.body.find(
-    (behavior) => behavior.id === id
-  );
-  loadingBehavior.value = false;
-  console.log("selectedBehavior.value", selectedBehavior.value);
-  console.log("title", selectedBehavior.value.title);
-}
-
-function clearRowClicked() {
-  clickedRowId.value = 0;
-}
-
-import { PlusCircleIcon } from "@heroicons/vue/24/outline";
 const searchTerm = ref("");
 const searchGraduated = ref(false);
+
+// Fetch behaviors
 const behaviors = await useFetch("/api/behavior/get/plural", {
   query: {
     searchTerm: searchTerm,
@@ -32,11 +21,31 @@ const behaviors = await useFetch("/api/behavior/get/plural", {
     id: props.user.data.value.id,
   },
 });
-console.log("behaviors", behaviors);
 
+// Watch for changes
 watch([searchTerm, searchGraduated], () => {
   behaviors.refresh();
 });
+
+// Event handlers
+function handleRowClicked(id) {
+  clickedRowId.value = id;
+  loadingBehavior.value = true;
+  selectedBehavior.value = behaviors.data.value.body.find(
+    (behavior) => behavior.id === id
+  );
+  loadingBehavior.value = false;
+}
+
+function clearRowClicked() {
+  clickedRowId.value = 0;
+}
+
+// Log output
+console.log("props.user", props.user);
+console.log("behaviors", behaviors);
+console.log("selectedBehavior.value", selectedBehavior.value);
+console.log("title", selectedBehavior.value.title);
 </script>
 
 <template>
