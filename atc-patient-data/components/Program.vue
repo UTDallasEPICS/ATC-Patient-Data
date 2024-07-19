@@ -1,6 +1,26 @@
 <script setup>
 const props = defineProps(["user"]);
+import { XMarkIcon } from "@heroicons/vue/20/solid";
+import BlockShuffle from "../../assets/blocks-shuffle-3.svg";
 console.log("props.user", props.user);
+const clickedRowId = ref(0);
+const loadingBehavior = ref(false);
+let selectedBehavior = reactive({ value: {} });
+
+function handleRowClicked(id) {
+  clickedRowId.value = id;
+  loadingBehavior.value = true;
+  selectedBehavior.value = behaviors.data.value.body.find(
+    (behavior) => behavior.id === id
+  );
+  loadingBehavior.value = false;
+  console.log("selectedBehavior.value", selectedBehavior.value);
+  console.log("title", selectedBehavior.value.title);
+}
+
+function clearRowClicked() {
+  clickedRowId.value = 0;
+}
 
 import { PlusCircleIcon } from "@heroicons/vue/24/outline";
 const searchTerm = ref("");
@@ -20,7 +40,9 @@ watch([searchTerm, searchGraduated], () => {
 </script>
 
 <template>
-  <div class="flex p-3 md:justify-center h-full overflow-auto">
+  <div
+    class="flex flex-col md:flex-row p-3 md:justify-center h-full overflow-auto md:space-x-10 md:space-y-0 space-y-5"
+  >
     <div class="md:w-1/2 w-full">
       <div class="flex">
         <button v-on:click="" title="Create Behavior">
@@ -66,6 +88,7 @@ watch([searchTerm, searchGraduated], () => {
               v-for="behavior in behaviors.data.value.body"
               :key="behavior.id"
               class="hover:bg-gray-100 hover:cursor-pointer text-center"
+              @click="handleRowClicked(behavior.id)"
             >
               <td class="px-6 py-4 whitespace-nowrap border">
                 <div class="text-sm text-gray-900">
@@ -86,6 +109,44 @@ watch([searchTerm, searchGraduated], () => {
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+    <div
+      v-if="clickedRowId"
+      class="flex flex-col w-full md:w-1/2 border border-gray-900 rounded-lg p-3"
+    >
+      <div>
+        <div class="flex w-full justify-end">
+          <button @click="clearRowClicked">
+            <div
+              class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100"
+            >
+              <XMarkIcon class="h-6 w-6" />
+            </div>
+          </button>
+        </div>
+        <div class="flex justify-center text-xl">
+          {{ selectedBehavior.value && selectedBehavior.value.title }}
+        </div>
+        <table class="table-auto w-full">
+          <tbody>
+            <tr>
+              <td class="font-bold w-1/5">Type</td>
+              <td>
+                {{ selectedBehavior.value && selectedBehavior.value.type }}
+              </td>
+            </tr>
+            <tr>
+              <td class="font-bold w-1/5">Description</td>
+              <td>
+                {{ selectedBehavior.value && selectedBehavior.value.desc }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-if="loadingBehavior" class="flex items-center justify-center">
+        <BlockShuffle />
       </div>
     </div>
   </div>
