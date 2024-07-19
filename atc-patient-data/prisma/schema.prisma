@@ -70,12 +70,13 @@ model Behavior {
 }
 
 model BehaviorTemplate {
-  id       Int          @id @default(autoincrement())
-  title    String
-  desc     String
-  type     BehaviorType
-  Behavior Behavior[]
-  archive  Boolean      @default(false)
+  id         Int          @id @default(autoincrement())
+  title      String
+  desc       String
+  type       BehaviorType
+  arrayCount Int?
+  Behavior   Behavior[]
+  archive    Boolean      @default(false)
 }
 
 model Session {
