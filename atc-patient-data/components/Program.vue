@@ -3,7 +3,11 @@
 const props = defineProps(["user"]);
 
 // Import icons and assets
-import { XMarkIcon, PlusCircleIcon } from "@heroicons/vue/24/outline";
+import {
+  XMarkIcon,
+  PlusCircleIcon,
+  ArrowLongRightIcon,
+} from "@heroicons/vue/24/outline";
 import BlockShuffle from "../../assets/blocks-shuffle-3.svg";
 
 // Initialize state
@@ -12,6 +16,7 @@ const loadingBehavior = ref(false);
 let selectedBehavior = reactive({ value: {} });
 const searchTerm = ref("");
 const searchGraduated = ref(false);
+const createBehaviorClicked = ref(false);
 
 // Fetch behaviors
 const behaviors = await useFetch("/api/behavior/get/plural", {
@@ -41,6 +46,14 @@ function clearRowClicked() {
   clickedRowId.value = 0;
 }
 
+function handleCreateBehaviorClicked() {
+  createBehaviorClicked.value = true;
+}
+
+function clearCreateBehaviorClicked() {
+  createBehaviorClicked.value = false;
+}
+
 // Log output
 console.log("props.user", props.user);
 console.log("behaviors", behaviors);
@@ -54,7 +67,10 @@ console.log("title", selectedBehavior.value.title);
   >
     <div class="md:w-1/2 w-full">
       <div class="flex">
-        <button v-on:click="" title="Create Behavior">
+        <button
+          v-on:click="handleCreateBehaviorClicked"
+          title="Create Behavior"
+        >
           <div
             class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100"
           >
@@ -157,6 +173,48 @@ console.log("title", selectedBehavior.value.title);
       <div v-if="loadingBehavior" class="flex items-center justify-center">
         <BlockShuffle />
       </div>
+    </div>
+    <div
+      v-if="createBehaviorClicked"
+      class="flex flex-col w-full md:w-1/2 border border-gray-900 rounded-lg p-3"
+    >
+      <div>
+        <div class="flex w-full justify-end">
+          <button @click="clearCreateBehaviorClicked">
+            <div
+              class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100"
+            >
+              <XMarkIcon class="h-6 w-6" />
+            </div>
+          </button>
+        </div>
+        <div class="flex justify-center text-xl">Choose Template</div>
+        <div class="flex justify-end mt-3">
+          <button class="border flex space-x-1 p-1 rounded-lg text-gray-600 hover:border-gray-900 hover:text-gray-900">
+            <span class="">create a new behavior</span>
+            <span class=""><ArrowLongRightIcon class="h-6 w-6" /></span>
+          </button>
+        </div>
+        <table class="table-auto w-full mt-5">
+          <!-- <tbody>
+            <tr>
+              <td class="font-bold w-1/5">Type</td>
+              <td>
+                {{ selectedBehavior.value && selectedBehavior.value.type }}
+              </td>
+            </tr>
+            <tr>
+              <td class="font-bold w-1/5">Description</td>
+              <td>
+                {{ selectedBehavior.value && selectedBehavior.value.desc }}
+              </td>
+            </tr>
+          </tbody> -->
+        </table>
+      </div>
+      <!-- <div v-if="loadingBehavior" class="flex items-center justify-center">
+        <BlockShuffle />
+      </div> -->
     </div>
   </div>
 </template>
