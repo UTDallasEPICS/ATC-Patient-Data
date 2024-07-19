@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
         // }
       } catch (e) {
         console.error(e);
+        await sendRedirect(event, logoutRedirectUrl(token));
       }
     } else {
       // console.log("token not found");

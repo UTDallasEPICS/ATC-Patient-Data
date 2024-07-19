@@ -25,7 +25,7 @@ const sentenceCaseUserType = computed(() => {
 
 const { data } = await useFetch("/api/user/get/employeeNames");
 const names = ref(data.value);
-const employeeTypes = { 1:"ADMIN", 2:"BCBA", 3:"TECH" };
+const employeeTypes = { 1: "ADMIN", 2: "BCBA", 3: "TECH" };
 
 const formData = reactive({
   firstName: "",
@@ -42,7 +42,7 @@ const formData = reactive({
   phoneNumber: string;
   dateOfBirth: ""; //need to be stored as Date object
   assignedEmployee: { id: number; name: string } | null;
-  role: string,
+  role: string;
 };
 
 watch(formData, () => {
@@ -51,13 +51,12 @@ watch(formData, () => {
 
 async function emitSubmit() {
   try {
-    if(props.userType=='STUDENT'){
+    if (props.userType == "STUDENT") {
       await $fetch("/api/user/create/student", {
         method: "POST",
         body: formData,
       });
-    }
-    else {
+    } else {
       await $fetch("/api/user/create/employee", {
         method: "POST",
         body: formData,
@@ -72,14 +71,13 @@ async function emitSubmit() {
     formData.role = "TECH";
     emit("closeModal");
   } catch (error) {
-      if(props.userType=='STUDENT'){
-        console.error("error in creating a student", error);
-        alert("Error in creating a student");
-      }
-      else {
-        console.error("error in creating a employee", error);
-        alert("Error in creating a employee");
-      }
+    if (props.userType == "STUDENT") {
+      console.error("error in creating a student", error);
+      alert("Error in creating a student");
+    } else {
+      console.error("error in creating a employee", error);
+      alert("Error in creating a employee");
+    }
   }
 }
 
@@ -168,7 +166,7 @@ function emitClose() {
                 />
               </div>
 
-              <div v-if="props.userType=='STUDENT'" class="flex flex-col m-3">
+              <div v-if="props.userType == 'STUDENT'" class="flex flex-col m-3">
                 <label>Date of Birth</label>
                 <input
                   v-model="formData.dateOfBirth"
@@ -177,7 +175,7 @@ function emitClose() {
                 />
               </div>
 
-              <div v-if="props.userType=='STUDENT'" class="flex flex-col m-3">
+              <div v-if="props.userType == 'STUDENT'" class="flex flex-col m-3">
                 <label>Assigned Employee</label>
                 <Listbox v-model="formData.assignedEmployee">
                   <div class="relative">
@@ -241,16 +239,17 @@ function emitClose() {
                 </Listbox>
               </div>
 
-              <div v-if="props.userType=='EMPLOYEE'" class="flex flex-col m-3">
+              <div
+                v-if="props.userType == 'EMPLOYEE'"
+                class="flex flex-col m-3"
+              >
                 <label>Assigned Employee</label>
                 <Listbox v-model="formData.role">
                   <div class="relative">
                     <ListboxButton
                       class="outline-none relative w-full cursor-pointer rounded p-1 text-left border hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                     >
-                      <span class="block truncate">{{
-                        formData.role
-                      }}</span>
+                      <span class="block truncate">{{ formData.role }}</span>
                       <span
                         class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
                       >
@@ -271,7 +270,6 @@ function emitClose() {
                         <ListboxOption
                           v-slot="{ active, selected }"
                           v-for="type in employeeTypes"
-                          
                           :value="type"
                           as="template"
                         >
