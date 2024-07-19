@@ -201,6 +201,38 @@ async function main() {
       type: "TRIAL",
     },
   });
+
+  const behaviorTemplate1 = await prisma.behaviorTemplate.create({
+    data: {
+      title: "Behavior Template 1",
+      desc: "Behavior Template 1 Description",
+      type: "TRIAL",
+      behavior: behavior1,
+      behavior2,
+      behavior3,
+    },
+  });
+
+  const behaviorTemplate2 = await prisma.behaviorTemplate.create({
+    data: {
+      title: "Behavior Template 2",
+      desc: "Behavior Template 2 Description",
+      type: "TRIAL",
+      behavior: behavior4,
+      behavior5,
+      behavior6,
+    },
+  });
+  const behaviorTemplate3 = await prisma.behaviorTemplate.create({
+    data: {
+      title: "Behavior Template 3",
+      desc: "Behavior Template 3 Description",
+      type: "TRIAL",
+      behavior: behavior7,
+      behavior8,
+      behavior9,
+    },
+  });
 }
 
 main()
