@@ -19,8 +19,6 @@ const sessions = await useFetch("/api/session/retrieve", {
   },
 });
 
-console.log("sessions", sessions);
-
 //Methods
 async function createEmptySession() {
   console.log("studentId", props.user.data.value.id);
@@ -39,7 +37,7 @@ async function createEmptySession() {
 }
 
 //Watches
-watch(refresh, () => {
+watch([refresh, searchArchived], () => {
   sessions.refresh();
 });
 </script>
@@ -122,9 +120,9 @@ watch(refresh, () => {
                 </div>
               </td>
             </tr>
-            <tr v-if="sessions.data.value.body === null">
+            <tr v-if="sessions.data.value.body.length === 0">
               <td
-                colspan="2"
+                colspan="3"
                 class="px-6 py-4 whitespace-nowrap border text-center"
               >
                 <div class="text-sm text-gray-900">

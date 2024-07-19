@@ -4,6 +4,16 @@ export default defineEventHandler(async (event) => {
     where: {
       id: Number(userId),
       archive: searchArchived === "true" ? true : false,
+      // StudentProfile: {
+      //   Sessions: {
+      //     some: {
+      //       createdAt: {
+      //         contains: searchTerm,
+      //         mode: "insensitive",
+      //       },
+      //     },
+      //   },
+      // },
     },
     include: {
       StudentProfile: {
@@ -27,10 +37,10 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  res = res.StudentProfile.Sessions ? res.StudentProfile.Sessions : [];
+  res = res && res.StudentProfile.Sessions ? res.StudentProfile.Sessions : [];
 
   return {
     statusCode: 200,
-    body: res,
+    body: res ? res : [],
   };
 });
