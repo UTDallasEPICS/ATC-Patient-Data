@@ -80,8 +80,8 @@ model BehaviorTemplate {
 model Session {
   id         Int             @id @default(autoincrement())
   Data       BehaviorData[]
-  studentId  Int             @unique
-  employeeId Int             @unique
+  studentId  Int
+  employeeId Int
   createdAt  DateTime
   note       String
   Student    StudentProfile  @relation(fields: [studentId], references: [id], onUpdate: Cascade)

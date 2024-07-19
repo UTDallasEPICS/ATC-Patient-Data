@@ -66,7 +66,7 @@ watch(currentTab, (newVal) => {
       </button>
     </div>
     <div class="h-full border border-black rounded-b-lg overflow-auto">
-      <Session v-if="currentTab === 'sessions'" />
+      <Session v-if="currentTab === 'sessions'" :user="student"/>
       <Program v-if="currentTab === 'program'" :user="student" />
       <UserInfo
         v-if="currentTab === 'userInfo'"

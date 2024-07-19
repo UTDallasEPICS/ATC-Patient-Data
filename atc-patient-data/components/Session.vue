@@ -1,10 +1,47 @@
 <script setup>
+//Props
+const props = defineProps(["user"]);
+
 //Imports
 import { PlusCircleIcon } from "@heroicons/vue/20/solid";
 
 //Refs
 const searchTerm = ref("");
 const searchArchived = ref(false);
+const refresh = ref(0);
+
+//Fetch Data
+const sessions = await useFetch("/api/session/retrieve", {
+  query: {
+    userId: props.user.data.value.id,
+    searchTerm: searchTerm,
+    searchArchived: searchArchived,
+  },
+});
+
+console.log("sessions", sessions);
+
+//Methods
+async function createEmptySession() {
+  console.log("studentId", props.user.data.value.id);
+  console.log("employeeId", useCookie("userId").value);
+  console.log("createdAt", new Date().toISOString());
+  const res = await $fetch("/api/session/create", {
+    method: "POST",
+    body: {
+      studentId: props.user.data.value.id,
+      employeeId: useCookie("userId").value,
+      createdAt: new Date().toISOString(),
+    },
+  });
+  console.log("res", res);
+  refresh.value++;
+}
+
+//Watches
+watch(refresh, () => {
+  sessions.refresh();
+});
 </script>
 
 <template>
@@ -13,7 +50,7 @@ const searchArchived = ref(false);
   >
     <div class="md:w-1/2 w-full">
       <div class="flex">
-        <button v-on:click="" title="Create Session">
+        <button v-on:click="createEmptySession" title="Create Session">
           <div
             class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100"
           >
@@ -52,34 +89,50 @@ const searchArchived = ref(false);
               <th
                 class="px-6 py-3 text-center text-xs font-medium uppercase border"
               >
+                Time
+              </th>
+              <th
+                class="px-6 py-3 text-center text-xs font-medium uppercase border"
+              >
                 Supervising Employee
               </th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <!-- <tr
-              v-for="behavior in behaviors.data.value.body"
-              :key="behavior.id"
+            <tr
+              v-for="session in sessions.data.value.body"
+              :key="session.id"
               class="hover:bg-gray-100 hover:cursor-pointer text-center"
-              @click="handleRowClicked(behavior.id)"
+              @click=""
             >
               <td class="px-6 py-4 whitespace-nowrap border">
                 <div class="text-sm text-gray-900">
-                  {{ behavior.title }}
+                  {{ session.createdAt.split("T")[0] }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap border">
+                <div class="text-sm text-gray-900">
+                  {{ session.createdAt.split("T")[1].split(".")[0] }}
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap border">
+                <div class="text-sm text-gray-900">
+                  {{ session.Employee.User && session.Employee.User.firstName }}
+                  {{ session.Employee.User && session.Employee.User.lastName }}
                 </div>
               </td>
             </tr>
-            <tr v-if="!behaviors.data.value.body.length">
+            <tr v-if="sessions.data.value.body === null">
               <td
-                colspan="1"
+                colspan="2"
                 class="px-6 py-4 whitespace-nowrap border text-center"
               >
                 <div class="text-sm text-gray-900">
-                  No behaviors found for
+                  No sessions found for
                   {{ props.user.data && props.user.data.value.firstName }}
                 </div>
               </td>
-            </tr> -->
+            </tr>
           </tbody>
         </table>
       </div>

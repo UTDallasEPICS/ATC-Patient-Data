@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     body.id_token,
     fs.readFileSync(process.cwd() + "/cert-dev.pem")
   );
+  console.log("payload", payload);
 
   if (typeof payload === "object" && "email" in payload) {
     retrievedEmail = payload.email;
@@ -20,17 +21,18 @@ export default defineEventHandler(async (event) => {
       where: { email: retrievedEmail },
     });
     // if (!retrievedUser) {
-      // console.error(`${retrievedEmail} not found`);
-      // return await fetch("http://localhost:3000/api/auth/logout", {
-      //   method: "GET",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
+    // console.error(`${retrievedEmail} not found`);
+    // return await fetch("http://localhost:3000/api/auth/logout", {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
     // } else {
-      console.log("retrievedUser", retrievedUser);
-      setCookie(event, "token", body.id_token);
-      await sendRedirect(event, "/students");
+    console.log("retrievedUser", retrievedUser);
+    setCookie(event, "token", body.id_token);
+    setCookie(event, "userId", retrievedUser.id.toString());
+    await sendRedirect(event, "/students");
     // }
   } catch (error) {
     console.error(error);
