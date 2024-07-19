@@ -3,7 +3,7 @@
 const props = defineProps(["user"]);
 
 //Imports
-import { PlusCircleIcon } from "@heroicons/vue/20/solid";
+import { PlusCircleIcon } from "@heroicons/vue/24/outline";
 
 //Refs
 const searchTerm = ref("");
