@@ -391,7 +391,7 @@ console.log("title", selectedBehavior.value.title);
               </div>
               <div class="flex flex-col m-3">
                 <label>Description</label>
-                <input
+                <textarea 
                   v-model="createBehaviorFormData.desc"
                   type="text"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
