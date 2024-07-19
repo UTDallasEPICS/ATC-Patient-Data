@@ -73,8 +73,8 @@ model BehaviorTemplate {
   title    String
   desc     String
   type     BehaviorType
-  archive  Boolean      @default(false)
   Behavior Behavior[]
+  archive  Boolean      @default(false)
 }
 
 model Session {

@@ -121,12 +121,29 @@ async function main() {
     },
   });
 
+  const behaviorTemplate1 = await prisma.behaviorTemplate.create({
+    data: {
+      title: "Behavior Template 1",
+      desc: "Behavior Template 1 Description",
+      type: "TRIAL",
+    },
+  });
+
+  const behaviorTemplate2 = await prisma.behaviorTemplate.create({
+    data: {
+      title: "Behavior Template 2",
+      desc: "Behavior Template 2 Description",
+      type: "TRIAL",
+    },
+  });
+
   const behavior1 = await prisma.behavior.create({
     data: {
       title: "Behavior 1",
       desc: "Behavior 1 Description",
       studentId: student1Profile.id,
       type: "TRIAL",
+      behaviorTempId: behaviorTemplate1.id,
     },
   });
 
@@ -136,6 +153,7 @@ async function main() {
       desc: "Behavior 2 Description",
       studentId: student1Profile.id,
       type: "TRIAL",
+      behaviorTempId: behaviorTemplate1.id,
     },
   });
 
@@ -145,6 +163,7 @@ async function main() {
       desc: "Behavior 3 Description",
       studentId: student1Profile.id,
       type: "TRIAL",
+      behaviorTempId: behaviorTemplate1.id,
     },
   });
 
@@ -154,6 +173,7 @@ async function main() {
       desc: "Behavior 4 Description",
       studentId: student2Profile.id,
       type: "TRIAL",
+      behaviorTempId: behaviorTemplate2.id,
     },
   });
 
@@ -163,6 +183,7 @@ async function main() {
       desc: "Behavior 5 Description",
       studentId: student2Profile.id,
       type: "TRIAL",
+      behaviorTempId: behaviorTemplate2.id,
     },
   });
 
@@ -172,6 +193,7 @@ async function main() {
       desc: "Behavior 6 Description",
       studentId: student2Profile.id,
       type: "TRIAL",
+      behaviorTempId: behaviorTemplate2.id,
     },
   });
 
@@ -199,38 +221,6 @@ async function main() {
       desc: "Behavior 9 Description",
       studentId: student3Profile.id,
       type: "TRIAL",
-    },
-  });
-
-  const behaviorTemplate1 = await prisma.behaviorTemplate.create({
-    data: {
-      title: "Behavior Template 1",
-      desc: "Behavior Template 1 Description",
-      type: "TRIAL",
-      behavior: behavior1,
-      behavior2,
-      behavior3,
-    },
-  });
-
-  const behaviorTemplate2 = await prisma.behaviorTemplate.create({
-    data: {
-      title: "Behavior Template 2",
-      desc: "Behavior Template 2 Description",
-      type: "TRIAL",
-      behavior: behavior4,
-      behavior5,
-      behavior6,
-    },
-  });
-  const behaviorTemplate3 = await prisma.behaviorTemplate.create({
-    data: {
-      title: "Behavior Template 3",
-      desc: "Behavior Template 3 Description",
-      type: "TRIAL",
-      behavior: behavior7,
-      behavior8,
-      behavior9,
     },
   });
 }
