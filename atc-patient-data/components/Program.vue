@@ -128,7 +128,7 @@ watch([searchTerm, searchGraduated], () => {
         <div class="flex justify-center text-xl">
           {{ selectedBehavior.value && selectedBehavior.value.title }}
         </div>
-        <table class="table-auto w-full">
+        <table class="table-auto w-full mt-5">
           <tbody>
             <tr>
               <td class="font-bold w-1/5">Type</td>
