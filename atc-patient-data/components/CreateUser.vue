@@ -65,9 +65,9 @@ function validateEmail(email: string) {
 }
 
 function validatePhoneNumber(phoneNumber: string) {
-  // Assuming phone number should only contain digits and be at least 10 digits long
-  const phonePattern = /^\d{10,}$/;
-  return phonePattern.test(phoneNumber);
+  // Check if phone number contains only digits
+  const phonePattern = /^\d+$/;
+  return phonePattern.test(phoneNumber) && phoneNumber.length >= 10;
 }
 
 function validateForm() {
@@ -92,7 +92,7 @@ function validateForm() {
   formErrors.phoneNumber = formData.phoneNumber.trim()
     ? validatePhoneNumber(formData.phoneNumber.trim())
       ? ""
-      : "Phone number must be at least 10 digits."
+      : "Phone number must be at least 10 digits and contain only numbers."
     : "Phone number is required.";
 
   formErrors.dateOfBirth = formData.dateOfBirth.trim()
@@ -133,6 +133,13 @@ function emitClose() {
   formData.dateOfBirth = "";
   formData.assignedEmployee = (data.value && data.value[0]) || null;
   emit("closeModal");
+}
+
+function sanitizePhoneNumber(event: Event) {
+  const input = event.target as HTMLInputElement;
+  // Remove non-numeric characters
+  input.value = input.value.replace(/\D/g, '');
+  formData.phoneNumber = input.value;
 }
 </script>
 
@@ -207,8 +214,9 @@ function emitClose() {
                 <label>Phone Number</label>
                 <input
                   v-model.trim="formData.phoneNumber"
-                  type="number"
-                  class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  type="text"
+                  @input="sanitizePhoneNumber"
+                  class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
                 <span v-if="formErrors.phoneNumber" class="text-red-500 text-sm">{{ formErrors.phoneNumber }}</span>
               </div>
