@@ -1,6 +1,5 @@
 node_modules
 dist
-*.local
-.next
 *.DS_Store
 .env
+.nuxt
