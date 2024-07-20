@@ -1,23 +1,13 @@
-<script setup lang="ts">
-import type {
-  User,
-  StudentProfile,
-  EmployeeProfile,
-  Behavior,
-  Session,
-} from "@prisma/client";
+<script setup>
+// import type {
+//   User,
+//   StudentProfile,
+//   EmployeeProfile,
+//   Behavior,
+//   Session,
+// } from "@prisma/client";
 
 const route = useRoute();
-/*
-  Import two compoents (create two files inside of components folder)
-    1. sessions
-      a. pass id
-        i. api for getting student's sessions
-    2. program
-      a. pass id
-        i. api for getting student's behaviors
-
-*/
 
 const student = await useFetch(`/api/user/get/student`, {
   query: { id: route.params.id },
@@ -25,7 +15,7 @@ const student = await useFetch(`/api/user/get/student`, {
 
 let currentTab = ref("sessions");
 
-function switchTab(tabName: string) {
+function switchTab(tabName) {
   currentTab.value = tabName;
 }
 

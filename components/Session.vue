@@ -4,11 +4,13 @@ const props = defineProps(["user"]);
 
 //Imports
 import { PlusCircleIcon } from "@heroicons/vue/24/outline";
+import BlockShuffle from "~/assets/blocks-shuffle-3.svg";
 
 //Refs
 const searchTerm = ref("");
 const searchArchived = ref(false);
 const refresh = ref(0);
+const loadingNewSession = ref(false);
 
 //Fetch Data
 const sessions = await useFetch("/api/session/retrieve", {
@@ -20,10 +22,24 @@ const sessions = await useFetch("/api/session/retrieve", {
 });
 
 //Methods
-async function createEmptySession() {
-  console.log("studentId", props.user.data.value.id);
-  console.log("employeeId", useCookie("userId").value);
-  console.log("createdAt", new Date().toISOString());
+// async function createEmptySession() {
+//   console.log("studentId", props.user.data.value.id);
+//   console.log("employeeId", useCookie("userId").value);
+//   console.log("createdAt", new Date().toISOString());
+//   const res = await $fetch("/api/session/create", {
+//     method: "POST",
+//     body: {
+//       studentId: props.user.data.value.id,
+//       employeeId: useCookie("userId").value,
+//       createdAt: new Date().toISOString(),
+//     },
+//   });
+//   console.log("res", res);
+//   refresh.value++;
+// }
+
+async function createNewSession() {
+  loadingNewSession.value = true;
   const res = await $fetch("/api/session/create", {
     method: "POST",
     body: {
@@ -34,6 +50,20 @@ async function createEmptySession() {
   });
   console.log("res", res);
   refresh.value++;
+  await navigateTo({
+    path:
+      "/students/student-profile/" +
+      props.user.data.value.id +
+      "/" +
+      res.body.id,
+  });
+  loadingNewSession.value = false;
+}
+
+async function navigateToSession(sessionId) {
+  await navigateTo({
+    path: `/students/student-profile/${props.user.data.value.id}/${sessionId}`,
+  });
 }
 
 //Watches
@@ -48,11 +78,12 @@ watch([refresh, searchArchived], () => {
   >
     <div class="md:w-1/2 w-full">
       <div class="flex">
-        <button v-on:click="createEmptySession" title="Create Session">
+        <button v-on:click="createNewSession" title="Create Session">
           <div
             class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100"
           >
-            <PlusCircleIcon class="h-6 w-6" />
+            <PlusCircleIcon class="h-6 w-6" v-if="!loadingNewSession" />
+            <BlockShuffle class="h-6 w-6" v-else />
           </div>
         </button>
         <input
@@ -101,7 +132,7 @@ watch([refresh, searchArchived], () => {
               v-for="session in sessions.data.value.body"
               :key="session.id"
               class="hover:bg-gray-100 hover:cursor-pointer text-center"
-              @click=""
+              @click="navigateToSession(session.id)"
             >
               <td class="px-6 py-4 whitespace-nowrap border">
                 <div class="text-sm text-gray-900">
