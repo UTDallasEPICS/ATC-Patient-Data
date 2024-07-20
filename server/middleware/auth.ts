@@ -7,6 +7,15 @@ const runtime = useRuntimeConfig();
 
 export default defineEventHandler(async (event) => {
   console.log("middleware accessed");
+  // const body = readBody(event);
+  // console.log("this is the body in the middleware search for it", body);
+  // const body = readBody(event);
+  // let payload = jwt.verify(
+  //   body.id_token,
+  //   fs.readFileSync(process.cwd() + "/cert-dev.pem")
+  // );
+  // console.log("payload", payload);
+
   event.context.prisma = prismaClient;
   const token = getCookie(event, "token") || "";
   if (!token && !event.node.req.url?.includes("/api/auth/callback")) {
@@ -36,10 +45,25 @@ export default defineEventHandler(async (event) => {
         // }
       } catch (e) {
         console.error(e);
-        await sendRedirect(event, logoutRedirectUrl(token));
+        // await sendRedirect(event, logoutRedirectUrl(token));
+        // const id_token = getCookie(event, "token");
+        setCookie(event, "token", "");
+        await sendRedirect(event, logoutRedirectUrl(token as string) || "");
+        // try {
+        //   await $fetch(`/api/auth/logout`, {
+        //     mode: "no-cors",
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   });
+        // } catch (error) {
+        //   console.error("Error logging out:", error);
+        // }
+        // await sendRedirect(event, "/");
       }
     } else {
-      // console.log("token not found");
+      console.log("token not found");
     }
   }
 });

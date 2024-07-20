@@ -2,9 +2,10 @@ import jwt from "jsonwebtoken";
 import fs from "fs";
 
 export default defineEventHandler(async (event) => {
+  console.log("callback accessed");
   const body = await readBody(event);
   let retrievedEmail;
-
+  // console.log("this is the body in the callback.post.ts search for it", body);
   let payload = jwt.verify(
     body.id_token,
     fs.readFileSync(process.cwd() + "/cert-dev.pem")
