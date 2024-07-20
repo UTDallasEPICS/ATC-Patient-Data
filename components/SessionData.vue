@@ -8,8 +8,6 @@ const props = defineProps({
   //save: Boolean //? needed if saving inside this component
 });
 
-const save = ref(0);
-
 let verifiedCount;
 if (props.type == "TRIAL" || props.type == "COUNT") {
   verifiedCount = 1;
@@ -20,7 +18,7 @@ else{
 
 const data = ref(Array(verifiedCount));
 
-watch([save], () => {
+watch([data], () => {
   // call the save api with current data
 });
 
@@ -29,30 +27,34 @@ watch([save], () => {
 
 
 <template>
-  {{ data }}
-  <div v-for="i in verifiedCount">
+  <div class="relative grid items-center grid-cols-[repeat(auto-fit,minmax(100px,2fr))] bg-gray-300">
+  <div v-for="i in verifiedCount" class="flex justify-center">
     <div v-if="type === 'TRIAL' || type === 'TRIAL_ARRAY'">
-      <label v-if="type === 'TRIAL'">Trial: </label>
-      <label v-else>Trial {{ i }}: </label>
-      <input
-        type="radio"
-        title="true"
-        value="true"
-        v-model="data[i-1]"
-      >
-      <input
-        type="radio"
-        title="false"
-        value="false"
-        v-model="data[i-1]"
-      >
+      <label v-if="verifiedCount==1" class="flex justify-center">Trial</label>
+      <label v-else class="flex justify-center">Trial {{ i }}</label>
+      <div class="flex justify-center">
+        <input
+          type="radio"
+          title="true"
+          value="true"
+          v-model="data[i-1]"
+        >
+        <input
+          type="radio"
+          title="false"
+          value="false"
+          v-model="data[i-1]"
+        >
+      </div>
     </div>
     <div v-if="type === 'COUNT' || type === 'COUNT_ARRAY'">
-      <label v-if="type === 'COUNT'">Count: </label>
-      <label v-else>Count {{ i }}: </label>
+      <label v-if="verifiedCount==1" class="flex justify-center">Count</label>
+      <label v-else class="flex justify-center">Count {{ i }}</label>
       <input
         v-model.number="data[i-1]"
+        class="w-24"
       >
     </div>
+  </div>
   </div>
 </template>
