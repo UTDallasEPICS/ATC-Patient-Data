@@ -33,18 +33,22 @@ watch([data], () => {
       <label v-if="verifiedCount==1" class="flex justify-center">Trial</label>
       <label v-else class="flex justify-center">Trial {{ i }}</label>
       <div class="flex justify-center">
-        <input
-          type="radio"
-          title="true"
-          value="true"
-          v-model="data[i-1]"
-        >
-        <input
-          type="radio"
-          title="false"
-          value="false"
-          v-model="data[i-1]"
-        >
+        <div class="px-2 scale-125">
+          <input
+            type="radio"
+            title="true"
+            value="true"
+            v-model="data[i-1]"
+          >
+        </div>
+        <div class="px-2 scale-125">
+          <input
+            type="radio"
+            title="false"
+            value="false"
+            v-model="data[i-1]"
+          >
+        </div>
       </div>
     </div>
     <div v-if="type === 'COUNT' || type === 'COUNT_ARRAY'">
@@ -52,7 +56,7 @@ watch([data], () => {
       <label v-else class="flex justify-center">Count {{ i }}</label>
       <input
         v-model.number="data[i-1]"
-        class="w-24"
+        class="w-24 text-black text-center"
       >
     </div>
   </div>
