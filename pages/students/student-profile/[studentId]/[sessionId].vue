@@ -112,11 +112,12 @@ watch(searchTerm, (newVal) => {
             <span>{{ behavior.desc }}</span>
           </div>
         </summary>
-        <div
+        <SessionData
+          :type="behavior.type"
+          :array-count="behavior.arrayCount"
           class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
         >
-          asdfadfafd
-        </div>
+        </SessionData>
       </details>
       <div v-if="behaviors.data.value.body.length === 0">
         <div class="flex p-3 border-2 justify-center items-center m-2 bg-gray-100 rounded">
