@@ -93,18 +93,21 @@ watch(searchTerm, (newVal) => {
     <div
       class="mt-3 p-3 rounded border-2 border-gray-900 h-[calc(100vh-11rem)] overflow-auto"
     >
-      <input
-        class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700 w-[calc(100%-1.5rem)]"
-        placeholder="Search Behaviors"
-        v-model.trim="searchTerm"
-      />
+      <div class="flex">
+        <input
+          class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700 w-[calc(100%-1.5rem)]"
+          placeholder="Search Behaviors"
+          v-model.trim="searchTerm"
+        />
+        <button class="uppercase font-semibold rounded border border-gray-900 p-3 hover:bg-gray-200 focus:bg-gray-300">Notes</button>
+      </div>
       <details
-        class="p-2 rounded border bg-gray-200 m-3"
+        class="p-2 rounded border bg-gray-200 m-3 cursor-default"
         v-for="behavior in behaviors.data.value.body"
         :key="behavior.id"
         :open="toggleAll"
       >
-        <summary>
+        <summary class="cursor-pointer">
           <div
             class="flex flex-col border rounded border-gray-100 bg-gray-100 p-2 overflow-auto max-h-[5rem]"
           >
