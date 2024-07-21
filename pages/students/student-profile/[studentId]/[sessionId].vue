@@ -116,11 +116,12 @@ watch(searchTerm, (newVal) => {
           :type="behavior.type"
           :array-count="behavior.arrayCount"
           class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
-        >
-        </SessionData>
+        />
       </details>
       <div v-if="behaviors.data.value.body.length === 0">
-        <div class="flex p-3 border-2 justify-center items-center m-2 bg-gray-100 rounded">
+        <div
+          class="flex p-3 border-2 justify-center items-center m-2 bg-gray-100 rounded"
+        >
           <h1 class="">No Behaviors Found</h1>
         </div>
       </div>
