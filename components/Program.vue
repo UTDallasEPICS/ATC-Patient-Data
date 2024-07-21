@@ -13,11 +13,6 @@ import {
 } from "@heroicons/vue/24/outline";
 import BlockShuffle from "../../assets/blocks-shuffle-3.svg";
 import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
   Listbox,
   ListboxButton,
   ListboxOptions,
@@ -45,6 +40,7 @@ const createBehaviorFormData = ref({
   title: "",
   desc: "",
   type: behaviorTypes[0],
+  arrayCount: 0,
   studentId: props.user.data.value.id,
   makeIntoTemplateToo: makeIntoTemplateToo.value,
 });
@@ -113,6 +109,7 @@ function clearCreateNewBehaviorNotClicked() {
     title: "",
     desc: "",
     type: behaviorTypes[0],
+    arrayCount: 0,
     studentId: props.user.data.value.id,
     makeIntoTemplateToo: false,
   };
@@ -144,6 +141,7 @@ function editTemplate(id) {
         return type;
       }
     }),
+    arrayCount: currTemplate.arrayCount,
     studentId: props.user.data.value.id,
     makeIntoTemplateToo: false,
   };
@@ -152,6 +150,13 @@ function editTemplate(id) {
     createBehaviorFormData.value
   );
   createNewBehaviorNotClicked.value = false;
+}
+
+function isTypeArray(typeId) {
+  if (typeId === "TRIAL_ARRAY" || typeId === "COUNT_ARRAY") {
+    return true;
+  }
+  return false;
 }
 
 // Log output
@@ -262,6 +267,14 @@ console.log("title", selectedBehavior.value.title);
               </td>
             </tr>
             <tr>
+              <td class="font-bold w-1/5">Count</td>
+              <td>
+                {{
+                  selectedBehavior.value && selectedBehavior.value.arrayCount
+                }}
+              </td>
+            </tr>
+            <tr>
               <td class="font-bold w-1/5">Description</td>
               <td>
                 {{ selectedBehavior.value && selectedBehavior.value.desc }}
@@ -300,16 +313,6 @@ console.log("title", selectedBehavior.value.title);
             </button>
           </div>
           <div class="flex mt-10">
-            <!-- <button
-              v-on:click="handleCreateBehaviorClicked"
-              title="Create Behavior"
-            >
-              <div
-                class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100"
-              >
-                <PlusCircleIcon class="h-6 w-6" />
-              </div>
-            </button> -->
             <input
               v-model.trim="searchBehaviorTemplates"
               class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700"
@@ -391,7 +394,7 @@ console.log("title", selectedBehavior.value.title);
               </div>
               <div class="flex flex-col m-3">
                 <label>Description</label>
-                <textarea 
+                <textarea
                   v-model="createBehaviorFormData.desc"
                   type="text"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
@@ -459,6 +462,17 @@ console.log("title", selectedBehavior.value.title);
                     </transition>
                   </div>
                 </Listbox>
+              </div>
+              <div
+                class="flex flex-col m-3"
+                v-if="isTypeArray(createBehaviorFormData.type.id)"
+              >
+                <label>Count</label>
+                <input
+                  v-model="createBehaviorFormData.arrayCount"
+                  type="number"
+                  class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
+                />
               </div>
               <div class="flex w-full p-3 justify-between">
                 <label class="inline-flex items-center cursor-pointer">

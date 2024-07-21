@@ -99,7 +99,11 @@ watch(searchTerm, (newVal) => {
           placeholder="Search Behaviors"
           v-model.trim="searchTerm"
         />
-        <button class="uppercase font-semibold rounded border border-gray-900 p-3 hover:bg-gray-200 focus:bg-gray-300">Notes</button>
+        <button
+          class="uppercase font-semibold rounded border border-gray-900 p-3 hover:bg-gray-200 focus:bg-gray-300"
+        >
+          Notes
+        </button>
       </div>
       <details
         class="p-2 rounded border bg-gray-200 m-3 cursor-default"

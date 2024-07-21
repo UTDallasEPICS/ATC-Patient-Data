@@ -162,7 +162,8 @@ async function main() {
       title: "Behavior 3",
       desc: "Behavior 3 Description",
       studentId: student1Profile.id,
-      type: "TRIAL",
+      type: "TRIAL_ARRAY",
+      arrayCount: 5,
       behaviorTempId: behaviorTemplate1.id,
     },
   });
@@ -192,7 +193,8 @@ async function main() {
       title: "Behavior 6",
       desc: "Behavior 6 Description",
       studentId: student2Profile.id,
-      type: "TRIAL",
+      type: "COUNT_ARRAY",
+      arrayCount: 5,
       behaviorTempId: behaviorTemplate2.id,
     },
   });

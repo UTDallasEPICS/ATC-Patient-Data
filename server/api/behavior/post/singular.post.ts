@@ -3,6 +3,7 @@ export default defineEventHandler(async (event) => {
     title,
     desc,
     type,
+    arrayCount,
     studentId,
     makeIntoTemplateToo = false,
   } = await readBody(event);
@@ -21,6 +22,7 @@ export default defineEventHandler(async (event) => {
       title,
       desc,
       type: type.id,
+      arrayCount,
       studentId: studentProfile.StudentProfile.id,
     },
   });
@@ -31,6 +33,7 @@ export default defineEventHandler(async (event) => {
         title,
         desc,
         type: type.id,
+        arrayCount,
       },
     });
     await event.context.prisma.behavior.update({
