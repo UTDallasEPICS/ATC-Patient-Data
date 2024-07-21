@@ -4,17 +4,20 @@ import {
   ChevronDoubleDownIcon,
 } from "@heroicons/vue/24/outline";
 
+
 const route = useRoute();
 const studentId = route.params.studentId;
 const sessionId = route.params.sessionId;
 const searchTerm = ref("");
 const toggleAll = ref(false);
 
+
 const student = await useFetch("/api/user/get/student", {
   query: {
     id: studentId,
   },
 });
+
 
 const behaviors = await useFetch("/api/behavior/get/plural", {
   query: {
@@ -24,11 +27,13 @@ const behaviors = await useFetch("/api/behavior/get/plural", {
   },
 });
 
+
 const currSession = await useFetch("/api/session/singular/retrieve", {
   query: {
     sessionId: sessionId,
   },
 });
+
 
 const currSessionDate = new Date(
   currSession.data.value.body.createdAt
@@ -38,24 +43,31 @@ const currSessionTime = new Date(
 ).toLocaleTimeString();
 console.log("currSessionDate", currSessionDate);
 
+
 console.log("behaviors in session", behaviors);
+
 
 console.log("student in session", student);
 
+
 console.log("currSession in session", currSession);
+
 
 function navigateBack() {
   navigateTo({ path: "/students/student-profile/" + studentId });
 }
 
+
 function toggleAllBehaviors() {
   toggleAll.value = !toggleAll.value;
 }
+
 
 watch(searchTerm, (newVal) => {
   console.log("behaviors", behaviors);
 });
 </script>
+
 
 <template>
   <div class="flex flex-col p-3">
@@ -135,3 +147,4 @@ watch(searchTerm, (newVal) => {
     </div>
   </div>
 </template>
+
