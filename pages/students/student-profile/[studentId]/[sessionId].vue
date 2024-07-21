@@ -102,7 +102,7 @@ watch(searchTerm, (newVal) => {
         <button
           class="uppercase font-semibold rounded border border-gray-900 p-3 hover:bg-gray-200 focus:bg-gray-300"
         >
-          Notes
+          Add Notes
         </button>
       </div>
       <details
