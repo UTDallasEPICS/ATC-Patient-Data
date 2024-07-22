@@ -88,6 +88,7 @@ model Session {
   note       String
   Student    StudentProfile  @relation(fields: [studentId], references: [id], onUpdate: Cascade)
   Employee   EmployeeProfile @relation(fields: [employeeId], references: [id], onUpdate: Cascade) //what are we doing onDelete?
+  submitted  Boolean       @default(false)
 }
 
 model BehaviorData {
