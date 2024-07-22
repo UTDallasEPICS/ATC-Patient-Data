@@ -11,6 +11,17 @@ const studentId = route.params.studentId;
 const sessionId = route.params.sessionId;
 const searchTerm = ref("");
 const toggleAll = ref(false);
+const createNoteModalOpen = ref(false);
+
+function openModal() {
+  createNoteModalOpen.value = true;
+  console.log("modal opened");
+}
+
+function closeModal() {
+  createNoteModalOpen.value = false;
+  console.log("modal closed");
+}
 
 const student = await useFetch("/api/user/get/student", {
   query: {
@@ -112,13 +123,11 @@ watch(searchTerm, (newVal) => {
             <PlusCircleIcon class="h-6 w-6" />
           </div>
         </button>
-        <CreateUser
+        <AddTextBox
           :isOpen="createNoteModalOpen"
           :sessionId="sessionId"
           @close-modal="closeModal"
         />
-
-        <AddTextBox v-if="showAddTextBox" @close="showTextBox = false" @save="handleSave" />
       </div>
 
       <details

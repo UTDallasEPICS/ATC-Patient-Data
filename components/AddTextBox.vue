@@ -10,20 +10,9 @@ import {
 
 const createNoteModalOpen = ref(false);
 
-function openModal() {
-  createNoteModalOpen.value = true;
-  console.log("modal opened");
-}
-
-function closeModal() {
-  createNoteModalOpen.value = false;
-  console.log("modal closed");
-}
-
 const props = defineProps({
-  sessionId: Number,
-  showTextBox: Boolean,
   isOpen: Boolean,
+  sessionId: Number,
 });
 
 const emit = defineEmits(["closeModal", "submit"]);
@@ -70,7 +59,7 @@ function emitClose() {
 
 
 <template>
-    <TransitionRoot appear :show="createNoteModalOpen.value" as="template">
+    <TransitionRoot appear :show="isOpen" as="template">
       <Dialog as="div" @close="emitClose" class="relative z-10">
         <TransitionChild
           as="template"
