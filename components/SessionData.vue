@@ -8,7 +8,7 @@ const props = defineProps({
   doSave: Number,
 });
 
-emits: ['saveData'];
+const emits = defineEmits['saveData'];
 
 const verifiedCount =
   props.type === "TRIAL" || props.type === "COUNT" ? 1 : props.arrayCount;
