@@ -4,6 +4,7 @@ import {
   ChevronDoubleDownIcon,
 } from "@heroicons/vue/24/outline";
 
+const showTextBox = ref(false)
 
 const route = useRoute();
 const studentId = route.params.studentId;
@@ -11,13 +12,11 @@ const sessionId = route.params.sessionId;
 const searchTerm = ref("");
 const toggleAll = ref(false);
 
-
 const student = await useFetch("/api/user/get/student", {
   query: {
     id: studentId,
   },
 });
-
 
 const behaviors = await useFetch("/api/behavior/get/plural", {
   query: {
@@ -27,13 +26,11 @@ const behaviors = await useFetch("/api/behavior/get/plural", {
   },
 });
 
-
 const currSession = await useFetch("/api/session/singular/retrieve", {
   query: {
     sessionId: sessionId,
   },
 });
-
 
 const currSessionDate = new Date(
   currSession.data.value.body.createdAt
@@ -67,7 +64,6 @@ watch(searchTerm, (newVal) => {
   console.log("behaviors", behaviors);
 });
 </script>
-
 
 <template>
   <div class="flex flex-col p-3">
@@ -113,9 +109,14 @@ watch(searchTerm, (newVal) => {
         />
         <button
           class="uppercase font-semibold rounded border border-gray-900 p-3 hover:bg-gray-200 focus:bg-gray-300"
+          @click = "showTextBox = true"
         >
           Add Notes
         </button>
+
+        <AddTextBox :sessionId="sessionId" :showTextBox="showTextBox" @close="showTextBox = false" />
+
+
       </div>
       <details
         class="p-2 rounded border bg-gray-200 m-3 cursor-default"
@@ -147,4 +148,5 @@ watch(searchTerm, (newVal) => {
     </div>
   </div>
 </template>
+
 
