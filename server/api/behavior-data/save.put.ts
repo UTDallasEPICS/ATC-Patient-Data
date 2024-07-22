@@ -2,8 +2,7 @@ export default defineEventHandler(async (event) => {
   const { 
     behaviorID, 
     sessionID, 
-    data, 
-    type, 
+    data,
     doSubmit, 
   } = await readBody(event);
 
@@ -24,16 +23,6 @@ export default defineEventHandler(async (event) => {
     };
   }
   else {
-    let convertedData;
-
-    if (type == "COUNT" || type == "TRIAL") {
-      convertedData = String(data);
-      return {};
-    } 
-    else {
-      convertedData = data.join(",");
-    }
-
     // check if the behavior data exists
     const behaviorData = await event.context.prisma.behaviorData.findFirst({
       where: {
@@ -48,7 +37,7 @@ export default defineEventHandler(async (event) => {
           id: behaviorData.id,
         },
         data: {
-          data: convertedData,
+          data: data,
         },
       });
     } else {
@@ -56,7 +45,7 @@ export default defineEventHandler(async (event) => {
         data: {
           sessionId: Number(sessionID),
           behaviorId: Number(behaviorID),
-          data: convertedData,
+          data: data,
         },
       });
     }

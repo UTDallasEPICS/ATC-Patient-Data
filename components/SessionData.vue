@@ -8,7 +8,7 @@ const props = defineProps({
   doSave: Number,
 });
 
-const emits = defineEmits['saveData'];
+const emits = defineEmits(["saveData"]);
 
 const verifiedCount =
   props.type === "TRIAL" || props.type === "COUNT" ? 1 : props.arrayCount;
@@ -17,8 +17,8 @@ const data = ref(Array(verifiedCount).fill(""));
 
 const dataString = computed(() => data.value.join(","));
 
-watch(doSave, () => {
-  emit("saveData", data)
+watch(props.doSave, () => {
+  emit("saveData", dataString)
 });
 
 watch(dataString, () => {

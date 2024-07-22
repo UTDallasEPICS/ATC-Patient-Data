@@ -61,14 +61,13 @@ function toggleAllBehaviors() {
   toggleAll.value = !toggleAll.value;
 }
 
-async function saveData(behaviorId, sessionId, data, type, doSubmit) {
+async function saveData(behaviorId, sessionId, data, doSubmit) {
   await $fetch("/api/behavior-data/save", {
         method: "PUT",
         body: {
           behaviorId: behaviorId,
           sessionId: sessionId,
           data: data,
-          type: type,
           doSubmit: doSubmit
         },
   });
@@ -149,9 +148,9 @@ watch(searchTerm, (newVal) => {
         <SessionData
           :type="behavior.type"
           :array-count="behavior.arrayCount"
-          :do-save="save"
+          :doSave="save"
           class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
-          @saveData="saveData(behavior.id,sessionId,$emit,behavior.type,submit)"
+          @saveData="saveData(behavior.id,sessionId,$emit,submit)"
         />
       </details>
       <div v-if="behaviors.data.value.body.length === 0">
