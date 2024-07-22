@@ -123,7 +123,6 @@ watch(searchTerm, (newVal) => {
           :type="behavior.type"
           :array-count="behavior.arrayCount"
           class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
-          @updatedData=""
         />
       </details>
       <div v-if="behaviors.data.value.body.length === 0">
