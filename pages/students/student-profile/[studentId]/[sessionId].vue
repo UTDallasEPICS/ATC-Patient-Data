@@ -3,6 +3,7 @@ import {
   ArrowLeftIcon,
   ChevronDoubleDownIcon,
 } from "@heroicons/vue/24/outline";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 const showTextBox = ref(false)
 
@@ -150,7 +151,7 @@ watch(searchTerm, (newVal) => {
           :array-count="behavior.arrayCount"
           :doSave="save"
           class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
-          @saveData="saveData(behavior.id,sessionId,$emit,submit)"
+          @saveData="saveData(behavior.id,sessionId,$event,submit)"
         />
       </details>
       <div v-if="behaviors.data.value.body.length === 0">

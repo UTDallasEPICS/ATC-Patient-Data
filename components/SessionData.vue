@@ -1,5 +1,4 @@
 <script setup>
-import { emit } from "process";
 import { computed, defineProps, ref, watch } from "vue";
 
 const props = defineProps({
@@ -8,7 +7,7 @@ const props = defineProps({
   doSave: Number,
 });
 
-const emits = defineEmits(["saveData"]);
+const emit = defineEmits(["saveData"]);
 
 const verifiedCount =
   props.type === "TRIAL" || props.type === "COUNT" ? 1 : props.arrayCount;
@@ -17,7 +16,7 @@ const data = ref(Array(verifiedCount).fill(""));
 
 const dataString = computed(() => data.value.join(","));
 
-watch(props.doSave, () => {
+watch(props, () => {
   emit("saveData", dataString)
 });
 
