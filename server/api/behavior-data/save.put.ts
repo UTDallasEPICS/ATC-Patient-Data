@@ -1,34 +1,40 @@
 export default defineEventHandler(async (event) => {
-  const { behaviorID, sessionID, data, type, submitted } = await readBody(
-    event
-  );
+  const { 
+    behaviorID, 
+    sessionID, 
+    data, 
+    type, 
+    doSubmit, 
+  } = await readBody(event);
+
+  // check if session is submitted
   const session = await event.context.prisma.session.findUnique({
     where: {
       id: Number(sessionID),
     },
+    select: {
+      submitted: true,
+    }
   });
 
-  if (!session.submitted) {
+  if (session.submitted) {
+    return {
+      statusCode: 201,
+      body: "Session locked by submit",
+    };
+  }
+  else {
     let convertedData;
 
     if (type == "COUNT" || type == "TRIAL") {
       convertedData = String(data);
       return {};
-      /*return {
-        statusCode: 400,
-      };*/
-    } else if (type == "COUNTARRAY" || type == "TRIALARRAY") {
-      convertedData = "";
-      for (let i = 0; i < data.length; i++) {
-        convertedData = convertedData + String(data[i]) + ",";
-      }
-
-      /*return {
-        body: convertedData,
-        statusCode: 300,
-      };*/
+    } 
+    else {
+      convertedData = data.join(",");
     }
 
+    // check if the behavior data exists
     const behaviorData = await event.context.prisma.behaviorData.findFirst({
       where: {
         sessionId: Number(sessionID),
@@ -56,7 +62,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  if (Boolean(submitted)) {
+  if (JSON.parse(doSubmit.toLowerCase())) {
     await event.context.prisma.session.update({
       where: {
         id: sessionID,
@@ -67,11 +73,8 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  /*return {
-    body: submitted,
-    statusCode: 300,
-  };*/
   return {
     statusCode: 200,
+    body: "Data saved",
   };
 });
