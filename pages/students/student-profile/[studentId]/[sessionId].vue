@@ -107,17 +107,20 @@ watch(searchTerm, (newVal) => {
           placeholder="Search Behaviors"
           v-model.trim="searchTerm"
         />
-        <button
-          class="uppercase font-semibold rounded border border-gray-900 p-3 hover:bg-gray-200 focus:bg-gray-300"
-          @click = "showTextBox = true"
-        >
-          Add Notes
+        <button v-on:click="openModal" title="Add Note">
+          <div class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100">
+            <PlusCircleIcon class="h-6 w-6" />
+          </div>
         </button>
+        <CreateUser
+          :isOpen="createNoteModalOpen"
+          :sessionId="sessionId"
+          @close-modal="closeModal"
+        />
 
-        <AddTextBox :sessionId="sessionId" :showTextBox="showTextBox" @close="showTextBox = false" />
-
-
+        <AddTextBox v-if="showAddTextBox" @close="showTextBox = false" @save="handleSave" />
       </div>
+
       <details
         class="p-2 rounded border bg-gray-200 m-3 cursor-default"
         v-for="behavior in behaviors.data.value.body"
