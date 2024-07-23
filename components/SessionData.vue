@@ -17,11 +17,12 @@ const data = ref(Array(verifiedCount).fill(""));
 const dataString = computed(() => data.value.join(","));
 
 watch(props, () => {
-  emit("saveData", dataString)
+  emit("saveData", dataString);
 });
 
 watch(dataString, () => {
-  console.log("Data String:", dataString.value);
+  emit("saveData", dataString.value);
+  // console.log("Data String:", dataString.value);
 });
 </script>
 

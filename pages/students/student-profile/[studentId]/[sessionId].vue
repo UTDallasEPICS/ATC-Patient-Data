@@ -12,7 +12,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-import { use } from "h3";
 
 // const showTextBox = ref(false)
 
@@ -72,14 +71,30 @@ function toggleAllBehaviors() {
   toggleAll.value = !toggleAll.value;
 }
 
-async function saveData(behaviorId, sessionId, data, doSubmit) {
+async function saveData(behaviorID, sessionID, data, doSubmit) {
+  // console.log(
+  //   "Behavior ID:",
+  //   behaviorId,
+  //   "Session ID:",
+  //   sessionId,
+  //   "Data:",
+  //   data,
+  //   "Do Submit:",
+  //   doSubmit
+  // );
+  console.log("-----------------");
+  console.log("behaviorId:", behaviorID);
+  console.log("sessionId:", sessionID);
+  console.log("data:", data);
+  console.log("doSubmit:", doSubmit);
+  console.log("-----------------");
   await $fetch("/api/behavior-data/save", {
     method: "PUT",
     body: {
-      behaviorId: behaviorId,
-      sessionId: sessionId,
-      data: data,
-      doSubmit: doSubmit,
+      behaviorID: Number(behaviorID),
+      sessionID: Number(sessionID),
+      data,
+      doSubmit,
     },
   });
 }
@@ -248,7 +263,7 @@ async function saveNote() {
           :array-count="behavior.arrayCount"
           :doSave="save"
           class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
-          @saveData="saveData(behavior.id, sessionId, $event, submit)"
+          @saveData="(data) => saveData(behavior.id, sessionId, data, submit)"
         />
       </details>
       <div v-if="behaviors.data.value.body.length === 0">
