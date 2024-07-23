@@ -7,98 +7,92 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// types of employees
 enum Role {
-  Admin
-  Technician
+  ADMIN
+  TECH
   BCBA
 }
 
-// siwitched to the below to match up with the behavior types listed in
-// behavior/add.tsx line 124-127
-enum Datatype {
-  TRIAL
-  PROBE
-  DURATION
-  FREQUENCY
+// types of behavior data
+enum BehaviorType {
+  TRIAL // Single YES OR NO
+  COUNT // Single count of how many things
+  TRIAL_ARRAY // Array of yes or nos
+  COUNT_ARRAY // Array of counts of how many trials
+  MEASUREMENT // Static measurements: height, weight, etc.
 }
 
-// previously used
-// enum Datatype {
-//   BOOLEAN
-//   COUNT
-//   BOOLEAN_ARRAY
-//   COUNT_ARRAY
-// }
-
-// any lines containing the word "patient" have been replaced with "student"
 model User {
   id              Int              @id @default(autoincrement())
-  first_name      String
-  last_name       String
-  email           String?          @unique
-  phone_number    String?
+  email           String           @unique
+  firstName       String
+  lastName        String
+  phoneNumber     String?
   EmployeeProfile EmployeeProfile?
   StudentProfile  StudentProfile?
-  Dependents      StudentProfile[] @relation("dependents")
-  Sessions        Session[]
-  image           Image?
+  archive         Boolean          @default(false)
 }
 
 model EmployeeProfile {
-  role     Role             @default(Technician)
   id       Int              @id @default(autoincrement())
-  user_id  Int              @unique
-  User     User             @relation(fields: [user_id], references: [id])
+  role     Role             @default(TECH)
+  userId   Int              @unique
+  User     User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Students StudentProfile[]
   Sessions Session[]
 }
 
 model StudentProfile {
-  Guardians         User[]           @relation("dependents") //guardian relation many to many link to User table instead
-  id                Int              @id @default(autoincrement())
-  // User              User             @relation(fields: [id], references: [id])
-  birthday          DateTime
-  user_id           Int              @unique
-  User              User             @relation(fields: [user_id], references: [id])
-  Sessions          Session[]
-  Program           Program[]
-  EmployeeProfile   EmployeeProfile? @relation(fields: [employeeProfileId], references: [id])
-  employeeProfileId Int?
+  id                 Int             @id @default(autoincrement())
+  dob                DateTime
+  userId             Int             @unique
+  User               User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedEmployeeId Int
+  AssignedEmployee   EmployeeProfile @relation(fields: [assignedEmployeeId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  Behaviors          Behavior[]
+  Sessions           Session[]
 }
 
 model Behavior {
-  id             Int      @id @default(autoincrement())
-  name           String
-  description    String
-  datatype       Datatype @default(TRIAL)
-  trialsPerEntry Int?
-  entries        String[]
-  tags           String[]
+  id              Int               @id @default(autoincrement())
+  title           String //meant to be technical jargon which will be easy to query in a search bar for end-user
+  desc            String
+  type            BehaviorType
+  studentId       Int
+  Student         StudentProfile    @relation(fields: [studentId], references: [id])
+  BehaviorData    BehaviorData[]
+  behaviorTempId  Int?
+  BehaviorTempRel BehaviorTemplate? @relation(fields: [behaviorTempId], references: [id])
+  graduated       Boolean           @default(false)
+  archive         Boolean           @default(false)
+}
+
+model BehaviorTemplate {
+  id       Int          @id @default(autoincrement())
+  title    String
+  desc     String
+  type     BehaviorType
+  archive  Boolean      @default(false)
+  Behavior Behavior[]
 }
 
 model Session {
-  id          Int             @id @default(autoincrement())
-  sessionTime DateTime
-  data        Json
-  studentId   Int
-  employeeId  Int
-  student     StudentProfile  @relation(fields: [studentId], references: [id])
-  employee    EmployeeProfile @relation(fields: [employeeId], references: [id])
-  User        User?           @relation(fields: [userId], references: [id])
-  userId      Int?
+  id         Int             @id @default(autoincrement())
+  Data       BehaviorData[]
+  studentId  Int             @unique
+  employeeId Int             @unique
+  createdAt  DateTime
+  note       String
+  Student    StudentProfile  @relation(fields: [studentId], references: [id], onUpdate: Cascade)
+  Employee   EmployeeProfile @relation(fields: [employeeId], references: [id], onUpdate: Cascade) //what are we doing onDelete?
 }
 
-model Program {
-  id        Int            @id @default(autoincrement())
-  studentId Int
-  student   StudentProfile @relation(fields: [studentId], references: [id])
-  behaviors Json           @default("[]")
-}
-
-// image model to hold user profile pictures
-model Image {
-  id     Int    @id @default(autoincrement())
-  Image  String
-  userId Int    @unique
-  user   User   @relation(fields: [userId], references: [id])
+model BehaviorData {
+  id         Int      @id @default(autoincrement())
+  data       String // decode at load time based on Behaviour.dataType
+  behaviorId Int
+  Behavior   Behavior @relation(fields: [behaviorId], references: [id])
+  sessionId  Int
+  Session    Session  @relation(fields: [sessionId], references: [id])
 }
