@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const { sessionId } = await getQuery(event);
+  const { sessionId } = getQuery(event);
 
   // Catch an error incase the session is not found
   if (!sessionId) {
