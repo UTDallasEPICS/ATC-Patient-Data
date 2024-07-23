@@ -102,42 +102,48 @@ function validateForm() {
     ? ""
     : "Date of birth is required.";
 
-  return !formErrors.firstName && !formErrors.lastName && !formErrors.email && !formErrors.phoneNumber && !formErrors.dateOfBirth;
+  return (
+    !formErrors.firstName &&
+    !formErrors.lastName &&
+    !formErrors.email &&
+    !formErrors.phoneNumber &&
+    !formErrors.dateOfBirth
+  );
 }
 
 async function emitSubmit() {
   if (validateForm()) {
     try {
-    if (props.userType == "STUDENT") {
+      if (props.userType == "STUDENT") {
         await $fetch("/api/user/create/student", {
           method: "POST",
           body: formData,
         });
-    } else {
-      await $fetch("/api/user/create/employee", {
-        method: "POST",
-        body: formData,
-      });
-    }
+      } else {
+        await $fetch("/api/user/create/employee", {
+          method: "POST",
+          body: formData,
+        });
+      }
       formData.firstName = "";
       formData.lastName = "";
       formData.email = "";
       formData.phoneNumber = "";
       formData.dateOfBirth = "";
       formData.assignedEmployee = (data.value && data.value[0]) || null;
-    formData.role = "TECH";
+      formData.role = "TECH";
       emit("closeModal");
     } catch (error) {
-    if (props.userType == "STUDENT") {
+      if (props.userType == "STUDENT") {
         console.error("Error in creating a student", error);
         alert("Error in creating a student");
-    } else {
-      console.error("error in creating a employee", error);
-      alert("Error in creating a employee");
-    }
+      } else {
+        console.error("error in creating a employee", error);
+        alert("Error in creating a employee");
+      }
     }
   } else {
-    alert("Please fix the errors in the form.");
+    console.log("Please fix the errors in the form.");
   }
 }
 
@@ -155,7 +161,7 @@ function emitClose() {
 function sanitizePhoneNumber(event: Event) {
   const input = event.target as HTMLInputElement;
   // Remove non-numeric characters
-  input.value = input.value.replace(/\D/g, '');
+  input.value = input.value.replace(/\D/g, "");
   formData.phoneNumber = input.value;
 }
 </script>
@@ -204,7 +210,11 @@ function sanitizePhoneNumber(event: Event) {
                   type="text"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
-                <span v-if="formErrors.firstName" class="text-red-500 text-sm">{{ formErrors.firstName }}</span>
+                <span
+                  v-if="formErrors.firstName"
+                  class="text-red-500 text-sm"
+                  >{{ formErrors.firstName }}</span
+                >
               </div>
 
               <div class="flex flex-col m-3">
@@ -214,7 +224,9 @@ function sanitizePhoneNumber(event: Event) {
                   type="text"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
-                <span v-if="formErrors.lastName" class="text-red-500 text-sm">{{ formErrors.lastName }}</span>
+                <span v-if="formErrors.lastName" class="text-red-500 text-sm">{{
+                  formErrors.lastName
+                }}</span>
               </div>
 
               <div class="flex flex-col m-3">
@@ -224,7 +236,9 @@ function sanitizePhoneNumber(event: Event) {
                   type="email"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
-                <span v-if="formErrors.email" class="text-red-500 text-sm">{{ formErrors.email }}</span>
+                <span v-if="formErrors.email" class="text-red-500 text-sm">{{
+                  formErrors.email
+                }}</span>
               </div>
 
               <div class="flex flex-col m-3">
@@ -235,7 +249,11 @@ function sanitizePhoneNumber(event: Event) {
                   @input="sanitizePhoneNumber"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
-                <span v-if="formErrors.phoneNumber" class="text-red-500 text-sm">{{ formErrors.phoneNumber }}</span>
+                <span
+                  v-if="formErrors.phoneNumber"
+                  class="text-red-500 text-sm"
+                  >{{ formErrors.phoneNumber }}</span
+                >
               </div>
 
               <div v-if="props.userType == 'STUDENT'" class="flex flex-col m-3">
@@ -245,7 +263,11 @@ function sanitizePhoneNumber(event: Event) {
                   type="date"
                   class="outline-none border rounded p-1 hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
                 />
-                <span v-if="formErrors.dateOfBirth" class="text-red-500 text-sm">{{ formErrors.dateOfBirth }}</span>
+                <span
+                  v-if="formErrors.dateOfBirth"
+                  class="text-red-500 text-sm"
+                  >{{ formErrors.dateOfBirth }}</span
+                >
               </div>
 
               <div v-if="props.userType == 'STUDENT'" class="flex flex-col m-3">
