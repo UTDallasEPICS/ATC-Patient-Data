@@ -2,10 +2,19 @@
 import {
   ArrowLeftIcon,
   ChevronDoubleDownIcon,
+  PencilSquareIcon,
+  XMarkIcon,
 } from "@heroicons/vue/24/outline";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/vue";
+import { use } from "h3";
 
-const showTextBox = ref(false)
+// const showTextBox = ref(false)
 
 const route = useRoute();
 const studentId = route.params.studentId;
@@ -13,23 +22,25 @@ const sessionId = route.params.sessionId;
 const searchTerm = ref("");
 const toggleAll = ref(false);
 const save = ref(0); // just increment to emit saveData from all behaviors
-const submit = ref(false)
-const createNoteModalOpen = ref(false);
-
-function openModal() {
-  createNoteModalOpen.value = true;
-  console.log("modal opened");
-}
-
-function closeModal() {
-  createNoteModalOpen.value = false;
-  console.log("modal closed");
-}
+const submit = ref(false);
+const noteModalOpen = ref(false);
 
 const student = await useFetch("/api/user/get/student", {
   query: {
     id: studentId,
   },
+});
+
+const retrievedNote = await useFetch("/api/session/get/note", {
+  query: {
+    sessionId: sessionId,
+  },
+});
+const localNote = ref(retrievedNote.data.value.body.note);
+
+const noteData = reactive({
+  sessionId: sessionId,
+  note: localNote,
 });
 
 const behaviors = await useFetch("/api/behavior/get/plural", {
@@ -52,22 +63,10 @@ const currSessionDate = new Date(
 const currSessionTime = new Date(
   currSession.data.value.body.createdAt
 ).toLocaleTimeString();
-console.log("currSessionDate", currSessionDate);
-
-
-console.log("behaviors in session", behaviors);
-
-
-console.log("student in session", student);
-
-
-console.log("currSession in session", currSession);
-
 
 function navigateBack() {
   navigateTo({ path: "/students/student-profile/" + studentId });
 }
-
 
 function toggleAllBehaviors() {
   toggleAll.value = !toggleAll.value;
@@ -75,19 +74,35 @@ function toggleAllBehaviors() {
 
 async function saveData(behaviorId, sessionId, data, doSubmit) {
   await $fetch("/api/behavior-data/save", {
-        method: "PUT",
-        body: {
-          behaviorId: behaviorId,
-          sessionId: sessionId,
-          data: data,
-          doSubmit: doSubmit
-        },
+    method: "PUT",
+    body: {
+      behaviorId: behaviorId,
+      sessionId: sessionId,
+      data: data,
+      doSubmit: doSubmit,
+    },
   });
 }
 
-watch(searchTerm, (newVal) => {
-  console.log("behaviors", behaviors);
-});
+function openNoteModal() {
+  retrievedNote.refresh();
+  localNote.value = retrievedNote.data.value.body.note;
+  noteModalOpen.value = true;
+}
+
+function closeNoteModal() {
+  noteModalOpen.value = false;
+  retrievedNote.refresh();
+  localNote.value = retrievedNote.data.value.body.note;
+}
+
+async function saveNote() {
+  await $fetch("/api/session/put/note", {
+    method: "PUT",
+    body: noteData,
+  });
+  closeNoteModal();
+}
 </script>
 
 <template>
@@ -132,16 +147,86 @@ watch(searchTerm, (newVal) => {
           placeholder="Search Behaviors"
           v-model.trim="searchTerm"
         />
-        <button v-on:click="openModal" title="Add Note">
-          <div class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100">
-            <PlusCircleIcon class="h-6 w-6" />
+        <button v-on:click="openNoteModal" title="Add Note">
+          <div
+            class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100"
+          >
+            <PencilSquareIcon class="w-6 h-6" />
           </div>
         </button>
-        <AddTextBox
+        <!-- <AddTextBox
           :isOpen="createNoteModalOpen"
           :sessionId="sessionId"
           @close-modal="closeModal"
-        />
+          @submit="closeModal"
+        /> -->
+        <div>
+          <TransitionRoot appear :show="noteModalOpen" as="template">
+            <Dialog as="div" @close="closeNoteModal" class="relative z-10">
+              <TransitionChild
+                as="template"
+                enter="duration-300 ease-out"
+                enter-from="opacity-0"
+                enter-to="opacity-100"
+                leave="duration-200 ease-in"
+                leave-from="opacity-100"
+                leave-to="opacity-0"
+              >
+                <div class="fixed inset-0 bg-black/25" />
+              </TransitionChild>
+              <div class="fixed inset-0">
+                <div
+                  class="flex min-h-full items-center justify-center p-4 text-center"
+                >
+                  <TransitionChild
+                    as="template"
+                    enter="duration-300 ease-out"
+                    enter-from="opacity-0 scale-95"
+                    enter-to="opacity-100 scale-100"
+                    leave="duration-200 ease-in"
+                    leave-from="opacity-100 scale-100"
+                    leave-to="opacity-0 scale-95"
+                  >
+                    <DialogPanel
+                      class="w-full max-w-md transform rounded bg-white p-6 text-left transition-all"
+                    >
+                      <div class="flex w-full justify-between items-center">
+                        <DialogTitle
+                          as="h3"
+                          class="text-lg font-medium leading-6 text-gray-900"
+                        >
+                          Note
+                        </DialogTitle>
+                        <button @click="closeNoteModal">
+                          <div
+                            class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100"
+                          >
+                            <XMarkIcon class="h-6 w-6" />
+                          </div>
+                        </button>
+                      </div>
+                      <div>
+                        <textarea
+                          v-model="localNote"
+                          class="min-h-80 w-full mt-2 p-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div class="flex w-full p-3 justify-center">
+                        <button
+                          type="button"
+                          class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                          @click="saveNote"
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </DialogPanel>
+                  </TransitionChild>
+                </div>
+              </div>
+            </Dialog>
+          </TransitionRoot>
+        </div>
       </div>
 
       <details
@@ -163,7 +248,7 @@ watch(searchTerm, (newVal) => {
           :array-count="behavior.arrayCount"
           :doSave="save"
           class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
-          @saveData="saveData(behavior.id,sessionId,$event,submit)"
+          @saveData="saveData(behavior.id, sessionId, $event, submit)"
         />
       </details>
       <div v-if="behaviors.data.value.body.length === 0">
@@ -176,5 +261,3 @@ watch(searchTerm, (newVal) => {
     </div>
   </div>
 </template>
-
-
