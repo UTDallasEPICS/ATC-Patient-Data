@@ -33,6 +33,11 @@ async function viewUser(id) {
                     Name
                   </th>
                   <th
+                    class="px-6 py-3 text-center text-xs font-medium uppercase border w-2/3"
+                  >
+                    Email
+                  </th>
+                  <th
                     v-if="userType === 'STUDENT'"
                     class="px-6 py-3 text-center text-xs font-medium uppercase border"
                   >
@@ -52,6 +57,11 @@ async function viewUser(id) {
                       {{ user.firstName }} {{ user.lastName }}
                     </div>
                   </td>
+                  <td class="px-6 py-4 whitespace-nowrap border">
+                    <div class="text-sm text-gray-900">
+                      {{ user.email }}
+                    </div>
+                  </td>
                   <td
                     v-if="userType && userType === 'STUDENT'"
                     class="px-6 py-4 whitespace-nowrap border"
@@ -62,12 +72,12 @@ async function viewUser(id) {
                   </td>
                 </tr>
                 <tr v-if="!users.length && userType === 'STUDENT'">
-                  <td colspan="2" class="px-6 py-4 whitespace-nowrap border">
+                  <td colspan="3" class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">No students found</div>
                   </td>
                 </tr>
                 <tr v-if="!users.length && userType === 'EMPLOYEE'">
-                  <td colspan="1" class="px-6 py-4 whitespace-nowrap border">
+                  <td colspan="2" class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">No employee found</div>
                   </td>
                 </tr>

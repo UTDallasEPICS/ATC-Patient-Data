@@ -53,13 +53,14 @@ getEmployees();
         @close-modal="closeModal"
       />
       <input
-        v-model="searchTerm"
+        v-model.trim="searchTerm"
         class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700"
         placeholder="Search"
       />
       <label class="inline-flex items-center cursor-pointer">
         <input type="checkbox" v-model="searchArchived" class="sr-only peer" />
-        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+        <span
+          class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 hidden md:block"
           >Search Archived</span
         >
         <div

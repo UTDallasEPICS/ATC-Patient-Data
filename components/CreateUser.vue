@@ -25,6 +25,7 @@ const sentenceCaseUserType = computed(() => {
 
 const { data } = await useFetch("/api/user/get/employeeNames");
 const names = ref(data.value);
+const employeeTypes = { 1: "ADMIN", 2: "BCBA", 3: "TECH" };
 
 const formData = reactive({
   firstName: "",
@@ -33,6 +34,7 @@ const formData = reactive({
   phoneNumber: "",
   dateOfBirth: "",
   assignedEmployee: (data.value && data.value[0]) || null,
+  role: "TECH",
 }) as {
   firstName: string;
   lastName: string;
@@ -40,6 +42,7 @@ const formData = reactive({
   phoneNumber: string;
   dateOfBirth: ""; //need to be stored as Date object
   assignedEmployee: { id: number; name: string } | null;
+  role: string;
 };
 
 const formErrors = reactive({
@@ -105,20 +108,33 @@ function validateForm() {
 async function emitSubmit() {
   if (validateForm()) {
     try {
-      await $fetch("/api/user/create/student", {
+    if (props.userType == "STUDENT") {
+        await $fetch("/api/user/create/student", {
+          method: "POST",
+          body: formData,
+        });
+    } else {
+      await $fetch("/api/user/create/employee", {
         method: "POST",
         body: formData,
       });
+    }
       formData.firstName = "";
       formData.lastName = "";
       formData.email = "";
       formData.phoneNumber = "";
       formData.dateOfBirth = "";
       formData.assignedEmployee = (data.value && data.value[0]) || null;
+    formData.role = "TECH";
       emit("closeModal");
     } catch (error) {
-      console.error("Error in creating a student", error);
-      alert("Error in creating a student");
+    if (props.userType == "STUDENT") {
+        console.error("Error in creating a student", error);
+        alert("Error in creating a student");
+    } else {
+      console.error("error in creating a employee", error);
+      alert("Error in creating a employee");
+    }
     }
   } else {
     alert("Please fix the errors in the form.");
@@ -132,6 +148,7 @@ function emitClose() {
   formData.phoneNumber = "";
   formData.dateOfBirth = "";
   formData.assignedEmployee = (data.value && data.value[0]) || null;
+  formData.role = "TECH";
   emit("closeModal");
 }
 
@@ -221,7 +238,7 @@ function sanitizePhoneNumber(event: Event) {
                 <span v-if="formErrors.phoneNumber" class="text-red-500 text-sm">{{ formErrors.phoneNumber }}</span>
               </div>
 
-              <div class="flex flex-col m-3">
+              <div v-if="props.userType == 'STUDENT'" class="flex flex-col m-3">
                 <label>Date of Birth</label>
                 <input
                   v-model.trim="formData.dateOfBirth"
@@ -231,7 +248,7 @@ function sanitizePhoneNumber(event: Event) {
                 <span v-if="formErrors.dateOfBirth" class="text-red-500 text-sm">{{ formErrors.dateOfBirth }}</span>
               </div>
 
-              <div class="flex flex-col m-3">
+              <div v-if="props.userType == 'STUDENT'" class="flex flex-col m-3">
                 <label>Assigned Employee</label>
                 <Listbox v-model="formData.assignedEmployee">
                   <div class="relative">
@@ -280,6 +297,69 @@ function sanitizePhoneNumber(event: Event) {
                                 'block truncate',
                               ]"
                               >{{ person.name }}</span
+                            >
+                            <span
+                              v-if="selected"
+                              class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600"
+                            >
+                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          </li>
+                        </ListboxOption>
+                      </ListboxOptions>
+                    </transition>
+                  </div>
+                </Listbox>
+              </div>
+
+              <div
+                v-if="props.userType == 'EMPLOYEE'"
+                class="flex flex-col m-3"
+              >
+                <label>Assigned Employee</label>
+                <Listbox v-model="formData.role">
+                  <div class="relative">
+                    <ListboxButton
+                      class="outline-none relative w-full cursor-pointer rounded p-1 text-left border hover:border-blue-300 focus:border-blue-500 focus:border-2 focus:bg-blue-100"
+                    >
+                      <span class="block truncate">{{ formData.role }}</span>
+                      <span
+                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+                      >
+                        <ChevronUpDownIcon
+                          class="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </ListboxButton>
+                    <transition
+                      leave-active-class="transition duration-100 ease-in"
+                      leave-from-class="opacity-100"
+                      leave-to-class="opacity-0"
+                    >
+                      <ListboxOptions
+                        class="absolute p-1 w-full overflow-auto rounded bg-gray-100"
+                      >
+                        <ListboxOption
+                          v-slot="{ active, selected }"
+                          v-for="type in employeeTypes"
+                          :value="type"
+                          as="template"
+                        >
+                          <li
+                            :class="[
+                              active
+                                ? 'bg-blue-100 text-blue-900'
+                                : 'text-gray-900',
+                              'relative cursor-pointer select-none py-2 pl-10 pr-4',
+                            ]"
+                          >
+                            <span
+                              :class="[
+                                selected ? 'font-medium' : 'font-normal',
+                                'block truncate',
+                              ]"
+                              >{{ type }}</span
                             >
                             <span
                               v-if="selected"

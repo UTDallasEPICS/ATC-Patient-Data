@@ -59,6 +59,7 @@ model Behavior {
   title           String //meant to be technical jargon which will be easy to query in a search bar for end-user
   desc            String
   type            BehaviorType
+  arrayCount      Int?
   studentId       Int
   Student         StudentProfile    @relation(fields: [studentId], references: [id])
   BehaviorData    BehaviorData[]
@@ -69,23 +70,25 @@ model Behavior {
 }
 
 model BehaviorTemplate {
-  id       Int          @id @default(autoincrement())
-  title    String
-  desc     String
-  type     BehaviorType
-  archive  Boolean      @default(false)
-  Behavior Behavior[]
+  id         Int          @id @default(autoincrement())
+  title      String
+  desc       String
+  type       BehaviorType
+  arrayCount Int?
+  Behavior   Behavior[]
+  archive    Boolean      @default(false)
 }
 
 model Session {
   id         Int             @id @default(autoincrement())
   Data       BehaviorData[]
-  studentId  Int             @unique
-  employeeId Int             @unique
+  studentId  Int
+  employeeId Int
   createdAt  DateTime
   note       String
   Student    StudentProfile  @relation(fields: [studentId], references: [id], onUpdate: Cascade)
   Employee   EmployeeProfile @relation(fields: [employeeId], references: [id], onUpdate: Cascade) //what are we doing onDelete?
+  submitted  Boolean       @default(false)
 }
 
 model BehaviorData {

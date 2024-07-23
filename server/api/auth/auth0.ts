@@ -7,7 +7,16 @@ const genState = () => {
   return s;
 };
 
-export const getRuntimeConfig = () => {
+const verifyNonce = (nonce: string) => {
+  if (state[nonce]) {
+    delete state[nonce];
+    return true;
+  }
+  return false;
+};
+
+
+const getRuntimeConfig = () => {
   const runtimeConfig = useRuntimeConfig();
   return runtimeConfig;
 };
@@ -24,12 +33,4 @@ export const logoutRedirectUrl = (id_token: string) => {
   return `${ISSUER}/oidc/logout?id_token_hint=${id_token}&post_logout_redirect_uri=${encodeURIComponent(
     BASEURL + "api/auth/logout-complete"
   )}&nonce=${genState()}`;
-};
-
-export const verifyNonce = (nonce: string) => {
-  if (state[nonce]) {
-    delete state[nonce];
-    return true;
-  }
-  return false;
 };

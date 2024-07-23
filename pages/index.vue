@@ -1,3 +1,3 @@
 <script setup lang="ts">
-  window.location.href = "/students";
+  await navigateTo({ path: `/students` });
 </script>

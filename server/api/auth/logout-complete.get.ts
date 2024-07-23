@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   // console.log("from logout-complete api token", getCookie(event, "token"));
   // console.log("-----------------------------------------------------");
   // setCookie(event, "cvuser", "");
-  await sendRedirect(event, "/user-portal");
+  await sendRedirect(event, "/students");
   // console.log("from logout-complete api token", getCookie(event, "token"));
   // console.log("-----------------------------------------------------");
 });
