@@ -155,6 +155,11 @@ function emitClose() {
   formData.dateOfBirth = "";
   formData.assignedEmployee = (data.value && data.value[0]) || null;
   formData.role = "TECH";
+  formErrors.firstName = "";
+  formErrors.lastName = "";
+  formErrors.email = "";
+  formErrors.phoneNumber = "";
+  formErrors.dateOfBirth = "";
   emit("closeModal");
 }
 
