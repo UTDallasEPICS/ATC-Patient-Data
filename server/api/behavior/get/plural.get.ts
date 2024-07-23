@@ -1,12 +1,23 @@
 export default defineEventHandler(async (event) => {
   const { searchTerm, searchGraduated, id } = getQuery(event);
+
+  const user = await event.context.prisma.user.findUnique({
+    where: {
+      id: Number(id),
+    },
+    include: {
+      StudentProfile: true,
+    },
+  });
+
   const res = await event.context.prisma.behavior.findMany({
     where: {
       archive: false,
       graduated: searchGraduated === "true" ? true : false,
-      Student: {
-        userId: Number(id),
-      },
+      // Student: {
+      //   userId: Number(id),
+      // },
+      studentId: user.StudentProfile.id,
       OR: [
         {
           title: {
