@@ -1,5 +1,16 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
 node_modules
 dist
 *.DS_Store
 .env
 .nuxt
+.output
+package-lock.json

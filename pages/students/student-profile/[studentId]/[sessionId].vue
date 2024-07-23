@@ -3,6 +3,7 @@ import {
   ArrowLeftIcon,
   ChevronDoubleDownIcon,
 } from "@heroicons/vue/24/outline";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 const showTextBox = ref(false)
 
@@ -11,6 +12,8 @@ const studentId = route.params.studentId;
 const sessionId = route.params.sessionId;
 const searchTerm = ref("");
 const toggleAll = ref(false);
+const save = ref(0); // just increment to emit saveData from all behaviors
+const submit = ref(false)
 const createNoteModalOpen = ref(false);
 
 function openModal() {
@@ -70,6 +73,17 @@ function toggleAllBehaviors() {
   toggleAll.value = !toggleAll.value;
 }
 
+async function saveData(behaviorId, sessionId, data, doSubmit) {
+  await $fetch("/api/behavior-data/save", {
+        method: "PUT",
+        body: {
+          behaviorId: behaviorId,
+          sessionId: sessionId,
+          data: data,
+          doSubmit: doSubmit
+        },
+  });
+}
 
 watch(searchTerm, (newVal) => {
   console.log("behaviors", behaviors);
@@ -147,7 +161,9 @@ watch(searchTerm, (newVal) => {
         <SessionData
           :type="behavior.type"
           :array-count="behavior.arrayCount"
+          :doSave="save"
           class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
+          @saveData="saveData(behavior.id,sessionId,$event,submit)"
         />
       </details>
       <div v-if="behaviors.data.value.body.length === 0">

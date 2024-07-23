@@ -4,7 +4,10 @@ import { computed, defineProps, ref, watch } from "vue";
 const props = defineProps({
   type: String,
   arrayCount: Number,
+  doSave: Number,
 });
+
+const emit = defineEmits(["saveData"]);
 
 const verifiedCount =
   props.type === "TRIAL" || props.type === "COUNT" ? 1 : props.arrayCount;
@@ -13,7 +16,11 @@ const data = ref(Array(verifiedCount).fill(""));
 
 const dataString = computed(() => data.value.join(","));
 
-watch(verifiedCount, () => {
+watch(props, () => {
+  emit("saveData", dataString)
+});
+
+watch(dataString, () => {
   console.log("Data String:", dataString.value);
 });
 </script>
