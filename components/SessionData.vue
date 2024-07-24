@@ -2,6 +2,8 @@
 import { computed, defineProps, ref, watch } from "vue";
 
 const props = defineProps({
+  sessionID: Number,
+  behaviorID: Number,
   type: String,
   arrayCount: Number,
   doSave: Number,
