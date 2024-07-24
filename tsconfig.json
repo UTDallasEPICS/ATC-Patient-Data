@@ -1,31 +1,8 @@
- {
+{
+  // https://nuxt.com/docs/guide/concepts/typescript
+  "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "pages/test/index.tsx"
-, "auth0CheckUser.ts", "pages/add-user-test.js", "pages/employee/test.jsx", "pages/student/profile.js", "pages/new-user.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "target": "ES2017",
+    "module": "ESNext"
+  }
 }
