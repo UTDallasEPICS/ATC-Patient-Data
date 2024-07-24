@@ -15,7 +15,6 @@ const verifyNonce = (nonce: string) => {
   return false;
 };
 
-
 const getRuntimeConfig = () => {
   const runtimeConfig = useRuntimeConfig();
   return runtimeConfig;

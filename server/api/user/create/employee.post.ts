@@ -1,13 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
 export default defineEventHandler(async (event) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    role,
-  } = await readBody(event);
+  const { firstName, lastName, email, phoneNumber, role } = await readBody(
+    event
+  );
 
   const user = await event.context.prisma.$transaction(
     async (p: PrismaClient) => {

@@ -1,18 +1,17 @@
 export default defineEventHandler(async (event) => {
-    const { sessionID } = await readBody(event);
-  
-    await event.context.prisma.session.update({
+  const { sessionID } = await readBody(event);
+
+  await event.context.prisma.session.update({
     where: {
-        id: Number(sessionID),
+      id: Number(sessionID),
     },
     data: {
-        submitted: true,
+      submitted: true,
     },
-    });
-    
-    return {
-      statusCode: 200,
-      body: "Session submitted",
-    };
   });
-  
+
+  return {
+    statusCode: 200,
+    body: "Session submitted",
+  };
+});
