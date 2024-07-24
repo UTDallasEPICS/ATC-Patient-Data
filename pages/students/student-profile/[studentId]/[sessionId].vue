@@ -259,9 +259,11 @@ async function saveNote() {
           </div>
         </summary>
         <SessionData
+          :sessionID="Number(sessionId)"
+          :behaviorID="Number(behavior.id)"
           :type="behavior.type"
-          :array-count="behavior.arrayCount"
-          :doSave="save"
+          :array-count="Number(behavior.arrayCount)"
+          :doSave="Number(save)"
           class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
           @saveData="(data) => saveData(behavior.id, sessionId, data, submit)"
         />
