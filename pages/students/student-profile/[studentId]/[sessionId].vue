@@ -4,6 +4,7 @@ import {
   ChevronDoubleDownIcon,
   PencilSquareIcon,
   XMarkIcon,
+  CheckIcon,
 } from "@heroicons/vue/24/outline";
 import {
   TransitionRoot,
@@ -168,6 +169,30 @@ async function saveNote() {
             <PencilSquareIcon class="w-6 h-6" />
           </div>
         </button>
+        <label
+          class="inline-flex items-center cursor-pointer border m-2 rounded hover:border-gray-500 hover:bg-gray-100"
+        >
+          <input type="checkbox" v-model="submit" class="sr-only peer" />
+          <span
+            class="ms-3 w-18 text-sm font-medium text-gray-900 dark:text-gray-300 hidden md:block"
+            >Submit</span
+          >
+          <div
+            class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+          ></div>
+          <button
+            class="cursor-not-allowed border rounded bg-gray-200 text-gray-500 m-2"
+            v-if="!submit"
+          >
+            <CheckIcon class="w-6 h-6" />
+          </button>
+          <button
+            class="border rounded bg-gray-200 hover:bg-gray-500 hover:text-white hover:border-gray-900 m-2"
+            v-if="submit"
+          >
+            <CheckIcon class="w-6 h-6" />
+          </button>
+        </label>
         <div>
           <TransitionRoot appear :show="noteModalOpen" as="template">
             <Dialog as="div" @close="closeNoteModal" class="relative z-10">
