@@ -162,8 +162,9 @@ async function saveNote() {
         />
         <button v-on:click="openNoteModal" title="Add Note">
           <div
-            class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100"
+            class="flex border p-2 space-x-2 font-thin hover:font-semibold rounded hover:border-gray-500 hover:bg-gray-100"
           >
+            <span class="uppercase">Note</span>
             <PencilSquareIcon class="w-6 h-6" />
           </div>
         </button>
