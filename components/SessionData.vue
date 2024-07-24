@@ -52,40 +52,41 @@ watch(dataString, () => {
 </script>
 
 <template>
-  <div class="flex flex-col space-y-2">
+  <div class="grid grid-cols-3 gap-3">
     <div
       v-for="i in verifiedCount"
       :key="i"
-      class="flex items-center justify-center"
+      class="flex items-center justify-center border-2 rounded border-gray-200 bg-gray-900 p-2"
     >
-      <div v-if="type.includes('TRIAL')" class="space-y-2">
+      <div v-if="type.includes('TRIAL')" class="space-y-1">
         <label class="text-center font-medium">
           {{ verifiedCount === 1 ? "Trial" : `Trial ${i}` }}
         </label>
-        <div class="flex justify-center space-x-2">
+        <div class="space-x-5">
           <input
             type="radio"
             title="true"
             value="true"
             v-model="data[i - 1]"
-            class="scale-125"
+            class="scale-150"
           />
           <input
             type="radio"
             title="false"
             value="false"
             v-model="data[i - 1]"
-            class="scale-125"
+            class="scale-150"
           />
         </div>
       </div>
-      <div v-if="type.includes('COUNT')" class="space-y-2">
-        <label class="text-center font-medium">
+      <div v-if="type.includes('COUNT')" class="space-y-1">
+        <label class="font-medium">
           {{ verifiedCount === 1 ? "Count" : `Count ${i}` }}
         </label>
         <input
+          type="number"
           v-model.number="data[i - 1]"
-          class="w-24 text-black text-center border rounded p-1"
+          class="w-24 text-black text-center border-2 border-gray-300 hover:border-blue-400 focus:border-blue-500 focus:bg-blue-100 rounded p-1 outline-none [&::-webkit-inner-spin-button]:appearance-none [appearance:textfield]"
         />
       </div>
     </div>

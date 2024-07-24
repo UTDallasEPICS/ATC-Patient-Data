@@ -167,12 +167,6 @@ async function saveNote() {
             <PencilSquareIcon class="w-6 h-6" />
           </div>
         </button>
-        <!-- <AddTextBox
-          :isOpen="createNoteModalOpen"
-          :sessionId="sessionId"
-          @close-modal="closeModal"
-          @submit="closeModal"
-        /> -->
         <div>
           <TransitionRoot appear :show="noteModalOpen" as="template">
             <Dialog as="div" @close="closeNoteModal" class="relative z-10">
@@ -241,31 +235,32 @@ async function saveNote() {
           </TransitionRoot>
         </div>
       </div>
-
-      <details
-        class="p-2 rounded border bg-gray-200 m-3 cursor-default"
-        v-for="behavior in behaviors.data.value.body"
-        :key="behavior.id"
-        :open="toggleAll"
-      >
-        <summary class="cursor-pointer">
-          <div
-            class="flex flex-col border rounded border-gray-100 bg-gray-100 p-2 overflow-auto max-h-[5rem]"
-          >
-            <span>{{ behavior.title }}</span>
-            <span>{{ behavior.desc }}</span>
-          </div>
-        </summary>
-        <SessionData
-          :sessionID="Number(sessionId)"
-          :behaviorID="Number(behavior.id)"
-          :type="behavior.type"
-          :array-count="Number(behavior.arrayCount)"
-          :doSave="Number(save)"
-          class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
-          @saveData="(data) => saveData(behavior.id, sessionId, data)"
-        />
-      </details>
+      <div class="lg:grid lg:grid-cols-2 lg:gap-3">
+        <details
+          class="p-2 rounded border bg-gray-200 m-3 cursor-default"
+          v-for="behavior in behaviors.data.value.body"
+          :key="behavior.id"
+          :open="toggleAll"
+        >
+          <summary class="cursor-pointer">
+            <div
+              class="flex flex-col border rounded border-gray-100 bg-gray-100 p-2 overflow-auto max-h-[5rem]"
+            >
+              <span>{{ behavior.title }}</span>
+              <span>{{ behavior.desc }}</span>
+            </div>
+          </summary>
+          <SessionData
+            :sessionID="Number(sessionId)"
+            :behaviorID="Number(behavior.id)"
+            :type="behavior.type"
+            :array-count="Number(behavior.arrayCount)"
+            :doSave="Number(save)"
+            class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
+            @saveData="(data) => saveData(behavior.id, sessionId, data)"
+          />
+        </details>
+      </div>
       <div v-if="behaviors.data.value.body.length === 0">
         <div
           class="flex p-3 border-2 justify-center items-center m-2 bg-gray-100 rounded"
