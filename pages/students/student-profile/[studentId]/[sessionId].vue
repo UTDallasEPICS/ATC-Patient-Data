@@ -49,7 +49,12 @@ const currSession = await useFetch("/api/session/singular/retrieve", {
   },
 });
 
-const displayTime = `${ currSession.data.value.body.createdAt.substring(8, 10) }/${ currSession.data.value.body.createdAt.substring(5, 7) }/${ currSession.data.value.body.createdAt.substring(0, 4) } - ${ currSession.data.value.body.createdAt.substring(11, 16) }`
+const currSessionDate = new Date(
+  currSession.data.value.body.createdAt
+).toDateString();
+const currSessionTime = new Date(
+  currSession.data.value.body.createdAt
+).toLocaleTimeString();
 
 const behaviors = await useFetch("/api/behavior/get/session", {
   query: {
@@ -128,7 +133,7 @@ async function saveNote() {
           <span>{{ student && student.data.value.firstName }}</span>
           <span>{{ student && student.data.value.lastName }}</span>
           <span class="font-thin">
-            {{ displayTime }}
+            {{ currSessionDate }} - {{ currSessionTime }}
           </span>
         </h1>
         <button
