@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
-  const { behaviorID, sessionID, data, doSubmit } = await readBody(event);
+  const { behaviorID, sessionID, data } = await readBody(event);
 
-  // check if session is submitted
+/*   // check if session is submitted
   const session = await event.context.prisma.session.findMany({
     where: {
       id: sessionID,
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
       statusCode: 201,
       body: "Session locked by submit",
     };
-  } else {
+  } else { */
     // check if the behavior data exists
     const behaviorData = await event.context.prisma.behaviorData.findFirst({
       where: {
@@ -43,18 +43,7 @@ export default defineEventHandler(async (event) => {
         },
       });
     }
-  }
-
-  if (doSubmit === "true") {
-    await event.context.prisma.session.update({
-      where: {
-        id: Number(sessionID),
-      },
-      data: {
-        submitted: true,
-      },
-    });
-  }
+//  }
 
   return {
     statusCode: 200,
