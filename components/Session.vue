@@ -66,6 +66,10 @@ async function navigateToSession(sessionId) {
   });
 }
 
+function getLocalTime(utcTime) {
+  return new Date(utcTime).toLocaleTimeString();
+}
+
 //Watches
 watch([refresh, searchArchived], () => {
   sessions.refresh();
@@ -141,7 +145,7 @@ watch([refresh, searchArchived], () => {
               </td>
               <td class="px-6 py-4 whitespace-nowrap border">
                 <div class="text-sm text-gray-900">
-                  {{ session.createdAt.split("T")[1].split(".")[0] }}
+                  {{ getLocalTime(session.createdAt) }}
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap border">

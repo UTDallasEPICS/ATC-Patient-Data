@@ -6,6 +6,7 @@
 //   Behavior,
 //   Session,
 // } from "@prisma/client";
+import { ArrowLeftIcon } from "@heroicons/vue/24/outline";
 
 const route = useRoute();
 
@@ -19,6 +20,10 @@ function switchTab(tabName) {
   currentTab.value = tabName;
 }
 
+function navigateBack() {
+  navigateTo({ path: "/students" });
+}
+
 watch(currentTab, (newVal) => {
   console.log(newVal);
 });
@@ -26,8 +31,14 @@ watch(currentTab, (newVal) => {
 
 <template>
   <div class="flex flex-col h-[calc(100vh-5rem)] p-2">
-    <div>
-      <div class="text-2xl font-bold mb-3">
+    <div class="flex space-x-5 mb-2 items-center">
+      <button
+        class="p-2 rounded text-gray-400 border-2 hover:border-black hover:text-black"
+        @click="navigateBack"
+      >
+        <ArrowLeftIcon class="h-6 w-6" />
+      </button>
+      <div class="text-2xl font-bold">
         {{ student.data.value && student.data.value.firstName }}
         {{ student.data.value && student.data.value.lastName }}
       </div>
@@ -56,7 +67,7 @@ watch(currentTab, (newVal) => {
       </button>
     </div>
     <div class="h-full border border-black rounded-b-lg overflow-auto">
-      <Session v-if="currentTab === 'sessions'" :user="student"/>
+      <Session v-if="currentTab === 'sessions'" :user="student" />
       <Program v-if="currentTab === 'program'" :user="student" />
       <UserInfo
         v-if="currentTab === 'userInfo'"
