@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineProps, ref, watch } from "vue";
+import { computed, defineProps, ref, watch } from 'vue';
 
 const props = defineProps({
   sessionID: Number,
@@ -9,22 +9,21 @@ const props = defineProps({
   doSave: Number,
 });
 
-const emit = defineEmits(["saveData"]);
+const emit = defineEmits(['saveData']);
 
-const verifiedCount =
-  props.type === "TRIAL" || props.type === "COUNT" ? 1 : props.arrayCount;
+const isTrialOrCount = props.type === 'TRIAL' || props.type === 'COUNT';
+const verifiedCount = isTrialOrCount ? 1 : props.arrayCount;
 
-const data = ref(Array(verifiedCount).fill(""));
+const data = ref(Array(verifiedCount).fill(''));
 
-const dataString = computed(() => data.value.join(","));
+const dataString = computed(() => data.value.join(','));
 
 watch(props, () => {
-  emit("saveData", dataString);
+  emit('saveData', dataString.value);
 });
 
 watch(dataString, () => {
-  emit("saveData", dataString.value);
-  // console.log("Data String:", dataString.value);
+  emit('saveData', dataString.value);
 });
 </script>
 
@@ -35,11 +34,10 @@ watch(dataString, () => {
       :key="i"
       class="flex items-center justify-center"
     >
-      <div v-if="type === 'TRIAL' || type === 'TRIAL_ARRAY'" class="space-y-2">
-        <label v-if="verifiedCount === 1" class="text-center font-medium"
-          >Trial</label
-        >
-        <label v-else class="text-center font-medium">Trial {{ i }}</label>
+      <div v-if="type.includes('TRIAL')" class="space-y-2">
+        <label class="text-center font-medium">
+          {{ verifiedCount === 1 ? 'Trial' : `Trial ${i}` }}
+        </label>
         <div class="flex justify-center space-x-2">
           <input
             type="radio"
@@ -57,11 +55,10 @@ watch(dataString, () => {
           />
         </div>
       </div>
-      <div v-if="type === 'COUNT' || type === 'COUNT_ARRAY'" class="space-y-2">
-        <label v-if="verifiedCount === 1" class="text-center font-medium"
-          >Count</label
-        >
-        <label v-else class="text-center font-medium">Count {{ i }}</label>
+      <div v-if="type.includes('COUNT')" class="space-y-2">
+        <label class="text-center font-medium">
+          {{ verifiedCount === 1 ? 'Count' : `Count ${i}` }}
+        </label>
         <input
           v-model.number="data[i - 1]"
           class="w-24 text-black text-center border rounded p-1"
