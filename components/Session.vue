@@ -45,7 +45,6 @@ async function createNewSession() {
     body: {
       studentId: props.user.data.value.id,
       employeeId: useCookie("userId").value,
-      createdAt: new Date().toISOString(),
     },
   });
   console.log("res", res);

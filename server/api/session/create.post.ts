@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const { studentId, employeeId, createdAt } = await readBody(event);
+  const { studentId, employeeId } = await readBody(event);
 
   const studentProfile = await event.context.prisma.studentProfile.findUnique({
     where: {
@@ -19,7 +19,6 @@ export default defineEventHandler(async (event) => {
     data: {
       studentId: studentProfile.id,
       employeeId: employeeProfile.id,
-      createdAt: createdAt,
       note: "",
     },
   });

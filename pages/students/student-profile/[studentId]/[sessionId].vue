@@ -43,26 +43,21 @@ const noteData = reactive({
   note: localNote,
 });
 
-const behaviors = await useFetch("/api/behavior/get/plural", {
-  query: {
-    id: studentId,
-    searchTerm: searchTerm,
-    archived: false,
-  },
-});
-
 const currSession = await useFetch("/api/session/singular/retrieve", {
   query: {
     sessionId: sessionId,
   },
 });
 
-const currSessionDate = new Date(
-  currSession.data.value.body.createdAt
-).toDateString();
-const currSessionTime = new Date(
-  currSession.data.value.body.createdAt
-).toLocaleTimeString();
+const displayTime = `${ currSession.data.value.body.createdAt.substring(8, 10) }/${ currSession.data.value.body.createdAt.substring(5, 7) }/${ currSession.data.value.body.createdAt.substring(0, 4) } - ${ currSession.data.value.body.createdAt.substring(11, 16) }`
+
+const behaviors = await useFetch("/api/behavior/get/session", {
+  query: {
+    id: studentId,
+    archived: false,
+    sessionAt: currSession.data.value.body.createdAt,
+  },
+});
 
 function navigateBack() {
   navigateTo({ path: "/students/student-profile/" + studentId });
@@ -133,7 +128,7 @@ async function saveNote() {
           <span>{{ student && student.data.value.firstName }}</span>
           <span>{{ student && student.data.value.lastName }}</span>
           <span class="font-thin">
-            {{ currSessionDate }} - {{ currSessionTime }}
+            {{ displayTime }}
           </span>
         </h1>
         <button

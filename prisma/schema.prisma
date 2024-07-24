@@ -58,6 +58,7 @@ model Behavior {
   id              Int               @id @default(autoincrement())
   title           String //meant to be technical jargon which will be easy to query in a search bar for end-user
   desc            String
+  createdAt       DateTime          @default(now())
   type            BehaviorType
   arrayCount      Int?
   studentId       Int
@@ -84,11 +85,11 @@ model Session {
   Data       BehaviorData[]
   studentId  Int
   employeeId Int
-  createdAt  DateTime
+  createdAt  DateTime        @default(now())
   note       String
   Student    StudentProfile  @relation(fields: [studentId], references: [id], onUpdate: Cascade)
   Employee   EmployeeProfile @relation(fields: [employeeId], references: [id], onUpdate: Cascade) //what are we doing onDelete?
-  submitted  Boolean       @default(false)
+  submitted  Boolean         @default(false)
 }
 
 model BehaviorData {
