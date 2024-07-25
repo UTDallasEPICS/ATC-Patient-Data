@@ -24,15 +24,7 @@ export default defineEventHandler(async (event) => {
       ],
     },
     include: {
-      StudentProfile: {
-        include: {
-          AssignedEmployee: {
-            include: {
-              User: true,
-            },
-          },
-        },
-      },
+      EmployeeProfile: true
     },
   });
 

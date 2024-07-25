@@ -43,6 +43,18 @@ async function viewUser(id) {
                   >
                     Assigned Employee
                   </th>
+                  <th
+                    v-if="userType === 'EMPLOYEE'"
+                    class="px-6 py-3 text-center text-xs font-medium uppercase border"
+                  >
+                    Role
+                  </th>
+                  <th
+                    v-if="userType === 'EMPLOYEE'"
+                    class="px-6 py-3 text-center text-xs font-medium uppercase border"
+                  >
+                    Phone Number
+                  </th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
@@ -63,11 +75,27 @@ async function viewUser(id) {
                     </div>
                   </td>
                   <td
-                    v-if="userType && userType === 'STUDENT'"
+                    v-if=" userType === 'STUDENT'"
                     class="px-6 py-4 whitespace-nowrap border"
                   >
                     <div class="text-sm">
                       {{ user.StudentProfile.AssignedEmployee.User.firstName }}
+                    </div>
+                  </td>
+                  <td
+                    v-if=" userType === 'EMPLOYEE'"
+                    class="px-6 py-4 whitespace-nowrap border"
+                  >
+                    <div class="text-sm">
+                      {{ user.EmployeeProfile.role }}
+                    </div>
+                  </td>
+                  <td
+                    v-if=" userType === 'EMPLOYEE'"
+                    class="px-6 py-4 whitespace-nowrap border"
+                  >
+                    <div class="text-sm">
+                      {{ user.phoneNumber }}
                     </div>
                   </td>
                 </tr>
