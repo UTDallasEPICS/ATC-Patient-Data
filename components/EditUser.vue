@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { User } from "@auth0/auth0-vue";
 import {
   TransitionRoot,
   TransitionChild,
@@ -18,7 +17,7 @@ const props = defineProps({
   userType: String,
   user: Object,
 });
-const emit = defineEmits(["closeModal","refresh"]);
+const emit = defineEmits(["closeModal"]);
 
 const sentenceCaseUserType = computed(() => {
   if (!props.userType) return "";
@@ -61,6 +60,7 @@ watch(props, () => {
   else {
     formData.role = props.user.EmployeeProfile.role; 
   }
+  formData.archive = props.user.archive;
 });
 
 const formErrors = reactive({
@@ -137,6 +137,7 @@ async function emitSubmit() {
       if (props.userType == "STUDENT") {
         await $fetch("/api/user/update/student", {
           method: "PUT",
+          query: { id: props.user.id, },
           body: formData,
         });
       } else {
@@ -154,7 +155,6 @@ async function emitSubmit() {
       formData.assignedEmployee = (data.value && data.value[0]) || null;
       formData.role = "TECH";
       formData.archive =  false;
-      emit("refresh");
       emit("closeModal");
     } catch (error) {
       if (props.userType == "STUDENT") {
@@ -231,8 +231,6 @@ function sanitizePhoneNumber(event: Event) {
               >
                 Update {{ sentenceCaseUserType }}
               </DialogTitle>
-
-              <!--Archive?-->
 
               <div class="flex flex-col m-3">
                 <label>First Name</label>
@@ -427,6 +425,17 @@ function sanitizePhoneNumber(event: Event) {
                   </div>
                 </Listbox>
               </div>
+
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" v-model="formData.archive" class="sr-only peer" />
+                <span
+                  class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 hidden md:block"
+                  >Archive</span
+                >
+                <div
+                  class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                ></div>
+              </label>
 
               <div class="flex w-full p-3 justify-center">
                 <button

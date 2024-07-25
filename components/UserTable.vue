@@ -7,24 +7,14 @@ const props = defineProps({
   loading: Boolean,
 });
 
-const router = useRouter();
-const editUserModalOpen = ref(false);
-const currUser = ref()
+const emit = defineEmits(["openEditModal"]);
 
 async function viewUser(user) {
   if (props.userType == "STUDENT") {
     await navigateTo({ path: `/students/student-profile/${user.id}` });
   } else {
-    currUser.value = user;
-    editUserModalOpen.value = true;
-    console.log("modal opened");
+    emit("openEditModal", user);
   }
-}
-
-function closeModal() {
-  editUserModalOpen.value = false;
-  //getEmployees(); // MAKE AN EMIT TO REFETCH EMPLOYEES - MAKE AN EMIT TO REFETCH EMPLOYEES - MAKE AN EMIT TO REFETCH EMPLOYEES 
-  console.log("modal closed");
 }
 
 </script>
@@ -110,13 +100,6 @@ function closeModal() {
                     </div>
                   </td>
                 </tr>
-                <EditUser
-                  :isOpen="editUserModalOpen"
-                  :userType="'EMPLOYEE'"
-                  :user="currUser"
-                  @refresh="refresh"
-                  @close-modal="closeModal"
-                />
                 <tr v-if="!users.length && userType === 'STUDENT'">
                   <td colspan="3" class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">No students found</div>

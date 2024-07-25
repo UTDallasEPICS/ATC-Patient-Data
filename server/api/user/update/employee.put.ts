@@ -2,13 +2,18 @@ import { PrismaClient } from "@prisma/client";
 
 export default defineEventHandler(async (event) => {
   const { id } = getQuery(event);
-  const { firstName, lastName, email, phoneNumber, role } = await readBody(
-    event
-  );
+  const { 
+    firstName, 
+    lastName, 
+    email, 
+    phoneNumber, 
+    role, 
+    archive 
+  } = await readBody(event);
 
   const user = await event.context.prisma.$transaction(
     async (p: PrismaClient) => {
-      const updateUser = await p.user.update({
+      const updatedUser = await p.user.update({
         where: {
             id: Number(id),
         },
@@ -17,6 +22,7 @@ export default defineEventHandler(async (event) => {
           lastName,
           email,
           phoneNumber: String(phoneNumber),
+          archive,
         },
       });
 
@@ -29,7 +35,7 @@ export default defineEventHandler(async (event) => {
         },
       });
 
-      return { ...updateUser };
+      return { ...updatedUser, employeeProfile };
     }
   );
 
