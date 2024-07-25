@@ -20,6 +20,7 @@ export default defineEventHandler(async (event) => {
       studentId: studentProfile.id,
       employeeId: employeeProfile.id,
       note: "",
+      createdAt: new Date(),
     },
   });
 
