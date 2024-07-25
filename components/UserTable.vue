@@ -8,14 +8,25 @@ const props = defineProps({
 });
 
 const router = useRouter();
+const editUserModalOpen = ref(false);
+const currUser = ref()
 
-async function viewUser(id) {
+async function viewUser(user) {
   if (props.userType == "STUDENT") {
-    await navigateTo({ path: `/students/student-profile/${id}` });
+    await navigateTo({ path: `/students/student-profile/${user.id}` });
   } else {
-    await navigateTo({ path: `/employees/employee-profile/${id}` });
+    currUser.value = user;
+    editUserModalOpen.value = true;
+    console.log("modal opened");
   }
 }
+
+function closeModal() {
+  editUserModalOpen.value = false;
+  //getEmployees(); // MAKE AN EMIT TO REFETCH EMPLOYEES - MAKE AN EMIT TO REFETCH EMPLOYEES - MAKE AN EMIT TO REFETCH EMPLOYEES 
+  console.log("modal closed");
+}
+
 </script>
 
 <template>
@@ -62,7 +73,7 @@ async function viewUser(id) {
                   v-for="user in users"
                   :key="user.id"
                   class="hover:bg-gray-100 hover:cursor-pointer"
-                  v-on:click="viewUser(user.id)"
+                  v-on:click="viewUser(user)"
                 >
                   <td class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">
@@ -99,6 +110,13 @@ async function viewUser(id) {
                     </div>
                   </td>
                 </tr>
+                <EditUser
+                  :isOpen="editUserModalOpen"
+                  :userType="'EMPLOYEE'"
+                  :user="currUser"
+                  @refresh="refresh"
+                  @close-modal="closeModal"
+                />
                 <tr v-if="!users.length && userType === 'STUDENT'">
                   <td colspan="3" class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">No students found</div>

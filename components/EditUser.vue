@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { User } from "@auth0/auth0-vue";
 import {
   TransitionRoot,
   TransitionChild,
@@ -15,8 +16,9 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 const props = defineProps({
   isOpen: Boolean,
   userType: String,
+  user: Object,
 });
-const emit = defineEmits(["closeModal"]);
+const emit = defineEmits(["closeModal","refresh"]);
 
 const sentenceCaseUserType = computed(() => {
   if (!props.userType) return "";
@@ -35,6 +37,7 @@ const formData = reactive({
   dateOfBirth: "",
   assignedEmployee: (data.value && data.value[0]) || null,
   role: "TECH",
+  archive: false,
 }) as {
   firstName: string;
   lastName: string;
@@ -43,7 +46,22 @@ const formData = reactive({
   dateOfBirth: ""; //need to be stored as Date object
   assignedEmployee: { id: number; name: string } | null;
   role: string;
+  archive: boolean;
 };
+
+watch(props, () => {
+  formData.firstName = props.user.firstName;
+  formData.lastName = props.user.lastName;
+  formData.email = props.user.email;
+  formData.phoneNumber = props.user.phoneNumber;
+  if(props.userType == "STUDENT") {
+    formData.dateOfBirth = props.user.StudentProfile.dateOfBirth;
+    formData.assignedEmployee = props.user.StudentProfile.assignedEmployee;
+  }
+  else {
+    formData.role = props.user.EmployeeProfile.role; 
+  }
+});
 
 const formErrors = reactive({
   firstName: "",
@@ -117,13 +135,14 @@ async function emitSubmit() {
   if (validateForm()) {
     try {
       if (props.userType == "STUDENT") {
-        await $fetch("/api/user/create/student", {
-          method: "POST",
+        await $fetch("/api/user/update/student", {
+          method: "PUT",
           body: formData,
         });
       } else {
-        await $fetch("/api/user/create/employee", {
-          method: "POST",
+        await $fetch("/api/user/update/employee", { // update to U
+          method: "PUT",
+          query: { id: props.user.id, },
           body: formData,
         });
       }
@@ -134,14 +153,16 @@ async function emitSubmit() {
       formData.dateOfBirth = "";
       formData.assignedEmployee = (data.value && data.value[0]) || null;
       formData.role = "TECH";
+      formData.archive =  false;
+      emit("refresh");
       emit("closeModal");
     } catch (error) {
       if (props.userType == "STUDENT") {
-        console.error("Error in creating a student", error);
-        alert("Error in creating a student");
+        console.error("Error in updating a student", error);
+        alert("Error in updating a student");
       } else {
-        console.error("error in creating a employee", error);
-        alert("Error in creating a employee");
+        console.error("error in updating a employee", error);
+        alert("Error in updating a employee");
       }
     }
   } else {
@@ -157,6 +178,7 @@ function emitClose() {
   formData.dateOfBirth = "";
   formData.assignedEmployee = (data.value && data.value[0]) || null;
   formData.role = "TECH";
+  formData.archive =  false;
   formErrors.firstName = "";
   formErrors.lastName = "";
   formErrors.email = "";
@@ -207,8 +229,10 @@ function sanitizePhoneNumber(event: Event) {
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
               >
-                Create {{ sentenceCaseUserType }}
+                Update {{ sentenceCaseUserType }}
               </DialogTitle>
+
+              <!--Archive?-->
 
               <div class="flex flex-col m-3">
                 <label>First Name</label>
