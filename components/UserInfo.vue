@@ -1,14 +1,31 @@
 <script setup>
 const props = defineProps(["user", "userType"]);
+const emit = defineEmits(["refreshUser"]);
+const editUserModalOpen = ref(false);
 
-function formatDate(dateString) {
-  let date = new Date(dateString);
-  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+function openModal() {
+  editUserModalOpen.value = true;
+  console.log("edit modal opened");
+}
+
+function closeModal() {
+  editUserModalOpen.value = false;
+  emit("refreshUser");
+  console.log("edit modal closed");
 }
 </script>
 
 <template>
-  <div class="flex w-full h-full justify-center items-center text-lg">
+  <div class="flex justify-center py-16  ">
+    <button v-on:click="openModal" title="Edit User">
+      <div
+        class="border p-2 space-x-2 font-thin hover:font-semibold rounded hover:border-gray-500 hover:bg-gray-100"
+      >
+        <span class="uppercase">Edit User</span>
+      </div>
+    </button>
+  </div>
+  <div class="flex w-full h-half justify-center items-center text-lg">
     <table class="w-1/4 border-gray-900">
       <tr>
         <td class="font-semibold">Email</td>
@@ -17,8 +34,8 @@ function formatDate(dateString) {
       <tr>
         <td class="font-semibold">Phone</td>
         <td class="flex justify-center">
-          <div v-if="props.user.data.value.phone">
-            {{ props.user.data.vlue.phone }}
+          <div v-if="props.user.data.value.phoneNumber">
+            {{ props.user.data.value.phoneNumber }}
           </div>
           <div v-else class="font-mono">Not Provided</div>
         </td>
@@ -27,7 +44,7 @@ function formatDate(dateString) {
         <td class="font-semibold">DoB</td>
         <td class="flex justify-center">
           <div v-if="props.user.data.value.StudentProfile.dob">
-            {{ formatDate(props.user.data.value.StudentProfile.dob) }}
+            {{ (props.user.data.value.StudentProfile.dob).substring(0,10) }} <!-- can't use .toDateString() because of timezone -->
           </div>
           <div v-else class="font-mono">Not Provided</div>
         </td>
@@ -51,5 +68,11 @@ function formatDate(dateString) {
         </td>
       </tr>
     </table>
+    <EditUser
+      :isOpen="editUserModalOpen"
+      :userType="'STUDENT'"
+      :user="props.user.data.value"
+      @close-modal="closeModal"
+    />
   </div>
 </template>

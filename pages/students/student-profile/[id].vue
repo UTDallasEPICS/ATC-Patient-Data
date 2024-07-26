@@ -14,6 +14,10 @@ const student = await useFetch(`/api/user/get/student`, {
   query: { id: route.params.id },
 });
 
+function getStudent() {
+  student.refresh();
+}
+
 let currentTab = ref("sessions");
 
 function switchTab(tabName) {
@@ -27,6 +31,8 @@ function navigateBack() {
 watch(currentTab, (newVal) => {
   console.log(newVal);
 });
+
+getStudent();
 </script>
 
 <template>
@@ -73,6 +79,7 @@ watch(currentTab, (newVal) => {
         v-if="currentTab === 'userInfo'"
         :user="student"
         :userType="'STUDENT'"
+        @refreshUser="getStudent"
       />
     </div>
   </div>

@@ -54,8 +54,10 @@ watch(props, () => {
   formData.email = props.user.email;
   formData.phoneNumber = props.user.phoneNumber;
   if(props.userType == "STUDENT") {
-    formData.dateOfBirth = props.user.StudentProfile.dateOfBirth;
-    formData.assignedEmployee = props.user.StudentProfile.assignedEmployee;
+    formData.dateOfBirth = String(props.user.StudentProfile.dob).substring(0,10);
+    //formData.assignedEmployee = props.user.StudentProfile.AssignedEmployee.User;
+    formData.assignedEmployee = { id: props.user.StudentProfile.AssignedEmployee.User.id, name: props.user.StudentProfile.AssignedEmployee.User.firstName + " " + props.user.StudentProfile.AssignedEmployee.User.lastName };
+    console.log(formData.assignedEmployee);
   }
   else {
     formData.role = props.user.EmployeeProfile.role; 
@@ -425,26 +427,26 @@ function sanitizePhoneNumber(event: Event) {
                   </div>
                 </Listbox>
               </div>
-
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" v-model="formData.archive" class="sr-only peer" />
-                <span
-                  class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 hidden md:block"
-                  >Archive</span
-                >
-                <div
-                  class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-                ></div>
-              </label>
-
-              <div class="flex w-full p-3 justify-center">
-                <button
-                  type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                  @click="emitSubmit"
-                >
-                  Submit
-                </button>
+              <div class="flex w-full p-3 justify-between">
+                <label class="inline-flex items-center cursor-pointer">
+                  <input type="checkbox" v-model="formData.archive" class="sr-only peer" />
+                  <span
+                    class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 md:block"
+                    >Archive</span
+                  >
+                  <div
+                    class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                  ></div>
+                </label>
+                <div class="flex w-full p-3 justify-center">
+                  <button
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                    @click="emitSubmit"
+                  >
+                    Submit
+                  </button>
+              </div>
               </div>
             </DialogPanel>
           </TransitionChild>
