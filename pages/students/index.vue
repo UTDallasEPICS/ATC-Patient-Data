@@ -5,15 +5,15 @@ const students = ref([]);
 const searchTerm = ref("");
 const searchArchived = ref(false);
 const loading = ref(false);
-const createUserModalOpen = ref(false);
+const modalOpen = ref(false);
 
 function openModal() {
-  createUserModalOpen.value = true;
+  modalOpen.value = true;
   console.log("modal opened");
 }
 
 function closeModal() {
-  createUserModalOpen.value = false;
+  modalOpen.value = false;
   getStudents();
   console.log("modal closed");
 }
@@ -47,8 +47,9 @@ getStudents();
           <PlusCircleIcon class="h-6 w-6" />
         </div>
       </button>
-      <CreateUser
-        :isOpen="createUserModalOpen"
+      <InputUser
+        :isOpen="modalOpen"
+        :mode="'CREATE'"
         :userType="'STUDENT'"
         @close-modal="closeModal"
       />

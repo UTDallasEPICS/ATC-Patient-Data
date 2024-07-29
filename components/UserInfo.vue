@@ -1,15 +1,15 @@
 <script setup>
 const props = defineProps(["user", "userType"]);
 const emit = defineEmits(["refreshUser"]);
-const editUserModalOpen = ref(false);
+const modalOpen = ref(false);
 
 function openModal() {
-  editUserModalOpen.value = true;
+  modalOpen.value = true;
   console.log("edit modal opened");
 }
 
 function closeModal() {
-  editUserModalOpen.value = false;
+  modalOpen.value = false;
   emit("refreshUser");
   console.log("edit modal closed");
 }
@@ -68,8 +68,9 @@ function closeModal() {
         </td>
       </tr>
     </table>
-    <EditUser
-      :isOpen="editUserModalOpen"
+    <InputUser
+      :isOpen="modalOpen"
+      :mode="'EDIT'"
       :userType="'STUDENT'"
       :user="props.user.data.value"
       @close-modal="closeModal"
