@@ -175,14 +175,6 @@ async function emitSubmit() {
             });
         }
       }
-      formData.firstName = "";
-      formData.lastName = "";
-      formData.email = "";
-      formData.phoneNumber = "";
-      formData.dateOfBirth = "";
-      formData.assignedEmployee = (data.value && data.value[0]) || null;
-      formData.role = "TECH";
-      formData.archive =  false;
       emit("closeModal");
     } catch (error) {
       if (props.userType == "STUDENT") {
@@ -199,14 +191,6 @@ async function emitSubmit() {
 }
 
 function emitClose() {
-  formData.firstName = "";
-  formData.lastName = "";
-  formData.email = "";
-  formData.phoneNumber = "";
-  formData.dateOfBirth = "";
-  formData.assignedEmployee = (data.value && data.value[0]) || null;
-  formData.role = "TECH";
-  formData.archive =  false;
   formErrors.firstName = "";
   formErrors.lastName = "";
   formErrors.email = "";
@@ -361,7 +345,7 @@ function sanitizePhoneNumber(event: Event) {
                       leave-to-class="opacity-0"
                     >
                       <ListboxOptions
-                        class="absolute p-1 w-full overflow-auto rounded bg-gray-100"
+                        class="absolute p-1 w-full overflow-auto rounded bg-gray-100 z-10"
                       >
                         <ListboxOption
                           v-slot="{ active, selected }"
