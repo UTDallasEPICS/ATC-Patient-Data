@@ -14,7 +14,9 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
 const props = defineProps({
   isOpen: Boolean,
+  mode: String,
   userType: String,
+  user: Object,
 });
 const emit = defineEmits(["closeModal"]);
 
@@ -35,6 +37,7 @@ const formData = reactive({
   dateOfBirth: "",
   assignedEmployee: (data.value && data.value[0]) || null,
   role: "TECH",
+  archive: false,
 }) as {
   firstName: string;
   lastName: string;
@@ -43,7 +46,37 @@ const formData = reactive({
   dateOfBirth: ""; //need to be stored as Date object
   assignedEmployee: { id: number; name: string } | null;
   role: string;
+  archive: boolean;
 };
+
+watch(props, () => {
+    if(props.mode == "EDIT") {
+        formData.firstName = props.user.firstName;
+        formData.lastName = props.user.lastName;
+        formData.email = props.user.email;
+        formData.phoneNumber = props.user.phoneNumber;
+        if(props.userType == "STUDENT") {
+            formData.dateOfBirth = String(props.user.StudentProfile.dob).substring(0,10);
+            //formData.assignedEmployee = props.user.StudentProfile.AssignedEmployee.User;
+            formData.assignedEmployee = { id: props.user.StudentProfile.AssignedEmployee.User.id, name: props.user.StudentProfile.AssignedEmployee.User.firstName + " " + props.user.StudentProfile.AssignedEmployee.User.lastName };
+            console.log(formData.assignedEmployee);
+        }
+        else {
+            formData.role = props.user.EmployeeProfile.role; 
+        }
+        formData.archive = props.user.archive;
+    }
+    else {
+        formData.firstName = "";
+        formData.lastName = "";
+        formData.email = "";
+        formData.phoneNumber = "";
+        formData.dateOfBirth = "";
+        formData.assignedEmployee = (data.value && data.value[0]) || null;
+        formData.role = "TECH";
+        formData.archive =  false;
+    }
+});
 
 const formErrors = reactive({
   firstName: "",
@@ -70,7 +103,7 @@ function validateEmail(email: string) {
 function validatePhoneNumber(phoneNumber: string) {
   // Check if phone number contains only digits
   const phonePattern = /^\d+$/;
-  return phonePattern.test(phoneNumber) && phoneNumber.length >= 10;
+  return phonePattern.test(phoneNumber) && phoneNumber.length >= 10 || phoneNumber.length == 0;
 }
 
 function validateForm() {
@@ -92,15 +125,15 @@ function validateForm() {
       : "Invalid email address."
     : "Email is required.";
 
-  formErrors.phoneNumber = formData.phoneNumber.trim()
-    ? validatePhoneNumber(formData.phoneNumber.trim())
-      ? ""
-      : "Phone number must be at least 10 digits and contain only numbers."
-    : "Phone number is required.";
+  formErrors.phoneNumber = validatePhoneNumber(formData.phoneNumber.trim())
+    ? ""
+    : "Phone number must be at least 10 digits and contain only numbers.";
 
-  formErrors.dateOfBirth = formData.dateOfBirth.trim()
+  if (props.userType == "STUDENT") { 
+    formErrors.dateOfBirth = formData.dateOfBirth.trim()
     ? ""
     : "Date of birth is required.";
+  }
 
   return (
     !formErrors.firstName &&
@@ -114,32 +147,42 @@ function validateForm() {
 async function emitSubmit() {
   if (validateForm()) {
     try {
-      if (props.userType == "STUDENT") {
-        await $fetch("/api/user/create/student", {
-          method: "POST",
-          body: formData,
-        });
-      } else {
-        await $fetch("/api/user/create/employee", {
-          method: "POST",
-          body: formData,
-        });
+      if (props.mode == "EDIT") {
+        if (props.userType == "STUDENT") {
+            await $fetch("/api/user/update/student", {
+            method: "PUT",
+            query: { id: props.user.id, },
+            body: formData,
+            });
+        } else {
+            await $fetch("/api/user/update/employee", { // update to U
+            method: "PUT",
+            query: { id: props.user.id, },
+            body: formData,
+            });
+        }
       }
-      formData.firstName = "";
-      formData.lastName = "";
-      formData.email = "";
-      formData.phoneNumber = "";
-      formData.dateOfBirth = "";
-      formData.assignedEmployee = (data.value && data.value[0]) || null;
-      formData.role = "TECH";
+      else {
+        if (props.userType == "STUDENT") {
+            await $fetch("/api/user/create/student", {
+            method: "POST",
+            body: formData,
+            });
+        } else {
+            await $fetch("/api/user/create/employee", {
+            method: "POST",
+            body: formData,
+            });
+        }
+      }
       emit("closeModal");
     } catch (error) {
       if (props.userType == "STUDENT") {
-        console.error("Error in creating a student", error);
-        alert("Error in creating a student");
+        console.error("Error in updating a student", error);
+        alert("Error in updating a student");
       } else {
-        console.error("error in creating a employee", error);
-        alert("Error in creating a employee");
+        console.error("error in updating a employee", error);
+        alert("Error in updating a employee");
       }
     }
   } else {
@@ -148,13 +191,6 @@ async function emitSubmit() {
 }
 
 function emitClose() {
-  formData.firstName = "";
-  formData.lastName = "";
-  formData.email = "";
-  formData.phoneNumber = "";
-  formData.dateOfBirth = "";
-  formData.assignedEmployee = (data.value && data.value[0]) || null;
-  formData.role = "TECH";
   formErrors.firstName = "";
   formErrors.lastName = "";
   formErrors.email = "";
@@ -204,6 +240,14 @@ function sanitizePhoneNumber(event: Event) {
               <DialogTitle
                 as="h3"
                 class="text-lg font-medium leading-6 text-gray-900"
+                v-if="props.mode == 'EDIT'"
+              >
+                Update {{ sentenceCaseUserType }}
+              </DialogTitle>
+              <DialogTitle
+                as="h3"
+                class="text-lg font-medium leading-6 text-gray-900"
+                v-if="props.mode == 'CREATE'"
               >
                 Create {{ sentenceCaseUserType }}
               </DialogTitle>
@@ -301,7 +345,7 @@ function sanitizePhoneNumber(event: Event) {
                       leave-to-class="opacity-0"
                     >
                       <ListboxOptions
-                        class="absolute p-1 w-full overflow-auto rounded bg-gray-100"
+                        class="absolute p-1 w-full overflow-auto rounded bg-gray-100 z-10"
                       >
                         <ListboxOption
                           v-slot="{ active, selected }"
@@ -343,7 +387,7 @@ function sanitizePhoneNumber(event: Event) {
                 v-if="props.userType == 'EMPLOYEE'"
                 class="flex flex-col m-3"
               >
-                <label>Assigned Employee</label>
+                <label>Role</label>
                 <Listbox v-model="formData.role">
                   <div class="relative">
                     <ListboxButton
@@ -401,15 +445,26 @@ function sanitizePhoneNumber(event: Event) {
                   </div>
                 </Listbox>
               </div>
-
-              <div class="flex w-full p-3 justify-center">
-                <button
-                  type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                  @click="emitSubmit"
-                >
-                  Submit
-                </button>
+              <div class="flex w-full p-3 justify-between">
+                <label v-if="props.mode == 'EDIT'" class="inline-flex items-center cursor-pointer">
+                  <input type="checkbox" v-model="formData.archive" class="sr-only peer" />
+                  <span
+                    class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 md:block"
+                    >Archive</span
+                  >
+                  <div
+                    class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                  ></div>
+                </label>
+                <div class="flex w-full p-3 justify-center">
+                  <button
+                    type="button"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                    @click="emitSubmit"
+                  >
+                    Submit
+                  </button>
+              </div>
               </div>
             </DialogPanel>
           </TransitionChild>

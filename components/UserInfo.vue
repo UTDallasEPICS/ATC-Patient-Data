@@ -1,37 +1,66 @@
 <script setup>
-const props = defineProps(["user", "userType"]);
+import { ref } from 'vue';
 
-function formatDate(dateString) {
-  let date = new Date(dateString);
-  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+// Define props
+const props = defineProps(["user", "userType"]);
+const emit = defineEmits(["refreshUser"]);
+const modalOpen = ref(false);
+
+function openModal() {
+  modalOpen.value = true;
+  console.log("edit modal opened");
+}
+
+function closeModal() {
+  modalOpen.value = false;
+  emit("refreshUser");
+  console.log("edit modal closed");
+}
+
+// Function to handle toggle change
+function toggleArchive() {
+  isArchived.value = !isArchived.value;
+  // Handle the toggle action (e.g., update the student status)
+  console.log('Archive status:', isArchived.value);
 }
 </script>
 
 <template>
-  <div class="flex w-full h-full justify-center items-center text-lg">
+  <div class="flex justify-center py-16  ">
+    <button v-on:click="openModal" title="Update Student" class="bg-blue-500 text-white py-1 px-4 rounded">
+
+        <span class="uppercase">Update Student</span>
+
+    </button>
+  </div>
+  <div class="flex w-full h-half justify-center items-center text-lg">
     <table class="w-1/4 border-gray-900">
+      <!-- Email Row -->
       <tr>
         <td class="font-semibold">Email</td>
         <td class="flex justify-center">{{ props.user.data.value.email }}</td>
       </tr>
+      <!-- Phone Row -->
       <tr>
         <td class="font-semibold">Phone</td>
         <td class="flex justify-center">
-          <div v-if="props.user.data.value.phone">
-            {{ props.user.data.vlue.phone }}
+          <div v-if="props.user.data.value.phoneNumber">
+            {{ props.user.data.value.phoneNumber }}
           </div>
           <div v-else class="font-mono">Not Provided</div>
         </td>
       </tr>
+      <!-- Date of Birth Row (for students) -->
       <tr v-if="userType === 'STUDENT'">
         <td class="font-semibold">DoB</td>
         <td class="flex justify-center">
           <div v-if="props.user.data.value.StudentProfile.dob">
-            {{ formatDate(props.user.data.value.StudentProfile.dob) }}
+            {{ (props.user.data.value.StudentProfile.dob).substring(0,10) }} <!-- can't use .toDateString() because of timezone -->
           </div>
           <div v-else class="font-mono">Not Provided</div>
         </td>
       </tr>
+      <!-- Assigned Employee Row (for students) -->
       <tr v-if="userType === 'STUDENT'">
         <td class="font-semibold">Assigned Employee</td>
         <td class="flex justify-center">
@@ -51,5 +80,12 @@ function formatDate(dateString) {
         </td>
       </tr>
     </table>
+    <InputUser
+      :isOpen="modalOpen"
+      :mode="'EDIT'"
+      :userType="'STUDENT'"
+      :user="props.user.data.value"
+      @close-modal="closeModal"
+    />
   </div>
 </template>

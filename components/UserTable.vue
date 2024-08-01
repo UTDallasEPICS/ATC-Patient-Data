@@ -7,15 +7,16 @@ const props = defineProps({
   loading: Boolean,
 });
 
-const router = useRouter();
+const emit = defineEmits(["openEditModal"]);
 
-async function viewUser(id) {
+async function viewUser(user) {
   if (props.userType == "STUDENT") {
-    await navigateTo({ path: `/students/student-profile/${id}` });
+    await navigateTo({ path: `/students/student-profile/${user.id}` });
   } else {
-    await navigateTo({ path: `/employees/employee-profile/${id}` });
+    emit("openEditModal", user);
   }
 }
+
 </script>
 
 <template>
@@ -43,6 +44,18 @@ async function viewUser(id) {
                   >
                     Assigned Employee
                   </th>
+                  <th
+                    v-if="userType === 'EMPLOYEE'"
+                    class="px-6 py-3 text-center text-xs font-medium uppercase border"
+                  >
+                    Role
+                  </th>
+                  <th
+                    v-if="userType === 'EMPLOYEE'"
+                    class="px-6 py-3 text-center text-xs font-medium uppercase border"
+                  >
+                    Phone Number
+                  </th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
@@ -50,7 +63,7 @@ async function viewUser(id) {
                   v-for="user in users"
                   :key="user.id"
                   class="hover:bg-gray-100 hover:cursor-pointer"
-                  v-on:click="viewUser(user.id)"
+                  v-on:click="viewUser(user)"
                 >
                   <td class="px-6 py-4 whitespace-nowrap border">
                     <div class="text-sm text-gray-900">
@@ -63,11 +76,27 @@ async function viewUser(id) {
                     </div>
                   </td>
                   <td
-                    v-if="userType && userType === 'STUDENT'"
+                    v-if=" userType === 'STUDENT'"
                     class="px-6 py-4 whitespace-nowrap border"
                   >
                     <div class="text-sm">
                       {{ user.StudentProfile.AssignedEmployee.User.firstName }}
+                    </div>
+                  </td>
+                  <td
+                    v-if=" userType === 'EMPLOYEE'"
+                    class="px-6 py-4 whitespace-nowrap border"
+                  >
+                    <div class="text-sm">
+                      {{ user.EmployeeProfile.role }}
+                    </div>
+                  </td>
+                  <td
+                    v-if=" userType === 'EMPLOYEE'"
+                    class="px-6 py-4 whitespace-nowrap border"
+                  >
+                    <div class="text-sm">
+                      {{ user.phoneNumber }}
                     </div>
                   </td>
                 </tr>

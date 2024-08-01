@@ -5,15 +5,25 @@ const employees = ref([]);
 const searchTerm = ref("");
 const searchArchived = ref(false);
 const loading = ref(false);
-const createUserModalOpen = ref(false);
+const modalOpen = ref(false);
+const modalMode = ref("CREATE")
+const currUser = ref();
 
-function openModal() {
-  createUserModalOpen.value = true;
-  console.log("modal opened");
+function openCreateModal() {
+  modalMode.value = "CREATE";
+  modalOpen.value = true;
+  console.log("modal opened in create mode");
+}
+
+function openEditModal(user) {
+  modalMode.value = "EDIT"
+  currUser.value = user;
+  modalOpen.value = true;
+  console.log("modal opened in edit mode");
 }
 
 function closeModal() {
-  createUserModalOpen.value = false;
+  modalOpen.value = false;
   getEmployees();
   console.log("modal closed");
 }
@@ -42,14 +52,16 @@ getEmployees();
   <div class="m-3 font-thin text-4xl">Employees</div>
   <div class="md:flex flex-col md:items-center m-10">
     <div class="flex md:w-1/2">
-      <button v-on:click="openModal" title="Create Employee">
+      <button v-on:click="openCreateModal" title="Create Employee">
         <div class="border p-2 rounded hover:border-gray-500 hover:bg-gray-100">
           <PlusCircleIcon class="h-6 w-6" />
         </div>
       </button>
-      <CreateUser
-        :isOpen="createUserModalOpen"
+      <InputUser
+        :isOpen="modalOpen"
+        :mode="modalMode"
         :userType="'EMPLOYEE'"
+        :user="currUser"
         @close-modal="closeModal"
       />
       <input
@@ -73,6 +85,7 @@ getEmployees();
       :userType="'EMPLOYEE'"
       :loading="loading"
       class="md:w-1/2"
+      @open-edit-modal="openEditModal"
     />
   </div>
 </template>
