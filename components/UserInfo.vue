@@ -16,13 +16,6 @@ function closeModal() {
   emit("refreshUser");
   console.log("edit modal closed");
 }
-
-// Function to handle toggle change
-function toggleArchive() {
-  isArchived.value = !isArchived.value;
-  // Handle the toggle action (e.g., update the student status)
-  console.log('Archive status:', isArchived.value);
-}
 </script>
 
 <template>
