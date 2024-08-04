@@ -24,6 +24,8 @@ const toggleAll = ref(false);
 const save = ref(0); // just increment to emit saveData from all behaviors
 const submit = ref(false);
 const noteModalOpen = ref(false);
+const successfulSubmit = ref(false);
+const disableSubmit = ref(false);
 
 const student = await useFetch("/api/user/get/student", {
   query: {
@@ -96,6 +98,18 @@ async function saveData(behaviorID, sessionID, data) {
       data,
     },
   });
+}
+
+async function handleSubmit(sessionID) {
+  console.log("Submitting session with ID:", sessionID);
+  await $fetch("/api/session/put/submit", {
+    method: "PUT",
+    body: { sessionID: sessionID },
+  });
+  console.log("API request sent");
+  console.log("Session ID: ", sessionId);
+  successfulSubmit.value = true;
+  disableSubmit.value = true;
 }
 
 function openNoteModal() {
@@ -189,6 +203,9 @@ async function saveNote() {
           <button
             class="border rounded bg-gray-200 hover:bg-gray-500 hover:text-white hover:border-gray-900 m-2"
             v-if="submit"
+            @click="handleSubmit(sessionId)"
+            :disabled="disableSubmit"
+            :class="{ 'cursor-not-allowed': disableSubmit }"
           >
             <CheckIcon class="w-6 h-6" />
           </button>
@@ -294,6 +311,9 @@ async function saveNote() {
           <h1 class="">No Behaviors Found</h1>
         </div>
       </div>
+    </div>
+    <div v-if="successfulSubmit" class="text-blue-300">
+      Submission successful!
     </div>
   </div>
 </template>
