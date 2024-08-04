@@ -280,6 +280,10 @@ console.log("title", selectedBehavior.value.title);
                 {{ selectedBehavior.value && selectedBehavior.value.desc }}
               </td>
             </tr>
+            <tr>
+              <td>graduate</td>
+              <td>archive</td>
+            </tr>
           </tbody>
         </table>
       </div>

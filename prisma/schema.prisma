@@ -66,7 +66,7 @@ model Behavior {
   BehaviorData    BehaviorData[]
   behaviorTempId  Int?
   BehaviorTempRel BehaviorTemplate? @relation(fields: [behaviorTempId], references: [id])
-  graduated       Boolean           @default(false)
+  graduated       DateTime?         
   archive         Boolean           @default(false)
 }
 

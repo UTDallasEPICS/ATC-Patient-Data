@@ -16,6 +16,14 @@ export default defineEventHandler(async (event) => {
         archive: false,
         studentId: user.StudentProfile.id,
         createdAt: { lt: new Date(String(sessionAt)) }, // behavior creation less than session
+        OR: [
+          {
+            graduated: { gte: new Date(String(sessionAt)) }, // behavior gratudated at session or after session
+          },
+          {
+            graduated: null,
+          }
+        ]
       },
       include: {
         Student: {

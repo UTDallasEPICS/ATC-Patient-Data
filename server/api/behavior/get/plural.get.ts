@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const res = await event.context.prisma.behavior.findMany({
     where: {
       archive: false,
-      graduated: searchGraduated === "true" ? true : false,
+      graduated: searchGraduated === "true" ? { not: null } : null,
       // Student: {
       //   userId: Number(id),
       // },
