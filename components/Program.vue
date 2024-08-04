@@ -26,7 +26,9 @@ let selectedBehavior = reactive({ value: {} });
 const searchBehaviors = ref("");
 const searchBehaviorTemplates = ref("");
 const searchGraduated = ref(false);
-const searchArchived = ref(false);
+const archiveBool = ref(false);
+const searchArchivedBehavior = ref(false);
+const searchArchivedTemplate = ref(false);
 const createBehaviorClicked = ref(false);
 const createNewBehaviorNotClicked = ref(true);
 const behaviorTypes = [
@@ -49,6 +51,7 @@ const createBehaviorFormData = ref({
 const behaviors = await useFetch("/api/behavior/get/plural", {
   query: {
     searchTerm: searchBehaviors,
+    searchArchived: searchArchivedBehavior,
     searchGraduated: searchGraduated,
     id: props.user.data.value.id,
   },
@@ -57,18 +60,18 @@ const behaviors = await useFetch("/api/behavior/get/plural", {
 const behaviorTemplates = await useFetch("/api/behavior-template/plural", {
   query: {
     searchTerm: searchBehaviorTemplates,
-    searchArchived: searchArchived,
+    searchArchived: searchArchivedTemplate,
   },
 });
 
 console.log("behaviorTemplates.data.value", behaviorTemplates.data.value);
 
 // Watch for changes
-watch([searchBehaviors, searchGraduated], () => {
+watch([searchBehaviors, searchGraduated, searchArchivedBehavior], () => {
   behaviors.refresh();
 });
 
-watch([searchBehaviorTemplates, searchArchived], () => {
+watch([searchBehaviorTemplates, searchArchivedTemplate], () => {
   behaviorTemplates.refresh();
   console.log("behaviorTemplates.data look here", behaviorTemplates.data);
 });
@@ -159,8 +162,6 @@ function isTypeArray(typeId) {
   return false;
 }
 
-const archiveBool = ref(false);
-
 async function archiveBehavior(id){
   await $fetch("/api/behavior/put/archive", {
     method: "PUT",
@@ -221,6 +222,20 @@ console.log("title", selectedBehavior.value.title);
           <span
             class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 hidden md:block"
             >Search Graduated</span
+          >
+          <div
+            class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+          ></div>
+        </label>
+        <label class="inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            v-model="searchArchivedBehavior"
+            class="sr-only peer"
+          />
+          <span
+            class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 hidden md:block"
+            >Search Archived</span
           >
           <div
             class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
@@ -392,7 +407,7 @@ console.log("title", selectedBehavior.value.title);
             <label class="inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
-                v-model="searchArchived"
+                v-model="searchArchivedTemplate"
                 class="sr-only peer"
               />
               <span
