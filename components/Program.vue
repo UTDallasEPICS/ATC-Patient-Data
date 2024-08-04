@@ -159,6 +159,31 @@ function isTypeArray(typeId) {
   return false;
 }
 
+const archiveBool = ref(false);
+
+async function archiveBehavior(id){
+  await $fetch("/api/behavior/put/archive", {
+    method: "PUT",
+    body: {
+      id: id,
+      archive: this.archiveBool,
+    },
+  });
+  behaviors.refresh();
+  behaviorTemplates.refresh();
+}
+
+async function graduateBehavior(id){
+  await $fetch("/api/behavior/put/graduate", {
+    method: "PUT",
+    body: {
+      id: id,
+    },
+  });
+  behaviors.refresh();
+  behaviorTemplates.refresh();
+}
+
 // Log output
 console.log("props.user", props.user);
 console.log("behaviors", behaviors);
@@ -281,8 +306,50 @@ console.log("title", selectedBehavior.value.title);
               </td>
             </tr>
             <tr>
-              <td>graduate</td>
-              <td>archive</td>
+              <td>
+                <label class="inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    v-if="selectedBehavior.value.graduated"
+                    disabled
+                    checked
+                    @change="graduateBehavior(selectedBehavior.value.id)"
+                    class="sr-only peer"
+                  />
+                  <input
+                    type="checkbox"
+                    v-else
+                    @change="graduateBehavior(selectedBehavior.value.id)"
+                    class="sr-only peer"
+                  />
+                  <span
+                    class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >Graduate</span
+                  >
+                  <div
+                    class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                  ></div>
+                </label>
+              </td>
+              <td>
+                <label class="inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    v-model="archiveBool"
+                    :true-value="true"
+                    :false-value="false"
+                    @change="archiveBehavior(selectedBehavior.value.id)"
+                    class="sr-only peer"
+                  />
+                  <span
+                    class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >Archive</span
+                  >
+                  <div
+                    class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                  ></div>
+                </label>
+              </td>
             </tr>
           </tbody>
         </table>
