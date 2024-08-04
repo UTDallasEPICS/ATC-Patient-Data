@@ -26,6 +26,7 @@ let selectedBehavior = reactive({ value: {} });
 const searchBehaviors = ref("");
 const searchBehaviorTemplates = ref("");
 const searchGraduated = ref(false);
+const instaLockOut = ref(false);
 const archiveBool = ref(false);
 const searchArchivedBehavior = ref(false);
 const searchArchivedTemplate = ref(false);
@@ -82,6 +83,7 @@ watch(createBehaviorFormData.value, () => {
 
 // Event handlers
 function handleRowClicked(id) {
+  instaLockOut.value = false;
   clickedRowId.value = id;
   loadingBehavior.value = true;
   selectedBehavior.value = behaviors.data.value.body.find(
@@ -91,6 +93,7 @@ function handleRowClicked(id) {
 }
 
 function clearRowClicked() {
+  instaLockOut.value = false;
   clickedRowId.value = 0;
 }
 
@@ -171,7 +174,6 @@ async function archiveBehavior(id){
     },
   });
   behaviors.refresh();
-  behaviorTemplates.refresh();
 }
 
 async function graduateBehavior(id){
@@ -181,8 +183,8 @@ async function graduateBehavior(id){
       id: id,
     },
   });
+  instaLockOut.value = true;
   behaviors.refresh();
-  behaviorTemplates.refresh();
 }
 
 // Log output
@@ -325,15 +327,8 @@ console.log("title", selectedBehavior.value.title);
                 <label class="inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    v-if="selectedBehavior.value.graduated"
-                    disabled
-                    checked
-                    @change="graduateBehavior(selectedBehavior.value.id)"
-                    class="sr-only peer"
-                  />
-                  <input
-                    type="checkbox"
-                    v-else
+                    :disabled="selectedBehavior.value.graduated || instaLockOut"
+                    :checked="selectedBehavior.value.graduated || instaLockOut"
                     @change="graduateBehavior(selectedBehavior.value.id)"
                     class="sr-only peer"
                   />
