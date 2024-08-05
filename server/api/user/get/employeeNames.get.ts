@@ -13,6 +13,14 @@ export default defineEventHandler(async (event) => {
       firstName: true,
       lastName: true,
     },
+    orderBy: [
+      {
+        firstName: 'asc'
+      },
+      {
+        lastName: 'asc'
+      }
+    ],
   });
   console.log(employees);
   return employees.map((employee) => ({

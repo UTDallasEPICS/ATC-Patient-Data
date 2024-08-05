@@ -26,6 +26,14 @@ export default defineEventHandler(async (event) => {
     include: {
       EmployeeProfile: true
     },
+    orderBy: [
+      {
+        firstName: 'asc'
+      },
+      {
+        lastName: 'asc'
+      }
+    ],
   });
 
   console.log(res);

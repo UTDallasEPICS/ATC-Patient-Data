@@ -33,6 +33,14 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
+    orderBy: [
+      {
+        firstName: 'asc'
+      },
+      {
+        lastName: 'asc'
+      }
+    ],
   });
 
   console.log(res);

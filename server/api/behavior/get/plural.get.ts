@@ -40,6 +40,9 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
+    orderBy: {
+      id: 'asc',
+    },
   });
 
   //filter res based on id
