@@ -89,11 +89,11 @@ function handleRowClicked(id) {
   selectedBehavior.value = behaviors.data.value.body.find(
     (behavior) => behavior.id === id
   );
+  archiveBool.value = selectedBehavior.value.archive;
   loadingBehavior.value = false;
 }
 
 function clearRowClicked() {
-  instaLockOut.value = false;
   clickedRowId.value = 0;
 }
 
