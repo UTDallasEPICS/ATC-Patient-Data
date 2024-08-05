@@ -7,7 +7,8 @@ import { PlusCircleIcon } from "@heroicons/vue/24/outline";
 import BlockShuffle from "~/assets/blocks-shuffle-3.svg";
 
 //Refs
-const searchTerm = ref("");
+const searchStart = ref("");
+const searchEnd = ref("");
 const searchSubmitted = ref(false);
 const refresh = ref(0);
 const loadingNewSession = ref(false);
@@ -16,7 +17,8 @@ const loadingNewSession = ref(false);
 const sessions = await useFetch("/api/session/retrieve", {
   query: {
     userId: props.user.data.value.id,
-    searchTerm: searchTerm,
+    searchStart: searchStart,
+    searchEnd: searchEnd,
     searchSubmitted: searchSubmitted,
   },
 });
@@ -90,10 +92,18 @@ watch([refresh, searchSubmitted], () => {
           </div>
         </button>
         <input
-          v-model.trim="searchTerm"
+          v-model.trim="searchStart"
           type="date"
           class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700"
-          placeholder="Search"
+          placeholder="Search Start Date"
+          title="Search Start Date"
+        />
+        <input
+          v-model.trim="searchEnd"
+          type="date"
+          class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700"
+          placeholder="Search End Date"
+          title="Search End Date"
         />
         <label class="inline-flex items-center cursor-pointer">
           <input

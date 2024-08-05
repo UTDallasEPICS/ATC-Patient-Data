@@ -1,7 +1,5 @@
-import { start } from "repl";
-
 export default defineEventHandler(async (event) => {
-  const { userId, searchTerm, searchSubmitted } = getQuery(event);
+  const { userId, searchStart, searchEnd, searchSubmitted } = getQuery(event);
 
   const user = await event.context.prisma.user.findUnique({
     where: {
@@ -12,49 +10,34 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  const startOfDay = new Date(searchTerm);
-  let endOfDay = new Date(startOfDay.valueOf() + 86400000);
+  const startDay = new Date(searchStart);
+  let endDay = new Date(searchEnd);
+  endDay = new Date(endDay.valueOf() + 86400000); // add a day to the end day, so that date is included in the search
 
-  let res;
-
-  if(searchTerm){
-    res = await event.context.prisma.session.findMany({
-      where: {
-        studentId: user.StudentProfile.id,
-        submitted: searchSubmitted === "true" ? true : false,
-        AND: [
-          {
-            createdAt: {gte: startOfDay},
-          },
-          {
-            createdAt: {lt: endOfDay},
-          }
-        ]
-      },
-      include: {
-        Employee: {
-          include:{
-            User: true,
-          },
+  const res = await event.context.prisma.session.findMany({
+    where: {
+      studentId: user.StudentProfile.id,
+      submitted: searchSubmitted === "true" ? true : false,
+      AND: [
+        {
+          createdAt: searchStart ? {gte: startDay} : {lt: new Date()}, //no session should exist that is in the future, but if that is an issue, this is the cause
         },
-      }
-    });
-  }
-  else {
-    res = await event.context.prisma.session.findMany({
-      where: {
-        studentId: user.StudentProfile.id,
-        submitted: searchSubmitted === "true" ? true : false,
-      },
-      include: {
-        Employee: {
-          include:{
-            User: true,
-          },
+        {
+          createdAt: searchEnd ? {lt: endDay} : {lt: new Date()}, // ^
+        }
+      ]
+    },
+    include: {
+      Employee: {
+        include:{
+          User: true,
         },
-      }
-    });
-  }
+      },
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
   
 
   return {
