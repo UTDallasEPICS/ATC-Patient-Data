@@ -6,7 +6,7 @@ const props = defineProps({
   behaviorID: Number,
   type: String,
   arrayCount: Number,
-  doSave: Number,
+  submitted: Boolean,
 });
 
 const emit = defineEmits(["saveData"]);
@@ -67,6 +67,7 @@ watch(dataString, () => {
             type="radio"
             title="true"
             value="true"
+            :disabled="submitted"
             v-model="data[i - 1]"
             class="scale-150"
           />
@@ -74,6 +75,7 @@ watch(dataString, () => {
             type="radio"
             title="false"
             value="false"
+            :disabled="submitted"
             v-model="data[i - 1]"
             class="scale-150"
           />
@@ -88,6 +90,7 @@ watch(dataString, () => {
         <div>
         <input
           type="number"
+          :disabled="submitted"
           v-model.number="data[i - 1]"
           class="w-24 text-black text-center border-2 border-gray-300 hover:border-blue-400 focus:border-blue-500 focus:bg-blue-100 rounded p-1 outline-none [&::-webkit-inner-spin-button]:appearance-none [appearance:textfield]"
         />

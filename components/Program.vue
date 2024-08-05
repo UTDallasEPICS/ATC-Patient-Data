@@ -348,6 +348,7 @@ console.log("title", selectedBehavior.value.title);
                     v-model="archiveBool"
                     :true-value="true"
                     :false-value="false"
+                    :disabled="!selectedBehavior.value.graduated && !instaLockOut"
                     @change="archiveBehavior(selectedBehavior.value.id)"
                     class="sr-only peer"
                   />

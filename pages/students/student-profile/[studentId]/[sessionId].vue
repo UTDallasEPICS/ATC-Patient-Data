@@ -24,8 +24,6 @@ const toggleAll = ref(false);
 const save = ref(0); // just increment to emit saveData from all behaviors
 const submit = ref(false);
 const noteModalOpen = ref(false);
-const successfulSubmit = ref(false);
-const disableSubmit = ref(false);
 
 const student = await useFetch("/api/user/get/student", {
   query: {
@@ -51,6 +49,8 @@ const currSession = await useFetch("/api/session/singular/retrieve", {
   },
 });
 
+const submitted = ref(currSession.data.value.body.submitted);
+
 const currSessionDate = new Date(
   currSession.data.value.body.createdAt
 ).toDateString();
@@ -75,16 +75,6 @@ function toggleAllBehaviors() {
 }
 
 async function saveData(behaviorID, sessionID, data) {
-  // console.log(
-  //   "Behavior ID:",
-  //   behaviorId,
-  //   "Session ID:",
-  //   sessionId,
-  //   "Data:",
-  //   data,
-  //   "Do Submit:",
-  //   doSubmit
-  // );
   console.log("-----------------");
   console.log("behaviorId:", behaviorID);
   console.log("sessionId:", sessionID);
@@ -108,8 +98,8 @@ async function handleSubmit(sessionID) {
   });
   console.log("API request sent");
   console.log("Session ID: ", sessionId);
-  successfulSubmit.value = true;
-  disableSubmit.value = true;
+  submitted.value = true;
+  submitted.value = true;
 }
 
 function openNoteModal() {
@@ -149,6 +139,9 @@ async function saveNote() {
           <span class="font-thin">
             {{ currSessionDate }} - {{ currSessionTime }}
           </span>
+          <span v-if="submitted">
+            SUBMITTED
+          </span>
         </h1>
         <button
           v-if="!toggleAll"
@@ -186,11 +179,12 @@ async function saveNote() {
         <label
           class="inline-flex items-center cursor-pointer border m-2 rounded hover:border-gray-500 hover:bg-gray-100"
         >
-          <input type="checkbox" v-model="submit" class="sr-only peer" />
+          <input type="checkbox" v-model="submit" class="sr-only peer" :disabled="submitted" :checked="submitted"/>
           <span
             class="ms-3 w-18 text-sm font-medium text-gray-900 dark:text-gray-300 hidden md:block"
             >Submit</span
           >
+          <!--the below div should keep the toggle consistant after locking from submit-->
           <div
             class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
           ></div>
@@ -204,8 +198,8 @@ async function saveNote() {
             class="border rounded bg-gray-200 hover:bg-gray-500 hover:text-white hover:border-gray-900 m-2"
             v-if="submit"
             @click="handleSubmit(sessionId)"
-            :disabled="disableSubmit"
-            :class="{ 'cursor-not-allowed': disableSubmit }"
+            :disabled="submitted"
+            :class="{ 'cursor-not-allowed': submitted }"
           >
             <CheckIcon class="w-6 h-6" />
           </button>
@@ -257,6 +251,7 @@ async function saveNote() {
                       </div>
                       <div>
                         <textarea
+                          :disabled="submitted"
                           v-model="localNote"
                           class="min-h-80 w-full mt-2 p-2 border border-gray-300 rounded-md"
                         />
@@ -264,6 +259,7 @@ async function saveNote() {
                       <div class="flex w-full p-3 justify-center">
                         <button
                           type="button"
+                          :disabled="submitted"
                           class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
                           @click="saveNote"
                         >
@@ -298,7 +294,7 @@ async function saveNote() {
             :behaviorID="Number(behavior.id)"
             :type="behavior.type"
             :array-count="Number(behavior.arrayCount)"
-            :doSave="Number(save)"
+            :submitted="submitted"
             class="flex p-3 mt-2 rounded border-2 border-gray-200 bg-gray-500 text-white overflow-auto max-h-80"
             @saveData="(data) => saveData(behavior.id, sessionId, data)"
           />
@@ -311,9 +307,6 @@ async function saveNote() {
           <h1 class="">No Behaviors Found</h1>
         </div>
       </div>
-    </div>
-    <div v-if="successfulSubmit" class="text-blue-300">
-      Submission successful!
     </div>
   </div>
 </template>
