@@ -1,75 +1,44 @@
-# Nuxt 3 Minimal Starter
+# installing the project
+Install Ubuntu (Windows): https://learn.microsoft.com/en-us/windows/wsl/install
+1. Go to command prompt as administrator and type the command 'wsl --install'
+2. Restart device to apply the changes
+3. Set up your linux user info (use an easily entered password)
+	
+Install Docker: https://docs.docker.com/engine/install/ubuntu/
+follow the instuructions under: “Install using apt repository”
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Install NPM: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04
+Enter the command ‘npm install -g npm’
 
-## Setup
+Clone the code from github’s repository:
+1. Open the github page with the repository
+2. Click on ‘code’ which is above the list of files
+3. Click on the link with the two squares, which also says ‘Copy url to clipboard’
+4. Open Ubuntu
+5. Type the command ‘git clone [URL link of the repository]’ and press enter
 
-Make sure to install the dependencies:
+Install Prisma:
+1. Check is node.js and npm is installed with the commands
+2. node -v
+3. npm -v
+4. Use the command ‘npm i -g prisma’
+5. Use the command ‘npm i @prisma/client’
 
-```bash
-# npm
-npm install
+Instal Headless UI: ‘npm i @headlessui/vue’
 
-# pnpm
-pnpm install
 
-# yarn
-yarn install
+# Versions needed for the project:
+npm: 10.8.1
+node.js: v22.3.0
+prisma: 5.17.0
+@prisma/client: 5.17.0
+docker: 26.1.4, build 5650f9b
 
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+# How to run the project?
+1. Open a terminal
+2. Make sure the project is your working directory
+3. Enter the command “sudo docker compose up”
+4. Open another terminal
+5. Type and enter command “npm run dev”
+6. Open a browser
+7. Type in the local host link
