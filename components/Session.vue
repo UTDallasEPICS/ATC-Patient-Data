@@ -8,7 +8,7 @@ import BlockShuffle from "~/assets/blocks-shuffle-3.svg";
 
 //Refs
 const searchTerm = ref("");
-const searchArchived = ref(false);
+const searchSubmitted = ref(false);
 const refresh = ref(0);
 const loadingNewSession = ref(false);
 
@@ -17,7 +17,7 @@ const sessions = await useFetch("/api/session/retrieve", {
   query: {
     userId: props.user.data.value.id,
     searchTerm: searchTerm,
-    searchArchived: searchArchived,
+    searchSubmitted: searchSubmitted,
   },
 });
 
@@ -70,7 +70,7 @@ function getLocalTime(utcTime) {
 }
 
 //Watches
-watch([refresh, searchArchived], () => {
+watch([refresh, searchSubmitted], () => {
   sessions.refresh();
 });
 </script>
@@ -91,18 +91,19 @@ watch([refresh, searchArchived], () => {
         </button>
         <input
           v-model.trim="searchTerm"
+          type="date"
           class="border rounded grow p-2 m-2 shadow text-center hover:border-gray-500 focus:bg-gray-100 outline-none focus:border-gray-700"
           placeholder="Search"
         />
         <label class="inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
-            v-model="searchArchived"
+            v-model="searchSubmitted"
             class="sr-only peer"
           />
           <span
             class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 hidden md:block"
-            >Search Archived</span
+            >Search Submitted</span
           >
           <div
             class="relative mx-2 w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
