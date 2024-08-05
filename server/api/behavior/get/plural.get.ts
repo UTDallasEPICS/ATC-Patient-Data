@@ -1,5 +1,5 @@
 export default defineEventHandler(async (event) => {
-  const { searchTerm, searchGraduated, id } = getQuery(event);
+  const { searchTerm, searchArchived, searchGraduated, id } = getQuery(event);
 
   const user = await event.context.prisma.user.findUnique({
     where: {
@@ -12,8 +12,8 @@ export default defineEventHandler(async (event) => {
 
   const res = await event.context.prisma.behavior.findMany({
     where: {
-      archive: false,
-      graduated: searchGraduated === "true" ? true : false,
+      archive: searchArchived === "true" ? true : false,
+      graduated: searchGraduated === "true" ? { not: null } : null,
       // Student: {
       //   userId: Number(id),
       // },
