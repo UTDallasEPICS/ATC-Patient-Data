@@ -13,11 +13,14 @@ export default defineEventHandler(async (event) => {
   const emailCheck = await event.context.prisma.user.findUnique({
     where: {
       email: email,
+    },
+    include: {
+      StudentProfile: true,
     }
   });
 
   if(emailCheck) {
-    if (!emailCheck.employeeProfile && firstName == emailCheck.firstName && lastName == emailCheck.lastName){
+    if (firstName == emailCheck.firstName && lastName == emailCheck.lastName && !emailCheck.StudentProfile){
       return {
         statusCode: 203,
         message: "POSSIBLE EMAIL IN USE",
