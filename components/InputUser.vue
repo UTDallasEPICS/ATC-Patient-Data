@@ -149,33 +149,78 @@ async function emitSubmit() {
     try {
       if (props.mode == "EDIT") {
         if (props.userType == "STUDENT") {
-            await $fetch("/api/user/update/student", {
+            const { statusCode } = await $fetch("/api/user/update/student", {
             method: "PUT",
-            query: { id: props.user.id, },
-            body: formData,
+              query: { id: props.user.id, },
+              body: formData,
             });
+            if (statusCode == 202) {
+              console.log(statusCode, "Email in use");
+              alert("Student email in use");
+            }
+            else {
+              emit("closeModal");
+            }
         } else {
-            await $fetch("/api/user/update/employee", { // update to U
+            const { statusCode } = await $fetch("/api/user/update/employee", { // update to U
             method: "PUT",
-            query: { id: props.user.id, },
-            body: formData,
+              query: { id: props.user.id, },
+              body: formData,
             });
+            if (statusCode == 202) {
+              console.log(statusCode, "Email in use");
+              alert("Employee email in use");
+            }
+            else {
+              emit("closeModal");
+            }
         }
       }
       else {
         if (props.userType == "STUDENT") {
-            await $fetch("/api/user/create/student", {
-            method: "POST",
-            body: formData,
+            const { statusCode } = await $fetch("/api/user/create/student", {
+              method: "POST",
+              body: formData,
             });
+            if (statusCode == 202) {
+              console.log(statusCode, "Email in use");
+              alert("Student email in use");
+            }
+            if (statusCode == 203) {
+              if (confirm("Add student profile to existing user?")){
+                await $fetch("/api/user/link/student", {
+                  method: "POST",
+                  body: formData,
+                });
+                emit("closeModal");
+              }
+            }
+            else {
+              emit("closeModal");
+            }
         } else {
-            await $fetch("/api/user/create/employee", {
-            method: "POST",
-            body: formData,
+            const { statusCode } = await $fetch("/api/user/create/employee", {
+              method: "POST",
+              body: formData,
             });
+            if (statusCode == 202) {
+              console.log(statusCode, "Email in use");
+              alert("Employee email in use");
+            }
+            if (statusCode == 203) {
+              if (confirm("Add employee profile to existing user?")){
+                await $fetch("/api/user/link/employee", {
+                  method: "POST",
+                  body: formData,
+                });
+                emit("closeModal");
+              }
+            }
+            else {
+              emit("closeModal");
+            }
         }
       }
-      emit("closeModal");
     } catch (error) {
       if (props.userType == "STUDENT") {
         console.error("Error in updating a student", error);

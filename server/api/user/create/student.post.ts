@@ -10,6 +10,27 @@ export default defineEventHandler(async (event) => {
     assignedEmployee,
   } = await readBody(event);
 
+  const emailCheck = await event.context.prisma.user.findUnique({
+    where: {
+      email: email,
+    }
+  });
+
+  if(emailCheck) {
+    if (!emailCheck.employeeProfile && firstName == emailCheck.firstName && lastName == emailCheck.lastName){
+      return {
+        statusCode: 203,
+        message: "POSSIBLE EMAIL IN USE",
+      };
+    }
+    else {
+      return {
+        statusCode: 202,
+        message: "EMAIL IN USE",
+      };
+    }
+  }
+
   const user = await event.context.prisma.$transaction(
     async (p: PrismaClient) => {
       const newUser = await p.user.create({

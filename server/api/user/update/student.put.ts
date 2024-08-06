@@ -12,6 +12,20 @@ export default defineEventHandler(async (event) => {
     archive,
   } = await readBody(event);
 
+  const emailCheck = await event.context.prisma.user.findUnique({
+    where: {
+      NOT: {id: Number(id)},
+      email: email,
+    }
+  });
+
+  if(emailCheck) {
+    return {
+      statusCode: 202,
+      message: "EMAIL IN USE",
+    };
+  }
+
   const user = await event.context.prisma.$transaction(
     async (p: PrismaClient) => {
       const updatedUser = await p.user.update({
