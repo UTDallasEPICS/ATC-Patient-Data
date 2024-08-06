@@ -91,15 +91,17 @@ async function saveData(behaviorID, sessionID, data) {
 }
 
 async function handleSubmit(sessionID) {
-  console.log("Submitting session with ID:", sessionID);
-  await $fetch("/api/session/put/submit", {
-    method: "PUT",
-    body: { sessionID: sessionID },
-  });
-  console.log("API request sent");
-  console.log("Session ID: ", sessionId);
-  submitted.value = true;
-  submitted.value = true;
+  if (confirm("Are you sure you want to submit, locking the session?")){
+    console.log("Submitting session with ID:", sessionID);
+    await $fetch("/api/session/put/submit", {
+      method: "PUT",
+      body: { sessionID: sessionID },
+    });
+    console.log("API request sent");
+    console.log("Session ID: ", sessionId);
+    submitted.value = true;
+  }
+
 }
 
 function openNoteModal() {
