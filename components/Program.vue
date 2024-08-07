@@ -177,14 +177,18 @@ async function archiveBehavior(id){
 }
 
 async function graduateBehavior(id){
-  await $fetch("/api/behavior/put/graduate", {
-    method: "PUT",
-    body: {
-      id: id,
-    },
-  });
-  instaLockOut.value = true;
-  behaviors.refresh();
+  if(confirm("Are you sure you want to graduate this behavior?")){
+    await $fetch("/api/behavior/put/graduate", {
+      method: "PUT",
+      body: {
+        id: id,
+      },
+    });
+    behaviors.refresh();
+  }
+  else {
+    instaLockOut.value = false;
+  }
 }
 
 // Log output
@@ -327,6 +331,7 @@ console.log("title", selectedBehavior.value.title);
                 <label class="inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
+                    v-model="instaLockOut"
                     :disabled="selectedBehavior.value.graduated || instaLockOut"
                     :checked="selectedBehavior.value.graduated || instaLockOut"
                     @change="graduateBehavior(selectedBehavior.value.id)"
